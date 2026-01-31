@@ -95,6 +95,103 @@ export type Database = {
         }
         Relationships: []
       }
+      email_logs: {
+        Row: {
+          clicked_at: string | null
+          email_type: string
+          id: string
+          opened_at: string | null
+          property_ids: string[] | null
+          saved_search_id: string | null
+          sent_at: string
+          user_id: string
+        }
+        Insert: {
+          clicked_at?: string | null
+          email_type: string
+          id?: string
+          opened_at?: string | null
+          property_ids?: string[] | null
+          saved_search_id?: string | null
+          sent_at?: string
+          user_id: string
+        }
+        Update: {
+          clicked_at?: string | null
+          email_type?: string
+          id?: string
+          opened_at?: string | null
+          property_ids?: string[] | null
+          saved_search_id?: string | null
+          sent_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_logs_saved_search_id_fkey"
+            columns: ["saved_search_id"]
+            isOneToOne: false
+            referencedRelation: "saved_searches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          clicked: boolean | null
+          created_at: string
+          id: string
+          message: string | null
+          property_address: string | null
+          property_id: string | null
+          property_image: string | null
+          property_price: number | null
+          read: boolean | null
+          saved_search_id: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          clicked?: boolean | null
+          created_at?: string
+          id?: string
+          message?: string | null
+          property_address?: string | null
+          property_id?: string | null
+          property_image?: string | null
+          property_price?: number | null
+          read?: boolean | null
+          saved_search_id?: string | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          clicked?: boolean | null
+          created_at?: string
+          id?: string
+          message?: string | null
+          property_address?: string | null
+          property_id?: string | null
+          property_image?: string | null
+          property_price?: number | null
+          read?: boolean | null
+          saved_search_id?: string | null
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_saved_search_id_fkey"
+            columns: ["saved_search_id"]
+            isOneToOne: false
+            referencedRelation: "saved_searches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pipeline_properties: {
         Row: {
           address: string
@@ -184,30 +281,87 @@ export type Database = {
         Row: {
           alerts_enabled: boolean | null
           created_at: string
+          description: string | null
+          digest_time: string | null
           filters: Json
           id: string
           last_alert_at: string | null
+          max_properties_per_email: number | null
           name: string
+          new_matches_count: number | null
+          notification_frequency: string | null
+          paused: boolean | null
+          total_matches_count: number | null
           updated_at: string
           user_id: string
         }
         Insert: {
           alerts_enabled?: boolean | null
           created_at?: string
+          description?: string | null
+          digest_time?: string | null
           filters?: Json
           id?: string
           last_alert_at?: string | null
+          max_properties_per_email?: number | null
           name: string
+          new_matches_count?: number | null
+          notification_frequency?: string | null
+          paused?: boolean | null
+          total_matches_count?: number | null
           updated_at?: string
           user_id: string
         }
         Update: {
           alerts_enabled?: boolean | null
           created_at?: string
+          description?: string | null
+          digest_time?: string | null
           filters?: Json
           id?: string
           last_alert_at?: string | null
+          max_properties_per_email?: number | null
           name?: string
+          new_matches_count?: number | null
+          notification_frequency?: string | null
+          paused?: boolean | null
+          total_matches_count?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_notification_preferences: {
+        Row: {
+          created_at: string
+          default_digest_time: string | null
+          email_notifications_enabled: boolean | null
+          global_notifications_enabled: boolean | null
+          id: string
+          in_app_notifications_enabled: boolean | null
+          max_emails_per_day: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          default_digest_time?: string | null
+          email_notifications_enabled?: boolean | null
+          global_notifications_enabled?: boolean | null
+          id?: string
+          in_app_notifications_enabled?: boolean | null
+          max_emails_per_day?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          default_digest_time?: string | null
+          email_notifications_enabled?: boolean | null
+          global_notifications_enabled?: boolean | null
+          id?: string
+          in_app_notifications_enabled?: boolean | null
+          max_emails_per_day?: number | null
           updated_at?: string
           user_id?: string
         }

@@ -1,1 +1,4 @@
 project_id = "zlsmbruzafqpnjaqxmgf"
+
+[functions.send-property-alerts]
+verify_jwt = false
