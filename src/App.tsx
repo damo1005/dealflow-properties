@@ -12,6 +12,8 @@ import SavedSearches from "./pages/SavedSearches";
 import Calculators from "./pages/Calculators";
 import Settings from "./pages/Settings";
 import DealPackGenerator from "./pages/DealPackGenerator";
+import ViewingNotesRecording from "./pages/ViewingNotesRecording";
+import ViewingNotesResults from "./pages/ViewingNotesResults";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +29,8 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/search" element={<SearchProperties />} />
           <Route path="/property/:id" element={<PropertyDetail />} />
+          <Route path="/property/:id/viewing-notes" element={<ViewingNotesRecording />} />
+          <Route path="/property/:id/viewing-notes/:noteId" element={<ViewingNotesResults />} />
           <Route path="/pipeline" element={<Pipeline />} />
           <Route path="/saved-searches" element={<SavedSearches />} />
           <Route path="/calculators" element={<Calculators />} />

@@ -14,6 +14,7 @@ import { PropertyComparables } from "@/components/property/PropertyComparables";
 import { PropertyTabs } from "@/components/property/PropertyTabs";
 import { PropertyNotes } from "@/components/property/PropertyNotes";
 import { PropertyActionBar } from "@/components/property/PropertyActionBar";
+import { ViewingNotesTab } from "@/components/property/ViewingNotesTab";
 import { mockPropertyDetail, PropertyDetail } from "@/data/mockPropertyDetail";
 import { useToast } from "@/hooks/use-toast";
 
@@ -87,6 +88,7 @@ export default function PropertyDetailPage() {
             <PropertyMap property={property} />
             <PropertyComparables property={property} />
             <PropertyTabs property={property} />
+            <ViewingNotesTab propertyId={property.id} />
             <PropertyNotes propertyId={property.id} />
           </div>
 
