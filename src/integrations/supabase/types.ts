@@ -14,13 +14,211 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      cached_properties: {
+        Row: {
+          address: string
+          bathrooms: number | null
+          bedrooms: number | null
+          cached_at: string
+          county: string | null
+          created_at: string
+          days_on_market: number | null
+          description: string | null
+          estimated_yield: number | null
+          expires_at: string
+          external_id: string
+          features: string[] | null
+          id: string
+          images: string[] | null
+          latitude: number | null
+          longitude: number | null
+          original_price: number | null
+          postcode: string | null
+          price: number
+          price_reduced: boolean | null
+          property_type: string | null
+          raw_data: Json | null
+          region: string | null
+          roi_potential: number | null
+        }
+        Insert: {
+          address: string
+          bathrooms?: number | null
+          bedrooms?: number | null
+          cached_at?: string
+          county?: string | null
+          created_at?: string
+          days_on_market?: number | null
+          description?: string | null
+          estimated_yield?: number | null
+          expires_at?: string
+          external_id: string
+          features?: string[] | null
+          id?: string
+          images?: string[] | null
+          latitude?: number | null
+          longitude?: number | null
+          original_price?: number | null
+          postcode?: string | null
+          price: number
+          price_reduced?: boolean | null
+          property_type?: string | null
+          raw_data?: Json | null
+          region?: string | null
+          roi_potential?: number | null
+        }
+        Update: {
+          address?: string
+          bathrooms?: number | null
+          bedrooms?: number | null
+          cached_at?: string
+          county?: string | null
+          created_at?: string
+          days_on_market?: number | null
+          description?: string | null
+          estimated_yield?: number | null
+          expires_at?: string
+          external_id?: string
+          features?: string[] | null
+          id?: string
+          images?: string[] | null
+          latitude?: number | null
+          longitude?: number | null
+          original_price?: number | null
+          postcode?: string | null
+          price?: number
+          price_reduced?: boolean | null
+          property_type?: string | null
+          raw_data?: Json | null
+          region?: string | null
+          roi_potential?: number | null
+        }
+        Relationships: []
+      }
+      pipeline_properties: {
+        Row: {
+          address: string
+          created_at: string
+          external_property_id: string | null
+          id: string
+          notes: string | null
+          position: number | null
+          price: number | null
+          property_id: string | null
+          stage: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address: string
+          created_at?: string
+          external_property_id?: string | null
+          id?: string
+          notes?: string | null
+          position?: number | null
+          price?: number | null
+          property_id?: string | null
+          stage?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string
+          created_at?: string
+          external_property_id?: string | null
+          id?: string
+          notes?: string | null
+          position?: number | null
+          price?: number | null
+          property_id?: string | null
+          stage?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pipeline_properties_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "cached_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      saved_properties: {
+        Row: {
+          created_at: string
+          external_property_id: string | null
+          id: string
+          notes: string | null
+          property_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          external_property_id?: string | null
+          id?: string
+          notes?: string | null
+          property_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          external_property_id?: string | null
+          id?: string
+          notes?: string | null
+          property_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_properties_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "cached_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      saved_searches: {
+        Row: {
+          alerts_enabled: boolean | null
+          created_at: string
+          filters: Json
+          id: string
+          last_alert_at: string | null
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          alerts_enabled?: boolean | null
+          created_at?: string
+          filters?: Json
+          id?: string
+          last_alert_at?: string | null
+          name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          alerts_enabled?: boolean | null
+          created_at?: string
+          filters?: Json
+          id?: string
+          last_alert_at?: string | null
+          name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      clean_expired_cache: { Args: never; Returns: undefined }
     }
     Enums: {
       [_ in never]: never
