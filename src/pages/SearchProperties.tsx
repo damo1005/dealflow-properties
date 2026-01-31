@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { FilterPanel } from "@/components/search/FilterPanel";
 import { PropertyCard } from "@/components/search/PropertyCard";
@@ -14,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 
 export default function SearchProperties() {
+  const navigate = useNavigate();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [savedProperties, setSavedProperties] = useState<string[]>([]);
   const { toast } = useToast();
@@ -98,10 +100,7 @@ export default function SearchProperties() {
   };
 
   const handleViewDetails = (id: string) => {
-    toast({
-      title: "View details",
-      description: `Viewing property ${id}`,
-    });
+    navigate(`/property/${id}`);
   };
 
   const handleAddToPipeline = (id: string) => {
