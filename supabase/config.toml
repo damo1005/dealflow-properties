@@ -2,3 +2,18 @@ project_id = "zlsmbruzafqpnjaqxmgf"
 
 [functions.send-property-alerts]
 verify_jwt = false
+
+[functions.property-search]
+verify_jwt = false
+
+[functions.property-details]
+verify_jwt = false
+
+[functions.property-comparables]
+verify_jwt = false
+
+[functions.rental-estimates]
+verify_jwt = false
+
+[functions.area-statistics]
+verify_jwt = false

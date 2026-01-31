@@ -14,6 +14,69 @@ export type Database = {
   }
   public: {
     Tables: {
+      api_usage: {
+        Row: {
+          cost_credits: number | null
+          created_at: string
+          endpoint: string
+          error_message: string | null
+          id: string
+          request_count: number | null
+          response_time_ms: number | null
+          success: boolean | null
+          user_id: string | null
+        }
+        Insert: {
+          cost_credits?: number | null
+          created_at?: string
+          endpoint: string
+          error_message?: string | null
+          id?: string
+          request_count?: number | null
+          response_time_ms?: number | null
+          success?: boolean | null
+          user_id?: string | null
+        }
+        Update: {
+          cost_credits?: number | null
+          created_at?: string
+          endpoint?: string
+          error_message?: string | null
+          id?: string
+          request_count?: number | null
+          response_time_ms?: number | null
+          success?: boolean | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      area_statistics_cache: {
+        Row: {
+          area_type: string | null
+          cached_at: string
+          data: Json
+          expires_at: string
+          id: string
+          postcode: string
+        }
+        Insert: {
+          area_type?: string | null
+          cached_at?: string
+          data: Json
+          expires_at?: string
+          id?: string
+          postcode: string
+        }
+        Update: {
+          area_type?: string | null
+          cached_at?: string
+          data?: Json
+          expires_at?: string
+          id?: string
+          postcode?: string
+        }
+        Relationships: []
+      }
       cached_properties: {
         Row: {
           address: string
@@ -92,6 +155,36 @@ export type Database = {
           raw_data?: Json | null
           region?: string | null
           roi_potential?: number | null
+        }
+        Relationships: []
+      }
+      comparables_cache: {
+        Row: {
+          cached_at: string
+          data: Json
+          expires_at: string
+          id: string
+          postcode: string
+          property_type: string | null
+          radius_miles: number | null
+        }
+        Insert: {
+          cached_at?: string
+          data: Json
+          expires_at?: string
+          id?: string
+          postcode: string
+          property_type?: string | null
+          radius_miles?: number | null
+        }
+        Update: {
+          cached_at?: string
+          data?: Json
+          expires_at?: string
+          id?: string
+          postcode?: string
+          property_type?: string | null
+          radius_miles?: number | null
         }
         Relationships: []
       }
@@ -242,6 +335,36 @@ export type Database = {
           },
         ]
       }
+      rental_estimates_cache: {
+        Row: {
+          bedrooms: number | null
+          cached_at: string
+          data: Json
+          expires_at: string
+          id: string
+          postcode: string
+          property_type: string | null
+        }
+        Insert: {
+          bedrooms?: number | null
+          cached_at?: string
+          data: Json
+          expires_at?: string
+          id?: string
+          postcode: string
+          property_type?: string | null
+        }
+        Update: {
+          bedrooms?: number | null
+          cached_at?: string
+          data?: Json
+          expires_at?: string
+          id?: string
+          postcode?: string
+          property_type?: string | null
+        }
+        Relationships: []
+      }
       saved_properties: {
         Row: {
           created_at: string
@@ -372,6 +495,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      clean_all_expired_caches: { Args: never; Returns: undefined }
       clean_expired_cache: { Args: never; Returns: undefined }
     }
     Enums: {
