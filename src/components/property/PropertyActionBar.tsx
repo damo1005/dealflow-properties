@@ -48,10 +48,7 @@ export function PropertyActionBar({ propertyId, agentPhone }: PropertyActionBarP
   };
 
   const handleGenerateDealPack = () => {
-    toast({
-      title: "Generating deal pack",
-      description: "Your deal pack will be ready in a moment",
-    });
+    navigate(`/deal-pack/${propertyId}`);
   };
 
   return (
