@@ -156,4 +156,34 @@
     @apply bg-clip-text text-transparent;
     background-image: var(--gradient-primary);
   }
+
+  /* Waveform animation for voice recording */
+  .animate-waveform {
+    animation: waveform 0.5s ease-in-out infinite alternate;
+  }
+
+  /* Pulse animation for record button */
+  .animate-pulse-record {
+    animation: pulse-record 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes waveform {
+  0% {
+    height: 8px;
+  }
+  100% {
+    height: 40px;
+  }
+}
+
+@keyframes pulse-record {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 hsl(var(--destructive) / 0.7);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: 0 0 0 15px hsl(var(--destructive) / 0);
+  }
 }

@@ -490,6 +490,48 @@ export type Database = {
         }
         Relationships: []
       }
+      voice_notes: {
+        Row: {
+          audio_url: string | null
+          created_at: string
+          duration_seconds: number | null
+          id: string
+          property_address: string
+          property_id: string | null
+          recording_date: string
+          structured_analysis: Json | null
+          transcript: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          audio_url?: string | null
+          created_at?: string
+          duration_seconds?: number | null
+          id?: string
+          property_address: string
+          property_id?: string | null
+          recording_date?: string
+          structured_analysis?: Json | null
+          transcript?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          audio_url?: string | null
+          created_at?: string
+          duration_seconds?: number | null
+          id?: string
+          property_address?: string
+          property_id?: string | null
+          recording_date?: string
+          structured_analysis?: Json | null
+          transcript?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

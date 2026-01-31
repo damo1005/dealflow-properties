@@ -17,3 +17,6 @@ verify_jwt = false
 
 [functions.area-statistics]
 verify_jwt = false
+
+[functions.analyze-viewing-notes]
+verify_jwt = false
