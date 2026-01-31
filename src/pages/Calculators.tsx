@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Home, RefreshCw, Users, Hammer, Building2, Save, Download, Link2, Copy, RotateCcw } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Home, RefreshCw, Users, Hammer, Building2, Save, Download, Link2, Copy, RotateCcw, TrendingUp } from "lucide-react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,7 @@ const calculatorTabs = [
 ] as const;
 
 export default function Calculators() {
+  const navigate = useNavigate();
   const { activeTab, setActiveTab, resetBTL, resetBRR, resetHMO, resetFlip } = useCalculatorStore();
   const { toast } = useToast();
 
@@ -112,6 +114,15 @@ export default function Calculators() {
             <Button size="sm" className="gap-2" onClick={handleSave}>
               <Save className="h-4 w-4" />
               Save
+            </Button>
+            <Button 
+              variant="secondary" 
+              size="sm" 
+              className="gap-2" 
+              onClick={() => navigate("/scenarios?from=calculator")}
+            >
+              <TrendingUp className="h-4 w-4" />
+              What If?
             </Button>
           </div>
         </div>
