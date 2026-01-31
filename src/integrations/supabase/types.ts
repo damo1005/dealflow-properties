@@ -188,6 +188,42 @@ export type Database = {
         }
         Relationships: []
       }
+      comparisons: {
+        Row: {
+          calculator_inputs: Json | null
+          created_at: string
+          id: string
+          name: string
+          notes: string | null
+          property_data: Json | null
+          property_ids: string[]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          calculator_inputs?: Json | null
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string | null
+          property_data?: Json | null
+          property_ids?: string[]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          calculator_inputs?: Json | null
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          property_data?: Json | null
+          property_ids?: string[]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       email_logs: {
         Row: {
           clicked_at: string | null

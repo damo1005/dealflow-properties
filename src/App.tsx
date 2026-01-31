@@ -14,6 +14,8 @@ import Settings from "./pages/Settings";
 import DealPackGenerator from "./pages/DealPackGenerator";
 import ViewingNotesRecording from "./pages/ViewingNotesRecording";
 import ViewingNotesResults from "./pages/ViewingNotesResults";
+import Compare from "./pages/Compare";
+import MyComparisons from "./pages/MyComparisons";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +33,8 @@ const App = () => (
           <Route path="/property/:id" element={<PropertyDetail />} />
           <Route path="/property/:id/viewing-notes" element={<ViewingNotesRecording />} />
           <Route path="/property/:id/viewing-notes/:noteId" element={<ViewingNotesResults />} />
+          <Route path="/compare" element={<Compare />} />
+          <Route path="/comparisons" element={<MyComparisons />} />
           <Route path="/pipeline" element={<Pipeline />} />
           <Route path="/saved-searches" element={<SavedSearches />} />
           <Route path="/calculators" element={<Calculators />} />
