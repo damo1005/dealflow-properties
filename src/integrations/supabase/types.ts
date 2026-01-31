@@ -490,6 +490,45 @@ export type Database = {
         }
         Relationships: []
       }
+      scenarios: {
+        Row: {
+          base_inputs: Json
+          created_at: string
+          id: string
+          name: string
+          notes: string | null
+          property_id: string | null
+          scenario_type: string
+          scenario_variations: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          base_inputs?: Json
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string | null
+          property_id?: string | null
+          scenario_type: string
+          scenario_variations?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          base_inputs?: Json
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          property_id?: string | null
+          scenario_type?: string
+          scenario_variations?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_notification_preferences: {
         Row: {
           created_at: string

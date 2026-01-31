@@ -16,6 +16,7 @@ import ViewingNotesRecording from "./pages/ViewingNotesRecording";
 import ViewingNotesResults from "./pages/ViewingNotesResults";
 import Compare from "./pages/Compare";
 import MyComparisons from "./pages/MyComparisons";
+import ScenarioBuilder from "./pages/ScenarioBuilder";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,8 @@ const App = () => (
           <Route path="/property/:id/viewing-notes/:noteId" element={<ViewingNotesResults />} />
           <Route path="/compare" element={<Compare />} />
           <Route path="/comparisons" element={<MyComparisons />} />
+          <Route path="/scenarios" element={<ScenarioBuilder />} />
+          <Route path="/property/:id/scenarios" element={<ScenarioBuilder />} />
           <Route path="/pipeline" element={<Pipeline />} />
           <Route path="/saved-searches" element={<SavedSearches />} />
           <Route path="/calculators" element={<Calculators />} />
