@@ -11,6 +11,7 @@ import Pipeline from "./pages/Pipeline";
 import SavedSearches from "./pages/SavedSearches";
 import Calculators from "./pages/Calculators";
 import Settings from "./pages/Settings";
+import DealPackGenerator from "./pages/DealPackGenerator";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,8 @@ const App = () => (
           <Route path="/saved-searches" element={<SavedSearches />} />
           <Route path="/calculators" element={<Calculators />} />
           <Route path="/calculators/:id" element={<Calculators />} />
+          <Route path="/deal-pack" element={<DealPackGenerator />} />
+          <Route path="/deal-pack/:propertyId" element={<DealPackGenerator />} />
           <Route path="/settings" element={<Settings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
