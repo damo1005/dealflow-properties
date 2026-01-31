@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import SearchProperties from "./pages/SearchProperties";
+import PropertyDetail from "./pages/PropertyDetail";
 import Pipeline from "./pages/Pipeline";
 import SavedSearches from "./pages/SavedSearches";
 import Calculators from "./pages/Calculators";
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/search" element={<SearchProperties />} />
+          <Route path="/property/:id" element={<PropertyDetail />} />
           <Route path="/pipeline" element={<Pipeline />} />
           <Route path="/saved-searches" element={<SavedSearches />} />
           <Route path="/calculators" element={<Calculators />} />
