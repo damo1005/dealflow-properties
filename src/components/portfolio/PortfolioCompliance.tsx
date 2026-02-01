@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePortfolioStore } from "@/stores/portfolioStore";
 import {
   Shield,
@@ -10,45 +12,74 @@ import {
   Upload,
   Calendar,
   Building2,
+  Plus,
+  List,
+  CalendarDays,
+  FileText,
+  Phone,
 } from "lucide-react";
 import { format, differenceInDays } from "date-fns";
 import { COMPLIANCE_TYPES } from "@/types/portfolio";
+import { AddCertificateWizard, CertificateFormData } from "./AddCertificateWizard";
+import { toast } from "sonner";
 
 export function PortfolioCompliance() {
-  const { compliance, properties } = usePortfolioStore();
+  const { compliance, properties, addCompliance } = usePortfolioStore();
+  const [showAddWizard, setShowAddWizard] = useState(false);
+  const [viewMode, setViewMode] = useState<"list" | "calendar">("list");
 
   const validItems = compliance.filter((c) => c.status === "valid");
   const expiringItems = compliance.filter((c) => c.status === "expiring");
   const expiredItems = compliance.filter((c) => c.status === "expired");
 
-  // Group compliance by type
-  const complianceByType = COMPLIANCE_TYPES.map((type) => {
-    const items = compliance.filter((c) => c.compliance_type === type.value);
-    const valid = items.filter((c) => c.status === "valid").length;
-    const expiring = items.filter((c) => c.status === "expiring").length;
-    const expired = items.filter((c) => c.status === "expired").length;
-    return { ...type, items, valid, expiring, expired, total: items.length };
-  }).filter((t) => t.total > 0);
+  // Group compliance by property
+  const complianceByProperty = properties.map((property) => {
+    const items = compliance.filter((c) => c.portfolio_property_id === property.id);
+    return {
+      property,
+      items,
+      hasExpired: items.some((c) => c.status === "expired"),
+      hasExpiring: items.some((c) => c.status === "expiring"),
+    };
+  });
+
+  const handleAddCertificate = async (data: CertificateFormData) => {
+    // In real app, would save to Supabase
+    const newCompliance = {
+      id: crypto.randomUUID(),
+      portfolio_property_id: data.portfolio_property_id,
+      compliance_type: data.compliance_type as any,
+      certificate_number: data.certificate_number || null,
+      issued_date: data.issued_date,
+      expiry_date: data.expiry_date,
+      certificate_url: null,
+      status: "valid" as const,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+    addCompliance(newCompliance);
+    toast.success("Certificate added successfully");
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "valid":
         return (
-          <Badge className="bg-green-500 text-white">
+          <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
             <CheckCircle className="h-3 w-3 mr-1" />
             Valid
           </Badge>
         );
       case "expiring":
         return (
-          <Badge className="bg-yellow-500 text-white">
+          <Badge className="bg-yellow-500/10 text-yellow-600 border-yellow-500/20">
             <AlertTriangle className="h-3 w-3 mr-1" />
             Expiring Soon
           </Badge>
         );
       case "expired":
         return (
-          <Badge className="bg-red-500 text-white">
+          <Badge className="bg-red-500/10 text-red-600 border-red-500/20">
             <XCircle className="h-3 w-3 mr-1" />
             Expired
           </Badge>
@@ -66,7 +97,7 @@ export function PortfolioCompliance() {
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
               <CheckCircle className="h-5 w-5 text-green-500" />
-              <span className="text-sm text-muted-foreground">Valid</span>
+              <span className="text-sm text-muted-foreground">Up to Date</span>
             </div>
             <p className="text-3xl font-bold text-green-500 mt-1">
               {validItems.length}
@@ -88,7 +119,7 @@ export function PortfolioCompliance() {
           <CardContent className="pt-4">
             <div className="flex items-center gap-2">
               <XCircle className="h-5 w-5 text-red-500" />
-              <span className="text-sm text-muted-foreground">Expired</span>
+              <span className="text-sm text-muted-foreground">Overdue</span>
             </div>
             <p className="text-3xl font-bold text-red-500 mt-1">
               {expiredItems.length}
@@ -97,62 +128,39 @@ export function PortfolioCompliance() {
         </Card>
       </div>
 
-      {/* Compliance by Type */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {complianceByType.map((type) => (
-          <Card key={type.value}>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-lg flex items-center gap-2">
-                <span>{type.icon}</span>
-                {type.label}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center gap-4 mb-4">
-                <div className="flex items-center gap-1">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
-                  <span className="text-sm">{type.valid}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <AlertTriangle className="h-4 w-4 text-yellow-500" />
-                  <span className="text-sm">{type.expiring}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <XCircle className="h-4 w-4 text-red-500" />
-                  <span className="text-sm">{type.expired}</span>
-                </div>
-              </div>
-              <Button variant="outline" size="sm" className="w-full">
-                <Upload className="h-4 w-4 mr-2" />
-                Upload Certificate
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
+      {/* View Toggle & Add Button */}
+      <div className="flex justify-between items-center">
+        <Tabs value={viewMode} onValueChange={(v) => setViewMode(v as "list" | "calendar")}>
+          <TabsList>
+            <TabsTrigger value="list" className="gap-2">
+              <List className="h-4 w-4" />
+              List View
+            </TabsTrigger>
+            <TabsTrigger value="calendar" className="gap-2">
+              <CalendarDays className="h-4 w-4" />
+              Calendar View
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+        <Button onClick={() => setShowAddWizard(true)}>
+          <Plus className="h-4 w-4 mr-2" />
+          Add Certificate
+        </Button>
       </div>
 
-      {/* Properties Compliance List */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Compliance by Property</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {properties.map((property) => {
-            const propertyCompliance = compliance.filter(
-              (c) => c.portfolio_property_id === property.id
-            );
-            const hasExpired = propertyCompliance.some((c) => c.status === "expired");
-            const hasExpiring = propertyCompliance.some((c) => c.status === "expiring");
-
-            return (
-              <div key={property.id} className="border rounded-lg p-4">
-                <div className="flex items-start justify-between mb-4">
+      {/* List View */}
+      {viewMode === "list" && (
+        <div className="space-y-4">
+          {complianceByProperty.map(({ property, items, hasExpired, hasExpiring }) => (
+            <Card key={property.id}>
+              <CardHeader className="pb-3">
+                <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div className="p-2 rounded-lg bg-primary/10">
                       <Building2 className="h-5 w-5 text-primary" />
                     </div>
                     <div>
-                      <h4 className="font-semibold">{property.address}</h4>
+                      <CardTitle className="text-lg">{property.address}</CardTitle>
                       <p className="text-sm text-muted-foreground">{property.postcode}</p>
                     </div>
                   </div>
@@ -160,126 +168,174 @@ export function PortfolioCompliance() {
                     {hasExpired ? (
                       <Badge variant="destructive">Action Required</Badge>
                     ) : hasExpiring ? (
-                      <Badge className="bg-yellow-500 text-white">Renew Soon</Badge>
+                      <Badge className="bg-yellow-500/10 text-yellow-600 border-yellow-500/20">
+                        Renew Soon
+                      </Badge>
+                    ) : items.length > 0 ? (
+                      <Badge className="bg-green-500/10 text-green-600 border-green-500/20">
+                        All Valid
+                      </Badge>
                     ) : (
-                      <Badge className="bg-green-500 text-white">All Valid</Badge>
+                      <Badge variant="secondary">No Certificates</Badge>
                     )}
                   </div>
                 </div>
+              </CardHeader>
+              <CardContent>
+                {items.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-4">
+                    No certificates added yet
+                  </p>
+                ) : (
+                  <div className="space-y-3">
+                    {items.map((item) => {
+                      const typeInfo = COMPLIANCE_TYPES.find((t) => t.value === item.compliance_type);
+                      const daysUntilExpiry = differenceInDays(new Date(item.expiry_date), new Date());
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                  {COMPLIANCE_TYPES.slice(0, 4).map((type) => {
-                    const item = propertyCompliance.find(
-                      (c) => c.compliance_type === type.value
-                    );
-
-                    if (!item) {
                       return (
                         <div
-                          key={type.value}
-                          className="p-3 bg-muted/50 rounded-lg text-center"
+                          key={item.id}
+                          className={`p-3 rounded-lg border ${
+                            item.status === "expired"
+                              ? "bg-red-500/5 border-red-500/20"
+                              : item.status === "expiring"
+                              ? "bg-yellow-500/5 border-yellow-500/20"
+                              : "bg-green-500/5 border-green-500/20"
+                          }`}
                         >
-                          <p className="text-xs text-muted-foreground">{type.label}</p>
-                          <p className="text-sm font-medium mt-1">Not Added</p>
-                          <Button variant="link" size="sm" className="h-auto p-0 mt-1">
-                            Add
-                          </Button>
+                          <div className="flex items-start justify-between">
+                            <div className="flex items-center gap-3">
+                              <span className="text-2xl">{typeInfo?.icon}</span>
+                              <div>
+                                <p className="font-medium">{typeInfo?.label}</p>
+                                <p className="text-sm text-muted-foreground">
+                                  {item.status === "expired" ? (
+                                    <span className="text-red-600">
+                                      Expired {Math.abs(daysUntilExpiry)} days ago
+                                    </span>
+                                  ) : (
+                                    <>
+                                      Expires{" "}
+                                      <span className={daysUntilExpiry < 30 ? "text-yellow-600 font-medium" : ""}>
+                                        {format(new Date(item.expiry_date), "dd MMM yyyy")}
+                                      </span>
+                                      {daysUntilExpiry > 0 && ` (${daysUntilExpiry} days)`}
+                                    </>
+                                  )}
+                                </p>
+                                {item.certificate_number && (
+                                  <p className="text-xs text-muted-foreground mt-1">
+                                    Cert: {item.certificate_number}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              {getStatusBadge(item.status)}
+                            </div>
+                          </div>
+                          <div className="flex gap-2 mt-3">
+                            <Button variant="outline" size="sm">
+                              <FileText className="h-4 w-4 mr-1" />
+                              View
+                            </Button>
+                            <Button variant="outline" size="sm">
+                              <Upload className="h-4 w-4 mr-1" />
+                              Renew
+                            </Button>
+                          </div>
                         </div>
                       );
-                    }
+                    })}
+                  </div>
+                )}
 
-                    const daysUntilExpiry = differenceInDays(
-                      new Date(item.expiry_date),
-                      new Date()
-                    );
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full mt-4"
+                  onClick={() => setShowAddWizard(true)}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Certificate
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
 
-                    return (
-                      <div
-                        key={type.value}
-                        className={`p-3 rounded-lg text-center ${
-                          item.status === "expired"
-                            ? "bg-red-500/10"
-                            : item.status === "expiring"
-                            ? "bg-yellow-500/10"
-                            : "bg-green-500/10"
-                        }`}
-                      >
-                        <p className="text-xs text-muted-foreground">{type.label}</p>
-                        <p className="text-sm font-medium mt-1">
-                          {item.status === "expired" ? (
-                            <span className="text-red-500">Expired</span>
-                          ) : (
-                            <span className={item.status === "expiring" ? "text-yellow-600" : "text-green-600"}>
-                              {daysUntilExpiry} days
-                            </span>
-                          )}
+      {/* Calendar View */}
+      {viewMode === "calendar" && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Calendar className="h-5 w-5" />
+              Upcoming Renewals
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {[...expiringItems, ...expiredItems]
+                .sort((a, b) => new Date(a.expiry_date).getTime() - new Date(b.expiry_date).getTime())
+                .map((item) => {
+                  const property = properties.find((p) => p.id === item.portfolio_property_id);
+                  const typeInfo = COMPLIANCE_TYPES.find((t) => t.value === item.compliance_type);
+                  const daysUntil = differenceInDays(new Date(item.expiry_date), new Date());
+
+                  return (
+                    <div
+                      key={item.id}
+                      className="flex items-center justify-between p-4 bg-muted/50 rounded-lg hover:bg-muted transition-colors"
+                    >
+                      <div className="flex items-center gap-4">
+                        <span className="text-2xl">{typeInfo?.icon}</span>
+                        <div>
+                          <p className="font-medium">{typeInfo?.label}</p>
+                          <p className="text-sm text-muted-foreground">{property?.address}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p
+                          className={`font-medium ${
+                            daysUntil < 0
+                              ? "text-red-500"
+                              : daysUntil < 14
+                              ? "text-red-500"
+                              : daysUntil < 30
+                              ? "text-yellow-600"
+                              : ""
+                          }`}
+                        >
+                          {daysUntil < 0
+                            ? `${Math.abs(daysUntil)} days overdue`
+                            : `${daysUntil} days`}
                         </p>
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="text-sm text-muted-foreground">
                           {format(new Date(item.expiry_date), "dd MMM yyyy")}
                         </p>
                       </div>
-                    );
-                  })}
-                </div>
-
-                {(hasExpired || hasExpiring) && (
-                  <div className="flex gap-2 mt-4 pt-4 border-t">
-                    <Button size="sm">Schedule Renewal</Button>
-                    <Button size="sm" variant="outline">
-                      <Upload className="h-4 w-4 mr-2" />
-                      Upload Certificate
-                    </Button>
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </CardContent>
-      </Card>
-
-      {/* Upcoming Renewals Calendar */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Calendar className="h-5 w-5" />
-            Upcoming Renewals
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3">
-            {[...expiringItems, ...expiredItems]
-              .sort((a, b) => new Date(a.expiry_date).getTime() - new Date(b.expiry_date).getTime())
-              .map((item) => {
-                const property = properties.find((p) => p.id === item.portfolio_property_id);
-                const typeInfo = COMPLIANCE_TYPES.find((t) => t.value === item.compliance_type);
-                const daysUntil = differenceInDays(new Date(item.expiry_date), new Date());
-
-                return (
-                  <div
-                    key={item.id}
-                    className="flex items-center justify-between p-3 bg-muted/50 rounded-lg"
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-xl">{typeInfo?.icon}</span>
-                      <div>
-                        <p className="font-medium">{typeInfo?.label}</p>
-                        <p className="text-sm text-muted-foreground">{property?.address}</p>
-                      </div>
                     </div>
-                    <div className="text-right">
-                      <p className={`font-medium ${daysUntil < 0 ? "text-red-500" : daysUntil < 30 ? "text-yellow-600" : ""}`}>
-                        {daysUntil < 0 ? `${Math.abs(daysUntil)} days overdue` : `${daysUntil} days`}
-                      </p>
-                      <p className="text-sm text-muted-foreground">
-                        {format(new Date(item.expiry_date), "dd MMM yyyy")}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-          </div>
-        </CardContent>
-      </Card>
+                  );
+                })}
+
+              {expiringItems.length === 0 && expiredItems.length === 0 && (
+                <p className="text-center text-muted-foreground py-8">
+                  No upcoming renewals
+                </p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Add Certificate Wizard */}
+      <AddCertificateWizard
+        open={showAddWizard}
+        onOpenChange={setShowAddWizard}
+        properties={properties}
+        onSave={handleAddCertificate}
+      />
     </div>
   );
 }

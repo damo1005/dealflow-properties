@@ -1495,42 +1495,101 @@ export type Database = {
         }
         Relationships: []
       }
+      compliance_alerts: {
+        Row: {
+          alert_type: string | null
+          compliance_item_id: string | null
+          email_opened: boolean | null
+          email_sent: boolean | null
+          id: string
+          sent_at: string | null
+        }
+        Insert: {
+          alert_type?: string | null
+          compliance_item_id?: string | null
+          email_opened?: boolean | null
+          email_sent?: boolean | null
+          id?: string
+          sent_at?: string | null
+        }
+        Update: {
+          alert_type?: string | null
+          compliance_item_id?: string | null
+          email_opened?: boolean | null
+          email_sent?: boolean | null
+          id?: string
+          sent_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_alerts_compliance_item_id_fkey"
+            columns: ["compliance_item_id"]
+            isOneToOne: false
+            referencedRelation: "compliance_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       compliance_items: {
         Row: {
+          auto_renew: boolean | null
           certificate_number: string | null
           certificate_url: string | null
           compliance_type: string
+          contractor_name: string | null
+          contractor_phone: string | null
+          cost: number | null
           created_at: string | null
+          document_url: string | null
           expiry_date: string
           id: string
           issued_date: string | null
           portfolio_property_id: string | null
+          reminder_days_before: number | null
+          reminder_sent: boolean | null
           status: string | null
           updated_at: string | null
+          user_id: string | null
         }
         Insert: {
+          auto_renew?: boolean | null
           certificate_number?: string | null
           certificate_url?: string | null
           compliance_type: string
+          contractor_name?: string | null
+          contractor_phone?: string | null
+          cost?: number | null
           created_at?: string | null
+          document_url?: string | null
           expiry_date: string
           id?: string
           issued_date?: string | null
           portfolio_property_id?: string | null
+          reminder_days_before?: number | null
+          reminder_sent?: boolean | null
           status?: string | null
           updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
+          auto_renew?: boolean | null
           certificate_number?: string | null
           certificate_url?: string | null
           compliance_type?: string
+          contractor_name?: string | null
+          contractor_phone?: string | null
+          cost?: number | null
           created_at?: string | null
+          document_url?: string | null
           expiry_date?: string
           id?: string
           issued_date?: string | null
           portfolio_property_id?: string | null
+          reminder_days_before?: number | null
+          reminder_sent?: boolean | null
           status?: string | null
           updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -1541,6 +1600,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      compliance_templates: {
+        Row: {
+          applies_to: string[] | null
+          compliance_type: string
+          created_at: string | null
+          default_reminder_days: number | null
+          description: string | null
+          display_name: string
+          id: string
+          is_mandatory: boolean | null
+          legal_requirement: string | null
+          more_info_url: string | null
+          penalty_for_non_compliance: string | null
+          validity_months: number | null
+        }
+        Insert: {
+          applies_to?: string[] | null
+          compliance_type: string
+          created_at?: string | null
+          default_reminder_days?: number | null
+          description?: string | null
+          display_name: string
+          id?: string
+          is_mandatory?: boolean | null
+          legal_requirement?: string | null
+          more_info_url?: string | null
+          penalty_for_non_compliance?: string | null
+          validity_months?: number | null
+        }
+        Update: {
+          applies_to?: string[] | null
+          compliance_type?: string
+          created_at?: string | null
+          default_reminder_days?: number | null
+          description?: string | null
+          display_name?: string
+          id?: string
+          is_mandatory?: boolean | null
+          legal_requirement?: string | null
+          more_info_url?: string | null
+          penalty_for_non_compliance?: string | null
+          validity_months?: number | null
+        }
+        Relationships: []
       }
       copilot_conversations: {
         Row: {
@@ -4218,35 +4322,59 @@ export type Database = {
         Row: {
           actual_amount: number | null
           actual_date: string | null
+          amount: number | null
           created_at: string | null
           days_late: number | null
+          due_date: string | null
           expected_amount: number
           expected_date: string
           id: string
+          late_fee: number | null
+          notes: string | null
+          payment_date: string | null
+          payment_method: string | null
+          payment_reference: string | null
           status: string | null
           tenancy_id: string | null
+          user_id: string | null
         }
         Insert: {
           actual_amount?: number | null
           actual_date?: string | null
+          amount?: number | null
           created_at?: string | null
           days_late?: number | null
+          due_date?: string | null
           expected_amount: number
           expected_date: string
           id?: string
+          late_fee?: number | null
+          notes?: string | null
+          payment_date?: string | null
+          payment_method?: string | null
+          payment_reference?: string | null
           status?: string | null
           tenancy_id?: string | null
+          user_id?: string | null
         }
         Update: {
           actual_amount?: number | null
           actual_date?: string | null
+          amount?: number | null
           created_at?: string | null
           days_late?: number | null
+          due_date?: string | null
           expected_amount?: number
           expected_date?: string
           id?: string
+          late_fee?: number | null
+          notes?: string | null
+          payment_date?: string | null
+          payment_method?: string | null
+          payment_reference?: string | null
           status?: string | null
           tenancy_id?: string | null
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -5520,47 +5648,80 @@ export type Database = {
         Row: {
           created_at: string | null
           deposit_amount: number
+          deposit_reference: string | null
           deposit_scheme: string | null
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
           end_date: string | null
+          guarantor_email: string | null
+          guarantor_name: string | null
+          guarantor_phone: string | null
           id: string
           monthly_rent: number
+          notice_period_days: number | null
           portfolio_property_id: string | null
+          rent_due_day: number | null
+          rent_frequency: string | null
           start_date: string
           status: string | null
+          tenancy_type: string | null
           tenant_email: string | null
           tenant_name: string
           tenant_phone: string | null
           updated_at: string | null
+          user_id: string | null
         }
         Insert: {
           created_at?: string | null
           deposit_amount: number
+          deposit_reference?: string | null
           deposit_scheme?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
           end_date?: string | null
+          guarantor_email?: string | null
+          guarantor_name?: string | null
+          guarantor_phone?: string | null
           id?: string
           monthly_rent: number
+          notice_period_days?: number | null
           portfolio_property_id?: string | null
+          rent_due_day?: number | null
+          rent_frequency?: string | null
           start_date: string
           status?: string | null
+          tenancy_type?: string | null
           tenant_email?: string | null
           tenant_name: string
           tenant_phone?: string | null
           updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
           created_at?: string | null
           deposit_amount?: number
+          deposit_reference?: string | null
           deposit_scheme?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
           end_date?: string | null
+          guarantor_email?: string | null
+          guarantor_name?: string | null
+          guarantor_phone?: string | null
           id?: string
           monthly_rent?: number
+          notice_period_days?: number | null
           portfolio_property_id?: string | null
+          rent_due_day?: number | null
+          rent_frequency?: string | null
           start_date?: string
           status?: string | null
+          tenancy_type?: string | null
           tenant_email?: string | null
           tenant_name?: string
           tenant_phone?: string | null
           updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -5568,6 +5729,88 @@ export type Database = {
             columns: ["portfolio_property_id"]
             isOneToOne: false
             referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenancy_documents: {
+        Row: {
+          document_name: string
+          document_type: string
+          document_url: string | null
+          id: string
+          tenancy_id: string | null
+          uploaded_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          document_name: string
+          document_type: string
+          document_url?: string | null
+          id?: string
+          tenancy_id?: string | null
+          uploaded_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          document_name?: string
+          document_type?: string
+          document_url?: string | null
+          id?: string
+          tenancy_id?: string | null
+          uploaded_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenancy_documents_tenancy_id_fkey"
+            columns: ["tenancy_id"]
+            isOneToOne: false
+            referencedRelation: "tenancies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenant_communications: {
+        Row: {
+          attachments: string[] | null
+          communication_type: string | null
+          created_at: string | null
+          direction: string | null
+          id: string
+          message: string | null
+          subject: string | null
+          tenancy_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          attachments?: string[] | null
+          communication_type?: string | null
+          created_at?: string | null
+          direction?: string | null
+          id?: string
+          message?: string | null
+          subject?: string | null
+          tenancy_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          attachments?: string[] | null
+          communication_type?: string | null
+          created_at?: string | null
+          direction?: string | null
+          id?: string
+          message?: string | null
+          subject?: string | null
+          tenancy_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenant_communications_tenancy_id_fkey"
+            columns: ["tenancy_id"]
+            isOneToOne: false
+            referencedRelation: "tenancies"
             referencedColumns: ["id"]
           },
         ]

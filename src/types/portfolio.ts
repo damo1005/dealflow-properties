@@ -47,8 +47,11 @@ export interface RentPayment {
   expected_amount: number;
   actual_date: string | null;
   actual_amount: number | null;
-  status: 'pending' | 'paid' | 'partial' | 'overdue';
+  status: 'pending' | 'paid' | 'partial' | 'overdue' | 'late' | 'missed';
   days_late: number;
+  payment_method?: string;
+  payment_reference?: string;
+  notes?: string;
   created_at: string;
 }
 
