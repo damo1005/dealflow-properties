@@ -125,6 +125,161 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_announcements: {
+        Row: {
+          announcement_type: string | null
+          created_at: string | null
+          created_by: string | null
+          ends_at: string | null
+          id: string
+          is_active: boolean | null
+          message: string
+          show_banner: boolean | null
+          show_modal: boolean | null
+          starts_at: string | null
+          target_users: string | null
+          title: string
+        }
+        Insert: {
+          announcement_type?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          message: string
+          show_banner?: boolean | null
+          show_modal?: boolean | null
+          starts_at?: string | null
+          target_users?: string | null
+          title: string
+        }
+        Update: {
+          announcement_type?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          message?: string
+          show_banner?: boolean | null
+          show_modal?: boolean | null
+          starts_at?: string | null
+          target_users?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_announcements_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      admin_users: {
+        Row: {
+          admin_email: string
+          admin_role: string | null
+          can_manage_affiliates: boolean | null
+          can_manage_content: boolean | null
+          can_manage_settings: boolean | null
+          can_manage_users: boolean | null
+          can_view_financials: boolean | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          last_login_at: string | null
+          login_count: number | null
+          user_id: string
+        }
+        Insert: {
+          admin_email: string
+          admin_role?: string | null
+          can_manage_affiliates?: boolean | null
+          can_manage_content?: boolean | null
+          can_manage_settings?: boolean | null
+          can_manage_users?: boolean | null
+          can_view_financials?: boolean | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_login_at?: string | null
+          login_count?: number | null
+          user_id: string
+        }
+        Update: {
+          admin_email?: string
+          admin_role?: string | null
+          can_manage_affiliates?: boolean | null
+          can_manage_content?: boolean | null
+          can_manage_settings?: boolean | null
+          can_manage_users?: boolean | null
+          can_view_financials?: boolean | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_login_at?: string | null
+          login_count?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      affiliate_commissions: {
+        Row: {
+          advertiser: string | null
+          affiliate_network: string | null
+          click_date: string | null
+          commission_amount: number | null
+          commission_status: string | null
+          conversion_date: string | null
+          created_at: string | null
+          id: string
+          mortgage_amount: number | null
+          notes: string | null
+          property_address: string | null
+          tracking_id: string | null
+          transaction_id: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          advertiser?: string | null
+          affiliate_network?: string | null
+          click_date?: string | null
+          commission_amount?: number | null
+          commission_status?: string | null
+          conversion_date?: string | null
+          created_at?: string | null
+          id?: string
+          mortgage_amount?: number | null
+          notes?: string | null
+          property_address?: string | null
+          tracking_id?: string | null
+          transaction_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          advertiser?: string | null
+          affiliate_network?: string | null
+          click_date?: string | null
+          commission_amount?: number | null
+          commission_status?: string | null
+          conversion_date?: string | null
+          created_at?: string | null
+          id?: string
+          mortgage_amount?: number | null
+          notes?: string | null
+          property_address?: string | null
+          tracking_id?: string | null
+          transaction_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       affiliates: {
         Row: {
           active_referrals: number | null
@@ -2010,6 +2165,30 @@ export type Database = {
           },
         ]
       }
+      feature_usage: {
+        Row: {
+          date: string
+          feature_name: string
+          id: string
+          unique_users: number | null
+          usage_count: number | null
+        }
+        Insert: {
+          date: string
+          feature_name: string
+          id?: string
+          unique_users?: number | null
+          usage_count?: number | null
+        }
+        Update: {
+          date?: string
+          feature_name?: string
+          id?: string
+          unique_users?: number | null
+          usage_count?: number | null
+        }
+        Relationships: []
+      }
       goal_seek_results: {
         Row: {
           adjust_variable: string
@@ -2621,6 +2800,53 @@ export type Database = {
         }
         Relationships: []
       }
+      moderation_queue: {
+        Row: {
+          content_id: string
+          content_type: string | null
+          created_at: string | null
+          id: string
+          moderated_at: string | null
+          moderated_by: string | null
+          moderation_notes: string | null
+          report_reason: string | null
+          reported_by: string | null
+          status: string | null
+        }
+        Insert: {
+          content_id: string
+          content_type?: string | null
+          created_at?: string | null
+          id?: string
+          moderated_at?: string | null
+          moderated_by?: string | null
+          moderation_notes?: string | null
+          report_reason?: string | null
+          reported_by?: string | null
+          status?: string | null
+        }
+        Update: {
+          content_id?: string
+          content_type?: string | null
+          created_at?: string | null
+          id?: string
+          moderated_at?: string | null
+          moderated_by?: string | null
+          moderation_notes?: string | null
+          report_reason?: string | null
+          reported_by?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "moderation_queue_moderated_by_fkey"
+            columns: ["moderated_by"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mortgage_comparisons: {
         Row: {
           best_rate: number | null
@@ -3211,6 +3437,50 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      platform_settings: {
+        Row: {
+          category: string | null
+          description: string | null
+          id: string
+          is_sensitive: boolean | null
+          setting_key: string
+          setting_type: string | null
+          setting_value: Json | null
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          category?: string | null
+          description?: string | null
+          id?: string
+          is_sensitive?: boolean | null
+          setting_key: string
+          setting_type?: string | null
+          setting_value?: Json | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          category?: string | null
+          description?: string | null
+          id?: string
+          is_sensitive?: boolean | null
+          setting_key?: string
+          setting_type?: string | null
+          setting_value?: Json | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "platform_settings_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       portfolio_properties: {
         Row: {
@@ -3983,6 +4253,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      revenue_log: {
+        Row: {
+          amount: number
+          billing_period: string | null
+          created_at: string | null
+          currency: string | null
+          id: string
+          payment_method: string | null
+          plan_name: string | null
+          revenue_type: string | null
+          status: string | null
+          transaction_date: string | null
+          transaction_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          amount: number
+          billing_period?: string | null
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          payment_method?: string | null
+          plan_name?: string | null
+          revenue_type?: string | null
+          status?: string | null
+          transaction_date?: string | null
+          transaction_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          billing_period?: string | null
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          payment_method?: string | null
+          plan_name?: string | null
+          revenue_type?: string | null
+          status?: string | null
+          transaction_date?: string | null
+          transaction_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       saved_hotspots: {
         Row: {
@@ -4881,6 +5196,97 @@ export type Database = {
         }
         Relationships: []
       }
+      support_messages: {
+        Row: {
+          attachments: string[] | null
+          created_at: string | null
+          id: string
+          message: string
+          sender_id: string | null
+          sender_type: string | null
+          ticket_id: string | null
+        }
+        Insert: {
+          attachments?: string[] | null
+          created_at?: string | null
+          id?: string
+          message: string
+          sender_id?: string | null
+          sender_type?: string | null
+          ticket_id?: string | null
+        }
+        Update: {
+          attachments?: string[] | null
+          created_at?: string | null
+          id?: string
+          message?: string
+          sender_id?: string | null
+          sender_type?: string | null
+          ticket_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_messages_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_tickets: {
+        Row: {
+          assigned_to: string | null
+          category: string | null
+          closed_at: string | null
+          description: string
+          id: string
+          opened_at: string | null
+          priority: string | null
+          resolved_at: string | null
+          status: string | null
+          subject: string
+          ticket_number: string
+          user_id: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          category?: string | null
+          closed_at?: string | null
+          description: string
+          id?: string
+          opened_at?: string | null
+          priority?: string | null
+          resolved_at?: string | null
+          status?: string | null
+          subject: string
+          ticket_number: string
+          user_id?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          category?: string | null
+          closed_at?: string | null
+          description?: string
+          id?: string
+          opened_at?: string | null
+          priority?: string | null
+          resolved_at?: string | null
+          status?: string | null
+          subject?: string
+          ticket_number?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_tickets_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tenancies: {
         Row: {
           created_at: string | null
@@ -4958,6 +5364,36 @@ export type Database = {
           id?: string
           metadata?: Json | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_activity_log: {
+        Row: {
+          activity_details: Json | null
+          activity_type: string | null
+          created_at: string | null
+          id: string
+          ip_address: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          activity_details?: Json | null
+          activity_type?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          activity_details?: Json | null
+          activity_type?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }

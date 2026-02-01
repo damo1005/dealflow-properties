@@ -42,6 +42,16 @@ import MarketIntel from "./pages/MarketIntel";
 import STRManagement from "./pages/STRManagement";
 import NotFound from "./pages/NotFound";
 
+// Admin pages
+import {
+  AdminDashboard,
+  AdminUsers,
+  AdminSupport,
+  AdminSettings,
+  AdminRevenue,
+  AdminAffiliates,
+} from "./pages/admin";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -309,6 +319,14 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+
+            {/* Admin routes */}
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/users" element={<AdminUsers />} />
+            <Route path="/admin/revenue" element={<AdminRevenue />} />
+            <Route path="/admin/affiliates" element={<AdminAffiliates />} />
+            <Route path="/admin/support" element={<AdminSupport />} />
+            <Route path="/admin/settings" element={<AdminSettings />} />
 
             {/* Catch-all */}
             <Route path="*" element={<NotFound />} />
