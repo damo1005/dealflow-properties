@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import { useAppStore } from "@/stores/appStore";
 import { useNavigate } from "react-router-dom";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface TopBarProps {
   title?: string;
@@ -22,6 +23,20 @@ interface TopBarProps {
 export function TopBar({ title = "Dashboard", actions }: TopBarProps) {
   const { sidebarCollapsed } = useAppStore();
   const navigate = useNavigate();
+  const { signOut, user } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/");
+  };
+
+  const userInitials = user?.user_metadata?.full_name
+    ?.split(" ")
+    .map((n: string) => n[0])
+    .join("")
+    .toUpperCase() || user?.email?.[0]?.toUpperCase() || "U";
+
+  const displayName = user?.user_metadata?.full_name || user?.email || "User";
 
   return (
     <header
@@ -47,13 +62,13 @@ export function TopBar({ title = "Dashboard", actions }: TopBarProps) {
               className="flex items-center gap-2 px-2 hover:bg-accent"
             >
               <Avatar className="h-8 w-8">
-                <AvatarImage src="" alt="User" />
+                <AvatarImage src={user?.user_metadata?.avatar_url} alt="User" />
                 <AvatarFallback className="bg-primary text-primary-foreground text-sm">
-                  JD
+                  {userInitials}
                 </AvatarFallback>
               </Avatar>
-              <span className="hidden md:block text-sm font-medium text-foreground">
-                John Doe
+              <span className="hidden md:block text-sm font-medium text-foreground max-w-[150px] truncate">
+                {displayName}
               </span>
               <ChevronDown className="h-4 w-4 text-muted-foreground" />
             </Button>
@@ -68,7 +83,10 @@ export function TopBar({ title = "Dashboard", actions }: TopBarProps) {
               Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive focus:text-destructive">
+            <DropdownMenuItem 
+              className="text-destructive focus:text-destructive cursor-pointer"
+              onClick={handleSignOut}
+            >
               <LogOut className="mr-2 h-4 w-4" />
               Sign out
             </DropdownMenuItem>
