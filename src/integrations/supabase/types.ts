@@ -788,6 +788,114 @@ export type Database = {
         }
         Relationships: []
       }
+      area_contractors: {
+        Row: {
+          ccs_project_count: number | null
+          ccs_score: number | null
+          checkatrade_reviews: number | null
+          checkatrade_score: number | null
+          company_name: string
+          company_number: string | null
+          company_status: string | null
+          contact_name: string | null
+          created_at: string | null
+          email: string | null
+          fensa_number: string | null
+          gas_safe_number: string | null
+          id: string
+          incorporation_date: string | null
+          is_verified: boolean | null
+          last_synced: string | null
+          last_verified: string | null
+          latitude: number | null
+          longitude: number | null
+          niceic_number: string | null
+          phone: string | null
+          postcode: string | null
+          regions_served: string[] | null
+          service_radius_miles: number | null
+          sic_codes: string[] | null
+          source: string | null
+          source_id: string | null
+          source_url: string | null
+          specialties: string[] | null
+          trade_categories: string[] | null
+          trading_name: string | null
+          trustmark_registered: boolean | null
+          website: string | null
+        }
+        Insert: {
+          ccs_project_count?: number | null
+          ccs_score?: number | null
+          checkatrade_reviews?: number | null
+          checkatrade_score?: number | null
+          company_name: string
+          company_number?: string | null
+          company_status?: string | null
+          contact_name?: string | null
+          created_at?: string | null
+          email?: string | null
+          fensa_number?: string | null
+          gas_safe_number?: string | null
+          id?: string
+          incorporation_date?: string | null
+          is_verified?: boolean | null
+          last_synced?: string | null
+          last_verified?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          niceic_number?: string | null
+          phone?: string | null
+          postcode?: string | null
+          regions_served?: string[] | null
+          service_radius_miles?: number | null
+          sic_codes?: string[] | null
+          source?: string | null
+          source_id?: string | null
+          source_url?: string | null
+          specialties?: string[] | null
+          trade_categories?: string[] | null
+          trading_name?: string | null
+          trustmark_registered?: boolean | null
+          website?: string | null
+        }
+        Update: {
+          ccs_project_count?: number | null
+          ccs_score?: number | null
+          checkatrade_reviews?: number | null
+          checkatrade_score?: number | null
+          company_name?: string
+          company_number?: string | null
+          company_status?: string | null
+          contact_name?: string | null
+          created_at?: string | null
+          email?: string | null
+          fensa_number?: string | null
+          gas_safe_number?: string | null
+          id?: string
+          incorporation_date?: string | null
+          is_verified?: boolean | null
+          last_synced?: string | null
+          last_verified?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          niceic_number?: string | null
+          phone?: string | null
+          postcode?: string | null
+          regions_served?: string[] | null
+          service_radius_miles?: number | null
+          sic_codes?: string[] | null
+          source?: string | null
+          source_id?: string | null
+          source_url?: string | null
+          specialties?: string[] | null
+          trade_categories?: string[] | null
+          trading_name?: string | null
+          trustmark_registered?: boolean | null
+          website?: string | null
+        }
+        Relationships: []
+      }
       area_statistics_cache: {
         Row: {
           area_type: string | null
@@ -4475,6 +4583,51 @@ export type Database = {
         }
         Relationships: []
       }
+      demand_scores: {
+        Row: {
+          calculated_at: string | null
+          ccs_active_sites: number | null
+          construction_score: number | null
+          created_at: string | null
+          id: string
+          low_epc_properties: number | null
+          overall_demand_score: number | null
+          planning_approved_count: number | null
+          planning_pending_count: number | null
+          planning_score: number | null
+          postcode_district: string
+          renovation_score: number | null
+        }
+        Insert: {
+          calculated_at?: string | null
+          ccs_active_sites?: number | null
+          construction_score?: number | null
+          created_at?: string | null
+          id?: string
+          low_epc_properties?: number | null
+          overall_demand_score?: number | null
+          planning_approved_count?: number | null
+          planning_pending_count?: number | null
+          planning_score?: number | null
+          postcode_district: string
+          renovation_score?: number | null
+        }
+        Update: {
+          calculated_at?: string | null
+          ccs_active_sites?: number | null
+          construction_score?: number | null
+          created_at?: string | null
+          id?: string
+          low_epc_properties?: number | null
+          overall_demand_score?: number | null
+          planning_approved_count?: number | null
+          planning_pending_count?: number | null
+          planning_score?: number | null
+          postcode_district?: string
+          renovation_score?: number | null
+        }
+        Relationships: []
+      }
       deposit_protections: {
         Row: {
           amount: number
@@ -5493,6 +5646,93 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      epc_properties: {
+        Row: {
+          address: string | null
+          built_form: string | null
+          created_at: string | null
+          current_rating: string | null
+          current_score: number | null
+          floor_area: number | null
+          heating_description: string | null
+          heating_efficiency: string | null
+          id: string
+          improvement_cost_range: string | null
+          last_synced: string | null
+          latitude: number | null
+          lmk_key: string | null
+          local_authority: string | null
+          lodgement_date: string | null
+          longitude: number | null
+          postcode: string | null
+          potential_rating: string | null
+          potential_score: number | null
+          property_type: string | null
+          roof_description: string | null
+          roof_efficiency: string | null
+          walls_description: string | null
+          walls_efficiency: string | null
+          windows_description: string | null
+          windows_efficiency: string | null
+        }
+        Insert: {
+          address?: string | null
+          built_form?: string | null
+          created_at?: string | null
+          current_rating?: string | null
+          current_score?: number | null
+          floor_area?: number | null
+          heating_description?: string | null
+          heating_efficiency?: string | null
+          id?: string
+          improvement_cost_range?: string | null
+          last_synced?: string | null
+          latitude?: number | null
+          lmk_key?: string | null
+          local_authority?: string | null
+          lodgement_date?: string | null
+          longitude?: number | null
+          postcode?: string | null
+          potential_rating?: string | null
+          potential_score?: number | null
+          property_type?: string | null
+          roof_description?: string | null
+          roof_efficiency?: string | null
+          walls_description?: string | null
+          walls_efficiency?: string | null
+          windows_description?: string | null
+          windows_efficiency?: string | null
+        }
+        Update: {
+          address?: string | null
+          built_form?: string | null
+          created_at?: string | null
+          current_rating?: string | null
+          current_score?: number | null
+          floor_area?: number | null
+          heating_description?: string | null
+          heating_efficiency?: string | null
+          id?: string
+          improvement_cost_range?: string | null
+          last_synced?: string | null
+          latitude?: number | null
+          lmk_key?: string | null
+          local_authority?: string | null
+          lodgement_date?: string | null
+          longitude?: number | null
+          postcode?: string | null
+          potential_rating?: string | null
+          potential_score?: number | null
+          property_type?: string | null
+          roof_description?: string | null
+          roof_efficiency?: string | null
+          walls_description?: string | null
+          walls_efficiency?: string | null
+          windows_description?: string | null
+          windows_efficiency?: string | null
+        }
+        Relationships: []
       }
       event_connections: {
         Row: {
@@ -14824,6 +15064,71 @@ export type Database = {
         }
         Relationships: []
       }
+      user_contractors: {
+        Row: {
+          contractor_id: string | null
+          created_at: string | null
+          id: string
+          last_contact: string | null
+          manual_email: string | null
+          manual_name: string | null
+          manual_phone: string | null
+          manual_trades: string[] | null
+          notes: string | null
+          projects_together: number | null
+          status: string | null
+          total_spend: number | null
+          updated_at: string | null
+          user_id: string
+          user_rating: number | null
+          user_review: string | null
+        }
+        Insert: {
+          contractor_id?: string | null
+          created_at?: string | null
+          id?: string
+          last_contact?: string | null
+          manual_email?: string | null
+          manual_name?: string | null
+          manual_phone?: string | null
+          manual_trades?: string[] | null
+          notes?: string | null
+          projects_together?: number | null
+          status?: string | null
+          total_spend?: number | null
+          updated_at?: string | null
+          user_id: string
+          user_rating?: number | null
+          user_review?: string | null
+        }
+        Update: {
+          contractor_id?: string | null
+          created_at?: string | null
+          id?: string
+          last_contact?: string | null
+          manual_email?: string | null
+          manual_name?: string | null
+          manual_phone?: string | null
+          manual_trades?: string[] | null
+          notes?: string | null
+          projects_together?: number | null
+          status?: string | null
+          total_spend?: number | null
+          updated_at?: string | null
+          user_id?: string
+          user_rating?: number | null
+          user_review?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_contractors_contractor_id_fkey"
+            columns: ["contractor_id"]
+            isOneToOne: false
+            referencedRelation: "area_contractors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_integrations: {
         Row: {
           access_token: string | null
@@ -15089,6 +15394,76 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      user_tracked_planning: {
+        Row: {
+          alert_on_decision: boolean | null
+          created_at: string | null
+          id: string
+          notes: string | null
+          planning_id: string | null
+          user_id: string
+        }
+        Insert: {
+          alert_on_decision?: boolean | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          planning_id?: string | null
+          user_id: string
+        }
+        Update: {
+          alert_on_decision?: boolean | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          planning_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_tracked_planning_planning_id_fkey"
+            columns: ["planning_id"]
+            isOneToOne: false
+            referencedRelation: "planning_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_tracked_sites: {
+        Row: {
+          created_at: string | null
+          id: string
+          interested_in_contractor: boolean | null
+          notes: string | null
+          site_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          interested_in_contractor?: boolean | null
+          notes?: string | null
+          site_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          interested_in_contractor?: boolean | null
+          notes?: string | null
+          site_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_tracked_sites_site_id_fkey"
+            columns: ["site_id"]
+            isOneToOne: false
+            referencedRelation: "ccs_projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_viewing_stats: {
         Row: {
@@ -15589,6 +15964,7 @@ export type Database = {
       }
     }
     Functions: {
+      calculate_demand_score: { Args: { district: string }; Returns: number }
       clean_all_expired_caches: { Args: never; Returns: undefined }
       clean_expired_cache: { Args: never; Returns: undefined }
       find_ccs_projects_near: {
@@ -15627,6 +16003,90 @@ export type Database = {
           workforce_score: number
         }[]
       }
+      find_contractors_near: {
+        Args: {
+          radius_miles?: number
+          search_lat: number
+          search_lng: number
+          trade_filter?: string
+        }
+        Returns: {
+          ccs_project_count: number
+          ccs_score: number
+          checkatrade_reviews: number
+          checkatrade_score: number
+          company_name: string
+          distance_miles: number
+          email: string
+          id: string
+          is_verified: boolean
+          latitude: number
+          longitude: number
+          phone: string
+          postcode: string
+          source: string
+          specialties: string[]
+          trade_categories: string[]
+          trading_name: string
+          trustmark_registered: boolean
+          website: string
+        }[]
+      }
+      find_epc_near: {
+        Args: {
+          radius_miles?: number
+          rating_filter?: string[]
+          search_lat: number
+          search_lng: number
+        }
+        Returns: {
+          address: string
+          built_form: string
+          current_rating: string
+          current_score: number
+          distance_miles: number
+          floor_area: number
+          heating_efficiency: string
+          id: string
+          latitude: number
+          lmk_key: string
+          longitude: number
+          postcode: string
+          potential_rating: string
+          potential_score: number
+          property_type: string
+          roof_efficiency: string
+          walls_efficiency: string
+          windows_efficiency: string
+        }[]
+      }
+      find_planning_near: {
+        Args: {
+          radius_miles?: number
+          search_lat: number
+          search_lng: number
+          status_filter?: string
+        }
+        Returns: {
+          address: string
+          agent_company: string
+          applicant_name: string
+          application_type: string
+          decision_date: string
+          description: string
+          development_type: string
+          distance_miles: number
+          id: string
+          latitude: number
+          local_authority: string
+          longitude: number
+          postcode: string
+          proposed_units: number
+          reference: string
+          status: string
+          submitted_date: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -15634,6 +16094,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      refresh_demand_scores: { Args: never; Returns: undefined }
       reset_daily_alert_counts: { Args: never; Returns: undefined }
     }
     Enums: {
