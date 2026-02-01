@@ -28,9 +28,10 @@ import { ConstructionProject, PROJECT_STATUS_CONFIG, PROJECT_TYPE_CONFIG } from 
 import { ProjectDetailModal } from "@/components/construction/ProjectDetailModal";
 import { ConstructionMap } from "@/components/construction/ConstructionMap";
 import { MyContractorsTab } from "@/components/construction/MyContractorsTab";
+import { CCSProjectsTab } from "@/components/construction/CCSProjectsTab";
 
 export default function ConstructionRadar() {
-  const [activeTab, setActiveTab] = useState("projects");
+  const [activeTab, setActiveTab] = useState("ccs"); // Default to CCS tab
   const [searchPostcode, setSearchPostcode] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   
@@ -47,6 +48,7 @@ export default function ConstructionRadar() {
     setCompanies,
   } = useConstructionStore();
   
+  // Original construction projects (mock data)
   const { data: projects = [], isLoading: projectsLoading } = useConstructionProjects(
     searchPostcode || undefined
   );
@@ -83,7 +85,6 @@ export default function ConstructionRadar() {
   };
   
   const handleSearch = () => {
-    // Trigger refetch with new postcode
     setFilters({ postcode: searchPostcode });
   };
   
@@ -140,9 +141,13 @@ export default function ConstructionRadar() {
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList>
+            <TabsTrigger value="ccs" className="gap-2">
+              <Star className="h-4 w-4" />
+              CCS Projects
+            </TabsTrigger>
             <TabsTrigger value="projects" className="gap-2">
               <Building2 className="h-4 w-4" />
-              Projects
+              Local Projects
             </TabsTrigger>
             <TabsTrigger value="contractors" className="gap-2">
               <HardHat className="h-4 w-4" />
@@ -153,6 +158,10 @@ export default function ConstructionRadar() {
               Tracked ({trackedProjects.length})
             </TabsTrigger>
           </TabsList>
+          
+          <TabsContent value="ccs" className="mt-6">
+            <CCSProjectsTab />
+          </TabsContent>
           
           <TabsContent value="projects" className="mt-6">
             {/* Search & Filters */}
