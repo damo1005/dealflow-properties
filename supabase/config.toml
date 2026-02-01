@@ -74,3 +74,12 @@ verify_jwt = false
 
 [functions.sync-ccs-projects]
 verify_jwt = false
+
+[functions.sync-planning-data]
+verify_jwt = false
+
+[functions.sync-epc-data]
+verify_jwt = false
+
+[functions.calculate-demand]
+verify_jwt = false
