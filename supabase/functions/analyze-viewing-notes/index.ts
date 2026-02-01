@@ -8,7 +8,7 @@ const corsHeaders = {
 
 const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
 
-const systemPrompt = `You are a property viewing notes analyzer. Analyze property viewing transcripts and extract structured insights.
+const systemPrompt = `You are a property viewing notes analyzer for UK property investors. Analyze property viewing transcripts and extract structured insights.
 
 Return ONLY valid JSON (no markdown, no backticks, no explanations) in this exact structure:
 
@@ -16,9 +16,9 @@ Return ONLY valid JSON (no markdown, no backticks, no explanations) in this exac
   "condition_assessment": {
     "overall": "Good" | "Fair" | "Poor",
     "rooms": [
-      {"name": "Room name", "condition": "Good" | "Fair" | "Poor", "notes": "details"}
+      {"name": "Room name", "condition": "Good" | "Fair" | "Poor", "notes": "specific observations"}
     ],
-    "urgent_issues": ["issue1", "issue2"]
+    "urgent_issues": ["critical issue 1", "critical issue 2"]
   },
   "cost_estimates": {
     "cosmetic": [{"item": "description", "cost": number}],
@@ -28,15 +28,21 @@ Return ONLY valid JSON (no markdown, no backticks, no explanations) in this exac
   },
   "pros": ["pro1", "pro2", "pro3"],
   "cons": ["con1", "con2"],
-  "key_quotes": ["quote1", "quote2"],
+  "key_quotes": ["direct quote from viewing", "another key observation"],
   "overall_impression": {
     "sentiment": "Positive" | "Neutral" | "Negative",
     "interest_level": "High" | "Medium" | "Low",
-    "next_action": "recommended action"
+    "next_action": "specific recommended next step"
   }
 }
 
-Be realistic with cost estimates for UK property market. Extract actual quotes from the transcript. If information is missing, make reasonable assumptions based on context.`;
+Guidelines:
+- Be realistic with cost estimates for UK property market (2024 prices)
+- Extract actual quotes from the transcript when available
+- If information is missing, make reasonable assumptions based on context
+- Identify any deal-breaker issues in urgent_issues
+- Keep pros/cons concise and actionable
+- Recommend specific next actions based on sentiment`;
 
 const handler = async (req: Request): Promise<Response> => {
   if (req.method === "OPTIONS") {
@@ -48,18 +54,22 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    const { transcript, propertyAddress } = await req.json();
+    const { transcript, propertyAddress, templateUsed } = await req.json();
 
     if (!transcript || transcript.trim().length === 0) {
       throw new Error("Transcript is required");
     }
 
-    const userPrompt = `Analyze this property viewing transcript for: ${propertyAddress || "Unknown property"}
+    const templateContext = templateUsed
+      ? `\nThe user was using the "${templateUsed}" template, so pay special attention to those aspects in your analysis.`
+      : "";
+
+    const userPrompt = `Analyze this property viewing transcript for: ${propertyAddress || "Unknown property"}${templateContext}
 
 Transcript:
 "${transcript}"
 
-Extract condition assessments, cost estimates, pros/cons, key quotes, and overall impression. Return valid JSON only.`;
+Extract condition assessments, cost estimates, pros/cons, key quotes, and overall impression. Be specific and actionable. Return valid JSON only.`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -73,7 +83,7 @@ Extract condition assessments, cost estimates, pros/cons, key quotes, and overal
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
         ],
-        max_tokens: 2000,
+        max_tokens: 3000,
         temperature: 0.3,
       }),
     });
@@ -81,13 +91,13 @@ Extract condition assessments, cost estimates, pros/cons, key quotes, and overal
     if (!response.ok) {
       if (response.status === 429) {
         return new Response(
-          JSON.stringify({ error: "Rate limit exceeded. Please try again in a moment." }),
+          JSON.stringify({ success: false, error: "Rate limit exceeded. Please try again in a moment." }),
           { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
       if (response.status === 402) {
         return new Response(
-          JSON.stringify({ error: "AI credits exhausted. Please add credits to continue." }),
+          JSON.stringify({ success: false, error: "AI credits exhausted. Please add credits to continue." }),
           { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
@@ -123,6 +133,20 @@ Extract condition assessments, cost estimates, pros/cons, key quotes, and overal
       console.error("Failed to parse AI response:", cleanedContent);
       throw new Error("Failed to parse AI analysis response");
     }
+
+    // Validate required fields exist
+    if (!analysis.condition_assessment) {
+      analysis.condition_assessment = { overall: "Fair", rooms: [], urgent_issues: [] };
+    }
+    if (!analysis.cost_estimates) {
+      analysis.cost_estimates = { cosmetic: [], essential: [], upgrades: [], total: 0 };
+    }
+    if (!analysis.overall_impression) {
+      analysis.overall_impression = { sentiment: "Neutral", interest_level: "Medium", next_action: "Review transcript" };
+    }
+    if (!analysis.pros) analysis.pros = [];
+    if (!analysis.cons) analysis.cons = [];
+    if (!analysis.key_quotes) analysis.key_quotes = [];
 
     return new Response(
       JSON.stringify({

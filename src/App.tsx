@@ -32,6 +32,7 @@ const App = () => (
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/search" element={<SearchProperties />} />
           <Route path="/property/:id" element={<PropertyDetail />} />
+          <Route path="/property/:id/record" element={<ViewingNotesRecording />} />
           <Route path="/property/:id/viewing-notes" element={<ViewingNotesRecording />} />
           <Route path="/property/:id/viewing-notes/:noteId" element={<ViewingNotesResults />} />
           <Route path="/compare" element={<Compare />} />
