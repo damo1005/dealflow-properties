@@ -6,24 +6,30 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Known location codes for common UK areas
+// Pre-encoded location codes (use %5E instead of ^)
 const LOCATION_CODES: Record<string, string> = {
-  'harpenden': 'OUTCODE^114',
-  'al5': 'OUTCODE^114',
-  'st albans': 'REGION^1029',
-  'al1': 'OUTCODE^93',
-  'birmingham': 'REGION^162',
-  'manchester': 'REGION^904',
-  'london': 'REGION^87490',
-  'leeds': 'REGION^787',
-  'liverpool': 'REGION^821',
-  'bristol': 'REGION^219',
-  'sheffield': 'REGION^1195',
-  'edinburgh': 'REGION^475',
-  'glasgow': 'REGION^550',
-  'nottingham': 'REGION^1019',
-  'leicester': 'REGION^806',
-  'coventry': 'REGION^366',
+  'harpenden': 'OUTCODE%5E114',
+  'al5': 'OUTCODE%5E114',
+  'st albans': 'REGION%5E1029',
+  'al1': 'OUTCODE%5E93',
+  'birmingham': 'REGION%5E162',
+  'b1': 'OUTCODE%5E234',
+  'manchester': 'REGION%5E904',
+  'm1': 'OUTCODE%5E1712',
+  'london': 'REGION%5E87490',
+  'leeds': 'REGION%5E787',
+  'liverpool': 'REGION%5E821',
+  'bristol': 'REGION%5E219',
+  'sheffield': 'REGION%5E1195',
+  'edinburgh': 'REGION%5E475',
+  'glasgow': 'REGION%5E550',
+  'nottingham': 'REGION%5E1019',
+  'leicester': 'REGION%5E806',
+  'coventry': 'REGION%5E366',
+  'reading': 'REGION%5E1098',
+  'milton keynes': 'REGION%5E943',
+  'cambridge': 'REGION%5E274',
+  'oxford': 'REGION%5E1036',
 };
 
 serve(async (req) => {
@@ -48,76 +54,56 @@ serve(async (req) => {
     const searchLocation = params.location.trim().toLowerCase();
     console.log('=== SEARCH START ===');
     console.log('Location:', searchLocation);
+    console.log('Has APIFY_TOKEN:', !!APIFY_TOKEN);
 
-    // Get location code - try known codes first, then API
+    // Get pre-encoded location code
     let locationCode = LOCATION_CODES[searchLocation];
     
     if (!locationCode) {
-      // Check if it looks like a postcode outcode (e.g., AL5, M1, SW1)
+      // Check if it's an outcode pattern (e.g., AL5, M1, SW1A)
       const outcodeMatch = searchLocation.match(/^([a-z]{1,2}\d{1,2}[a-z]?)$/i);
       if (outcodeMatch) {
-        locationCode = `OUTCODE^${outcodeMatch[1].toUpperCase()}`;
-      } else {
-        // Try the API
-        const apiCode = await getRightmoveLocationCode(searchLocation);
-        if (apiCode) locationCode = apiCode;
+        locationCode = `OUTCODE%5E${outcodeMatch[1].toUpperCase()}`;
       }
     }
 
     if (!locationCode) {
-      // Last resort - treat as region search
-      locationCode = `REGION^${searchLocation.toUpperCase()}`;
+      throw new Error(`Unknown location: ${params.location}. Try a city name or postcode like AL5, M1, etc.`);
     }
 
     console.log('Location code:', locationCode);
 
-    // Build search URL - DO NOT encode the locationIdentifier, it's already in correct format
-    let searchUrl = `https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=${encodeURIComponent(locationCode)}&radius=${params.radius || 10}.0&sortType=6&includeSSTC=false&_includeSSTC=on`;
-    
-    if (params.minPrice) searchUrl += `&minPrice=${params.minPrice}`;
-    if (params.maxPrice && params.maxPrice < 5000000) searchUrl += `&maxPrice=${params.maxPrice}`;
-    if (params.minBeds) searchUrl += `&minBedrooms=${params.minBeds}`;
+    // Build EXACT URL format that works (from manual test)
+    const searchUrl = `https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=${locationCode}&radius=${params.radius || 10}.0&sortType=6&propertyTypes=&includeSSTC=false&mustHave=&dontShow=&furnishTypes=&keywords=`;
     
     console.log('Search URL:', searchUrl);
-
-    // Validate URL format
-    try {
-      new URL(searchUrl);
-    } catch {
-      throw new Error('Invalid search URL generated');
-    }
 
     let results: any[] = [];
 
     // Try Apify
     if (APIFY_TOKEN) {
       try {
-        console.log('Calling Apify...');
         results = await fetchFromApify(searchUrl, APIFY_TOKEN);
-        console.log('Apify returned:', results.length);
+        console.log('Apify returned:', results.length, 'results');
       } catch (e: any) {
-        console.error('Apify error:', e.message);
+        console.error('Apify failed:', e.message);
       }
+    } else {
+      console.log('No APIFY_TOKEN set');
     }
 
-    // Fallback to direct scraping
-    if (results.length === 0) {
-      console.log('Trying direct scrape...');
-      results = await directScrape(searchUrl);
-      console.log('Direct scrape returned:', results.length);
-    }
-
-    // Transform and save
+    // Transform results
     const listings = results.map(item => transformListing(item, params.location));
+    console.log('Transformed:', listings.length, 'listings');
 
+    // Save to database
     for (const listing of listings) {
       await supabase
         .from('property_listings')
-        .upsert(listing, { onConflict: 'external_id,source' })
-        .then(({ error }) => error && console.log('DB:', error.message));
+        .upsert(listing, { onConflict: 'external_id,source' });
     }
 
-    console.log('=== COMPLETE: ' + listings.length + ' listings ===');
+    console.log('=== COMPLETE ===');
 
     return new Response(
       JSON.stringify({ success: true, data: listings, count: listings.length }),
@@ -133,41 +119,8 @@ serve(async (req) => {
   }
 });
 
-async function getRightmoveLocationCode(location: string): Promise<string | null> {
-  try {
-    // Try multiple API endpoints
-    const endpoints = [
-      `https://www.rightmove.co.uk/typeAhead/uknocheck/${encodeURIComponent(location)}`,
-      `https://www.rightmove.co.uk/api/_searchLocations?searchType=SALE&query=${encodeURIComponent(location)}`,
-    ];
-
-    for (const url of endpoints) {
-      try {
-        const res = await fetch(url, {
-          headers: {
-            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-            "Accept": "application/json, text/plain, */*",
-            "Referer": "https://www.rightmove.co.uk/",
-          },
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          const loc = data.typeAheadLocations?.[0] || data.locations?.[0];
-          if (loc?.locationIdentifier) {
-            console.log('Found location via API:', loc.locationIdentifier);
-            return loc.locationIdentifier;
-          }
-        }
-      } catch {}
-    }
-    return null;
-  } catch {
-    return null;
-  }
-}
-
 async function fetchFromApify(searchUrl: string, token: string): Promise<any[]> {
+  // Use exact input format
   const input = {
     listUrls: [searchUrl],
     maxItems: 25,
@@ -176,7 +129,7 @@ async function fetchFromApify(searchUrl: string, token: string): Promise<any[]> 
     includeNearestSchools: false,
   };
 
-  console.log('Apify input:', JSON.stringify(input));
+  console.log('Apify input listUrls[0]:', input.listUrls[0]);
 
   const startRes = await fetch(
     `https://api.apify.com/v2/acts/dhrumil~rightmove-scraper/runs?token=${token}`,
@@ -187,32 +140,40 @@ async function fetchFromApify(searchUrl: string, token: string): Promise<any[]> 
     }
   );
 
-  const startText = await startRes.text();
-  console.log('Apify start response:', startText.substring(0, 300));
-
   if (!startRes.ok) {
-    throw new Error(`Apify start failed: ${startRes.status} - ${startText.substring(0, 100)}`);
+    const errText = await startRes.text();
+    console.error('Apify response:', errText);
+    throw new Error(`Apify failed: ${startRes.status}`);
   }
 
-  const startData = JSON.parse(startText);
+  const startData = await startRes.json();
   const runId = startData.data?.id;
-  if (!runId) throw new Error('No run ID');
-
-  console.log('Run ID:', runId);
+  
+  if (!runId) {
+    throw new Error('No run ID returned');
+  }
+  
+  console.log('Apify run ID:', runId);
 
   // Poll for completion
   for (let i = 0; i < 30; i++) {
     await new Promise(r => setTimeout(r, 2000));
     
-    const statusRes = await fetch(`https://api.apify.com/v2/actor-runs/${runId}?token=${token}`);
+    const statusRes = await fetch(
+      `https://api.apify.com/v2/actor-runs/${runId}?token=${token}`
+    );
     const statusData = await statusRes.json();
     const status = statusData.data?.status;
     
-    if (i % 5 === 0) console.log(`Status: ${status}`);
+    if (i % 5 === 0) console.log(`Poll ${i}: ${status}`);
     
     if (status === 'SUCCEEDED') {
-      const dataRes = await fetch(`https://api.apify.com/v2/actor-runs/${runId}/dataset/items?token=${token}`);
-      return await dataRes.json();
+      const dataRes = await fetch(
+        `https://api.apify.com/v2/actor-runs/${runId}/dataset/items?token=${token}`
+      );
+      const items = await dataRes.json();
+      console.log('Got', items.length, 'items from dataset');
+      return items;
     }
     
     if (status === 'FAILED' || status === 'ABORTED') {
@@ -220,32 +181,7 @@ async function fetchFromApify(searchUrl: string, token: string): Promise<any[]> 
     }
   }
 
-  throw new Error('Timeout');
-}
-
-async function directScrape(searchUrl: string): Promise<any[]> {
-  const res = await fetch(searchUrl, {
-    headers: {
-      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-      "Accept": "text/html,application/xhtml+xml",
-      "Accept-Language": "en-GB,en;q=0.9",
-    },
-  });
-
-  if (!res.ok) return [];
-
-  const html = await res.text();
-  
-  // Try to find embedded JSON
-  const jsonMatch = html.match(/window\.jsonModel\s*=\s*(\{[\s\S]*?\});\s*<\/script>/);
-  if (jsonMatch) {
-    try {
-      const data = JSON.parse(jsonMatch[1]);
-      return data.properties || [];
-    } catch {}
-  }
-
-  return [];
+  throw new Error('Timeout waiting for Apify');
 }
 
 function transformListing(item: any, location: string): any {
@@ -253,9 +189,13 @@ function transformListing(item: any, location: string): any {
   const postcode = extractPostcode(address);
   
   let price = 0;
-  if (typeof item.price === 'number') price = item.price;
-  else if (item.price?.amount) price = item.price.amount;
-  else if (item.displayPrice) price = parseInt(String(item.displayPrice).replace(/\D/g, '')) || 0;
+  if (typeof item.price === 'number') {
+    price = item.price;
+  } else if (item.price?.amount) {
+    price = item.price.amount;
+  } else if (item.displayPrice) {
+    price = parseInt(String(item.displayPrice).replace(/\D/g, '')) || 0;
+  }
 
   const rent = price ? Math.round(price * 0.0045) : null;
   const yld = rent && price ? Math.round((rent * 12 / price) * 100) / 10 : null;
@@ -266,7 +206,7 @@ function transformListing(item: any, location: string): any {
     .slice(0, 5);
 
   return {
-    external_id: String(item.id || `rm-${Date.now()}`),
+    external_id: String(item.id || `rm-${Date.now()}-${Math.random().toString(36).substr(2,6)}`),
     source: 'rightmove',
     listing_url: item.url || `https://www.rightmove.co.uk/properties/${item.id}`,
     address,
