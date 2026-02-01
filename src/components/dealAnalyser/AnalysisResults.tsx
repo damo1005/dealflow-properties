@@ -28,8 +28,11 @@ import {
   Shield,
   Calculator,
   ArrowRight,
+  Loader2,
+  Check,
 } from "lucide-react";
 import { useDealAnalysisStore } from "@/stores/dealAnalysisStore";
+import { useSaveAnalyzedProperty } from "@/hooks/useAnalyzedProperties";
 import { cn } from "@/lib/utils";
 import {
   LineChart,
@@ -41,9 +44,12 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+import { useState } from "react";
 
 export function AnalysisResults() {
-  const { analysis, resetWizard } = useDealAnalysisStore();
+  const { analysis, property, financials, strategyInput, resetWizard } = useDealAnalysisStore();
+  const saveProperty = useSaveAnalyzedProperty();
+  const [isSaved, setIsSaved] = useState(false);
 
   if (!analysis) {
     return null;
@@ -461,9 +467,33 @@ export function AnalysisResults() {
       <Card>
         <CardContent className="pt-6">
           <div className="flex flex-wrap gap-3 justify-center">
-            <Button variant="outline">
-              <Save className="mr-2 h-4 w-4" />
-              Save Analysis
+            <Button 
+              variant={isSaved ? "outline" : "default"}
+              disabled={saveProperty.isPending || isSaved}
+              onClick={() => {
+                saveProperty.mutate({
+                  ...analysis,
+                  sourceUrl: property.sourceUrl,
+                  sourcePlatform: property.sourcePlatform,
+                  propertyAddress: property.address,
+                  postcode: property.postcode,
+                  propertyType: property.propertyType,
+                  bedrooms: property.bedrooms,
+                  bathrooms: property.bathrooms,
+                  squareFootage: property.squareFootage,
+                }, {
+                  onSuccess: () => setIsSaved(true),
+                });
+              }}
+            >
+              {saveProperty.isPending ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : isSaved ? (
+                <Check className="mr-2 h-4 w-4" />
+              ) : (
+                <Save className="mr-2 h-4 w-4" />
+              )}
+              {isSaved ? "Saved to Compare" : "Save Analysis"}
             </Button>
             <Button variant="outline">
               <Download className="mr-2 h-4 w-4" />
