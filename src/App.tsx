@@ -81,7 +81,7 @@ import RentalListings from "./pages/RentalListings";
 import SmartHome from "./pages/SmartHome";
 import CarbonFootprint from "./pages/CarbonFootprint";
 import ConstructionRadar from "./pages/ConstructionRadar";
-import ContractorDemand from "./pages/ContractorDemand";
+import ContractorDemand from "./pages/ContractorDemandPage";
 import { AIChatWidget } from "./components/copilot/AIChatWidget";
 // Admin pages
 import {
