@@ -2442,6 +2442,158 @@ export type Database = {
         }
         Relationships: []
       }
+      deal_analyses: {
+        Row: {
+          annual_cash_flow: number | null
+          area_data: Json | null
+          arv: number | null
+          asking_price: number | null
+          bathrooms: number | null
+          bedrooms: number | null
+          cash_on_cash: number | null
+          costs_breakdown: Json | null
+          created_at: string | null
+          deal_score: number | null
+          finance_type: string | null
+          five_year_projection: Json | null
+          gross_yield: number | null
+          id: string
+          interest_only: boolean | null
+          interest_rate: number | null
+          ltv: number | null
+          monthly_cash_flow: number | null
+          mortgage_term: number | null
+          net_yield: number | null
+          notes: string | null
+          offer_price: number | null
+          postcode: string | null
+          property_address: string | null
+          property_type: string | null
+          purchase_type: string | null
+          refurb_heavy: number | null
+          refurb_light: number | null
+          refurb_medium: number | null
+          rental_comparables: Json | null
+          risk_assessment: Json | null
+          roi_year_1: number | null
+          score_breakdown: Json | null
+          sold_comparables: Json | null
+          source_platform: string | null
+          source_url: string | null
+          square_footage: number | null
+          status: string | null
+          strategy: string | null
+          strategy_inputs: Json | null
+          stress_test: Json | null
+          tax_implications: Json | null
+          total_cash_required: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          annual_cash_flow?: number | null
+          area_data?: Json | null
+          arv?: number | null
+          asking_price?: number | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          cash_on_cash?: number | null
+          costs_breakdown?: Json | null
+          created_at?: string | null
+          deal_score?: number | null
+          finance_type?: string | null
+          five_year_projection?: Json | null
+          gross_yield?: number | null
+          id?: string
+          interest_only?: boolean | null
+          interest_rate?: number | null
+          ltv?: number | null
+          monthly_cash_flow?: number | null
+          mortgage_term?: number | null
+          net_yield?: number | null
+          notes?: string | null
+          offer_price?: number | null
+          postcode?: string | null
+          property_address?: string | null
+          property_type?: string | null
+          purchase_type?: string | null
+          refurb_heavy?: number | null
+          refurb_light?: number | null
+          refurb_medium?: number | null
+          rental_comparables?: Json | null
+          risk_assessment?: Json | null
+          roi_year_1?: number | null
+          score_breakdown?: Json | null
+          sold_comparables?: Json | null
+          source_platform?: string | null
+          source_url?: string | null
+          square_footage?: number | null
+          status?: string | null
+          strategy?: string | null
+          strategy_inputs?: Json | null
+          stress_test?: Json | null
+          tax_implications?: Json | null
+          total_cash_required?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          annual_cash_flow?: number | null
+          area_data?: Json | null
+          arv?: number | null
+          asking_price?: number | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          cash_on_cash?: number | null
+          costs_breakdown?: Json | null
+          created_at?: string | null
+          deal_score?: number | null
+          finance_type?: string | null
+          five_year_projection?: Json | null
+          gross_yield?: number | null
+          id?: string
+          interest_only?: boolean | null
+          interest_rate?: number | null
+          ltv?: number | null
+          monthly_cash_flow?: number | null
+          mortgage_term?: number | null
+          net_yield?: number | null
+          notes?: string | null
+          offer_price?: number | null
+          postcode?: string | null
+          property_address?: string | null
+          property_type?: string | null
+          purchase_type?: string | null
+          refurb_heavy?: number | null
+          refurb_light?: number | null
+          refurb_medium?: number | null
+          rental_comparables?: Json | null
+          risk_assessment?: Json | null
+          roi_year_1?: number | null
+          score_breakdown?: Json | null
+          sold_comparables?: Json | null
+          source_platform?: string | null
+          source_url?: string | null
+          square_footage?: number | null
+          status?: string | null
+          strategy?: string | null
+          strategy_inputs?: Json | null
+          stress_test?: Json | null
+          tax_implications?: Json | null
+          total_cash_required?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deal_analyses_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       deal_pack_comments: {
         Row: {
           comment_text: string
