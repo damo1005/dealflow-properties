@@ -46,6 +46,10 @@ import Conveyancing from "./pages/Conveyancing";
 import Contractors from "./pages/Contractors";
 import Reports from "./pages/Reports";
 import DealAnalyser from "./pages/DealAnalyser";
+import TeamSettings from "./pages/TeamSettings";
+import JVDeals from "./pages/JVDeals";
+import AccountantPortal from "./pages/AccountantPortal";
+import PortfolioSharing from "./pages/PortfolioSharing";
 import NotFound from "./pages/NotFound";
 
 // Admin pages
