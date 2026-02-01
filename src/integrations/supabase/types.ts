@@ -1768,6 +1768,80 @@ export type Database = {
         }
         Relationships: []
       }
+      group_members: {
+        Row: {
+          group_id: string | null
+          id: string
+          joined_at: string | null
+          role: string | null
+          user_id: string
+        }
+        Insert: {
+          group_id?: string | null
+          id?: string
+          joined_at?: string | null
+          role?: string | null
+          user_id: string
+        }
+        Update: {
+          group_id?: string | null
+          id?: string
+          joined_at?: string | null
+          role?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "group_members_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "network_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jv_preferences: {
+        Row: {
+          capital_available: number | null
+          created_at: string | null
+          id: string
+          looking_for_capital: boolean | null
+          looking_for_skills: string[] | null
+          max_deal_size: number | null
+          min_deal_size: number | null
+          preferred_locations: string[] | null
+          preferred_strategies: string[] | null
+          skills: string[] | null
+          user_id: string
+        }
+        Insert: {
+          capital_available?: number | null
+          created_at?: string | null
+          id?: string
+          looking_for_capital?: boolean | null
+          looking_for_skills?: string[] | null
+          max_deal_size?: number | null
+          min_deal_size?: number | null
+          preferred_locations?: string[] | null
+          preferred_strategies?: string[] | null
+          skills?: string[] | null
+          user_id: string
+        }
+        Update: {
+          capital_available?: number | null
+          created_at?: string | null
+          id?: string
+          looking_for_capital?: boolean | null
+          looking_for_skills?: string[] | null
+          max_deal_size?: number | null
+          min_deal_size?: number | null
+          preferred_locations?: string[] | null
+          preferred_strategies?: string[] | null
+          skills?: string[] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       maintenance_jobs: {
         Row: {
           actual_cost: number | null
@@ -1938,6 +2012,111 @@ export type Database = {
           properties_sold_30d?: number | null
           rental_demand?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      network_groups: {
+        Row: {
+          cover_image_url: string | null
+          created_at: string | null
+          created_by: string
+          description: string | null
+          group_type: string | null
+          id: string
+          location_area: string | null
+          member_count: number | null
+          name: string
+          visibility: string | null
+        }
+        Insert: {
+          cover_image_url?: string | null
+          created_at?: string | null
+          created_by: string
+          description?: string | null
+          group_type?: string | null
+          id?: string
+          location_area?: string | null
+          member_count?: number | null
+          name: string
+          visibility?: string | null
+        }
+        Update: {
+          cover_image_url?: string | null
+          created_at?: string | null
+          created_by?: string
+          description?: string | null
+          group_type?: string | null
+          id?: string
+          location_area?: string | null
+          member_count?: number | null
+          name?: string
+          visibility?: string | null
+        }
+        Relationships: []
+      }
+      network_posts: {
+        Row: {
+          asking_price: number | null
+          comment_count: number | null
+          content: string
+          created_at: string | null
+          deal_type: string | null
+          id: string
+          images: Json | null
+          jv_equity_split: string | null
+          jv_investment_required: number | null
+          jv_structure: string | null
+          like_count: number | null
+          location_area: string | null
+          post_type: string
+          share_count: number | null
+          title: string | null
+          updated_at: string | null
+          user_id: string
+          view_count: number | null
+          visibility: string | null
+        }
+        Insert: {
+          asking_price?: number | null
+          comment_count?: number | null
+          content: string
+          created_at?: string | null
+          deal_type?: string | null
+          id?: string
+          images?: Json | null
+          jv_equity_split?: string | null
+          jv_investment_required?: number | null
+          jv_structure?: string | null
+          like_count?: number | null
+          location_area?: string | null
+          post_type: string
+          share_count?: number | null
+          title?: string | null
+          updated_at?: string | null
+          user_id: string
+          view_count?: number | null
+          visibility?: string | null
+        }
+        Update: {
+          asking_price?: number | null
+          comment_count?: number | null
+          content?: string
+          created_at?: string | null
+          deal_type?: string | null
+          id?: string
+          images?: Json | null
+          jv_equity_split?: string | null
+          jv_investment_required?: number | null
+          jv_structure?: string | null
+          like_count?: number | null
+          location_area?: string | null
+          post_type?: string
+          share_count?: number | null
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string
+          view_count?: number | null
+          visibility?: string | null
         }
         Relationships: []
       }
@@ -2291,6 +2470,80 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      post_comments: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          parent_comment_id: string | null
+          post_id: string | null
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          parent_comment_id?: string | null
+          post_id?: string | null
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          parent_comment_id?: string | null
+          post_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
+            isOneToOne: false
+            referencedRelation: "post_comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "post_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "network_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      post_reactions: {
+        Row: {
+          created_at: string | null
+          id: string
+          post_id: string | null
+          reaction_type: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          post_id?: string | null
+          reaction_type?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          post_id?: string | null
+          reaction_type?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_reactions_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "network_posts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -3381,6 +3634,60 @@ export type Database = {
         }
         Relationships: []
       }
+      user_connections: {
+        Row: {
+          connection_type: string | null
+          created_at: string | null
+          follower_id: string
+          following_id: string
+          id: string
+        }
+        Insert: {
+          connection_type?: string | null
+          created_at?: string | null
+          follower_id: string
+          following_id: string
+          id?: string
+        }
+        Update: {
+          connection_type?: string | null
+          created_at?: string | null
+          follower_id?: string
+          following_id?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      user_messages: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          read: boolean | null
+          read_at: string | null
+          recipient_id: string
+          sender_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          read?: boolean | null
+          read_at?: string | null
+          recipient_id: string
+          sender_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          read?: boolean | null
+          read_at?: string | null
+          recipient_id?: string
+          sender_id?: string
+        }
+        Relationships: []
+      }
       user_notification_preferences: {
         Row: {
           created_at: string
@@ -3414,6 +3721,84 @@ export type Database = {
           max_emails_per_day?: number | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_profiles: {
+        Row: {
+          bio: string | null
+          cover_photo_url: string | null
+          created_at: string | null
+          display_name: string | null
+          id: string
+          investor_type: string | null
+          linkedin_url: string | null
+          location_city: string | null
+          location_country: string | null
+          looking_for: string[] | null
+          open_to_jv: boolean | null
+          open_to_mentor: boolean | null
+          portfolio_value: number | null
+          portfolio_yield: number | null
+          profile_photo_url: string | null
+          profile_visibility: string | null
+          properties_count: number | null
+          specialties: string[] | null
+          twitter_handle: string | null
+          updated_at: string | null
+          user_id: string
+          website: string | null
+          years_investing: number | null
+        }
+        Insert: {
+          bio?: string | null
+          cover_photo_url?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          id?: string
+          investor_type?: string | null
+          linkedin_url?: string | null
+          location_city?: string | null
+          location_country?: string | null
+          looking_for?: string[] | null
+          open_to_jv?: boolean | null
+          open_to_mentor?: boolean | null
+          portfolio_value?: number | null
+          portfolio_yield?: number | null
+          profile_photo_url?: string | null
+          profile_visibility?: string | null
+          properties_count?: number | null
+          specialties?: string[] | null
+          twitter_handle?: string | null
+          updated_at?: string | null
+          user_id: string
+          website?: string | null
+          years_investing?: number | null
+        }
+        Update: {
+          bio?: string | null
+          cover_photo_url?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          id?: string
+          investor_type?: string | null
+          linkedin_url?: string | null
+          location_city?: string | null
+          location_country?: string | null
+          looking_for?: string[] | null
+          open_to_jv?: boolean | null
+          open_to_mentor?: boolean | null
+          portfolio_value?: number | null
+          portfolio_yield?: number | null
+          profile_photo_url?: string | null
+          profile_visibility?: string | null
+          properties_count?: number | null
+          specialties?: string[] | null
+          twitter_handle?: string | null
+          updated_at?: string | null
+          user_id?: string
+          website?: string | null
+          years_investing?: number | null
         }
         Relationships: []
       }
