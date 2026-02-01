@@ -983,6 +983,174 @@ export type Database = {
           },
         ]
       }
+      analyzed_properties: {
+        Row: {
+          address: string
+          agent_name: string | null
+          agent_phone: string | null
+          analyzed_at: string | null
+          annual_cashflow: number | null
+          annual_rent: number | null
+          asking_price: number | null
+          bathrooms: number | null
+          bedrooms: number | null
+          cash_on_cash: number | null
+          created_at: string | null
+          deal_score: number | null
+          deposit_percent: number | null
+          description: string | null
+          epc_rating: string | null
+          features: string[] | null
+          floor_area_sqft: number | null
+          gdv: number | null
+          gross_yield: number | null
+          id: string
+          images: string[] | null
+          interest_only: boolean | null
+          latitude: number | null
+          legal_fees: number | null
+          longitude: number | null
+          monthly_cashflow: number | null
+          monthly_rent: number | null
+          mortgage_rate: number | null
+          mortgage_term: number | null
+          net_yield: number | null
+          notes: string | null
+          offer_price: number | null
+          other_costs: number | null
+          postcode: string | null
+          price_per_sqft: number | null
+          profit: number | null
+          profit_on_cost: number | null
+          property_type: string | null
+          purchase_price: number | null
+          receptions: number | null
+          refurb_cost: number | null
+          roi: number | null
+          source_type: string | null
+          source_url: string | null
+          stamp_duty: number | null
+          status: string | null
+          strategy: string | null
+          tenure: string | null
+          thumbnail_url: string | null
+          total_investment: number | null
+          updated_at: string | null
+          user_id: string
+          year_built: number | null
+        }
+        Insert: {
+          address: string
+          agent_name?: string | null
+          agent_phone?: string | null
+          analyzed_at?: string | null
+          annual_cashflow?: number | null
+          annual_rent?: number | null
+          asking_price?: number | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          cash_on_cash?: number | null
+          created_at?: string | null
+          deal_score?: number | null
+          deposit_percent?: number | null
+          description?: string | null
+          epc_rating?: string | null
+          features?: string[] | null
+          floor_area_sqft?: number | null
+          gdv?: number | null
+          gross_yield?: number | null
+          id?: string
+          images?: string[] | null
+          interest_only?: boolean | null
+          latitude?: number | null
+          legal_fees?: number | null
+          longitude?: number | null
+          monthly_cashflow?: number | null
+          monthly_rent?: number | null
+          mortgage_rate?: number | null
+          mortgage_term?: number | null
+          net_yield?: number | null
+          notes?: string | null
+          offer_price?: number | null
+          other_costs?: number | null
+          postcode?: string | null
+          price_per_sqft?: number | null
+          profit?: number | null
+          profit_on_cost?: number | null
+          property_type?: string | null
+          purchase_price?: number | null
+          receptions?: number | null
+          refurb_cost?: number | null
+          roi?: number | null
+          source_type?: string | null
+          source_url?: string | null
+          stamp_duty?: number | null
+          status?: string | null
+          strategy?: string | null
+          tenure?: string | null
+          thumbnail_url?: string | null
+          total_investment?: number | null
+          updated_at?: string | null
+          user_id: string
+          year_built?: number | null
+        }
+        Update: {
+          address?: string
+          agent_name?: string | null
+          agent_phone?: string | null
+          analyzed_at?: string | null
+          annual_cashflow?: number | null
+          annual_rent?: number | null
+          asking_price?: number | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          cash_on_cash?: number | null
+          created_at?: string | null
+          deal_score?: number | null
+          deposit_percent?: number | null
+          description?: string | null
+          epc_rating?: string | null
+          features?: string[] | null
+          floor_area_sqft?: number | null
+          gdv?: number | null
+          gross_yield?: number | null
+          id?: string
+          images?: string[] | null
+          interest_only?: boolean | null
+          latitude?: number | null
+          legal_fees?: number | null
+          longitude?: number | null
+          monthly_cashflow?: number | null
+          monthly_rent?: number | null
+          mortgage_rate?: number | null
+          mortgage_term?: number | null
+          net_yield?: number | null
+          notes?: string | null
+          offer_price?: number | null
+          other_costs?: number | null
+          postcode?: string | null
+          price_per_sqft?: number | null
+          profit?: number | null
+          profit_on_cost?: number | null
+          property_type?: string | null
+          purchase_price?: number | null
+          receptions?: number | null
+          refurb_cost?: number | null
+          roi?: number | null
+          source_type?: string | null
+          source_url?: string | null
+          stamp_duty?: number | null
+          status?: string | null
+          strategy?: string | null
+          tenure?: string | null
+          thumbnail_url?: string | null
+          total_investment?: number | null
+          updated_at?: string | null
+          user_id?: string
+          year_built?: number | null
+        }
+        Relationships: []
+      }
       api_integrations: {
         Row: {
           auth_url: string | null
@@ -10987,6 +11155,36 @@ export type Database = {
           vat_number?: string | null
           vat_registered?: boolean | null
           year_end_month?: number | null
+        }
+        Relationships: []
+      }
+      property_comparisons: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string | null
+          notes: string | null
+          property_ids: string[] | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name?: string | null
+          notes?: string | null
+          property_ids?: string[] | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string | null
+          notes?: string | null
+          property_ids?: string[] | null
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
