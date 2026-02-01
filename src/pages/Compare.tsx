@@ -1,7 +1,24 @@
 import { useState, useEffect, useCallback } from "react";
-import { Plus, Save, Trash2, Download } from "lucide-react";
+import {
+  Plus,
+  Save,
+  Trash2,
+  Download,
+  Trophy,
+  FileText,
+  Bell,
+  Share2,
+} from "lucide-react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useComparisonStore, calculatePropertyMetrics } from "@/stores/comparisonStore";
 import { EmptyComparison } from "@/components/comparison/EmptyComparison";
@@ -10,11 +27,16 @@ import { ComparisonTable } from "@/components/comparison/ComparisonTable";
 import { CalculatorBar } from "@/components/comparison/CalculatorBar";
 import { AddPropertySlot } from "@/components/comparison/AddPropertySlot";
 import { SaveComparisonDialog } from "@/components/comparison/SaveComparisonDialog";
+import { WinnerSummaryCards } from "@/components/comparison/WinnerSummaryCards";
+import { DecisionDialog } from "@/components/comparison/DecisionDialog";
+import { InvestmentMemoDialog } from "@/components/comparison/InvestmentMemoDialog";
 import type { ComparisonProperty } from "@/types/comparison";
 
 export default function Compare() {
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [showSaveDialog, setShowSaveDialog] = useState(false);
+  const [showDecisionDialog, setShowDecisionDialog] = useState(false);
+  const [showMemoDialog, setShowMemoDialog] = useState(false);
   const { toast } = useToast();
 
   const {
@@ -55,15 +77,14 @@ export default function Compare() {
   };
 
   const handleExportCSV = () => {
-    // Simple CSV export
     const headers = ["Property", "Price", "Rent", "Yield %", "Cash Flow", "ROI %"];
     const rows = properties.map((p) => [
       p.address,
       p.price,
       p.estimatedRent,
-      p.calculatedYield,
+      p.calculatedYield?.toFixed(2),
       p.calculatedCashFlow,
-      p.calculatedROI,
+      p.calculatedROI?.toFixed(2),
     ]);
 
     const csv = [headers, ...rows].map((row) => row.join(",")).join("\n");
@@ -81,6 +102,13 @@ export default function Compare() {
     });
   };
 
+  const handleDecisionMade = (chosenId: string, ranking: string[], reasons: string[]) => {
+    toast({
+      title: "Decision recorded!",
+      description: "Your property choice has been saved.",
+    });
+  };
+
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -91,6 +119,14 @@ export default function Compare() {
       if ((e.metaKey || e.ctrlKey) && e.key === "s" && properties.length >= 2) {
         e.preventDefault();
         setShowSaveDialog(true);
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key === "r" && properties.length >= 2) {
+        e.preventDefault();
+        setShowDecisionDialog(true);
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key === "m" && properties.length >= 2) {
+        e.preventDefault();
+        setShowMemoDialog(true);
       }
     };
 
@@ -107,14 +143,21 @@ export default function Compare() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold">Compare Properties</h1>
+            <div className="flex items-center gap-3">
+              <h1 className="text-2xl font-bold">Compare Properties</h1>
+              {properties.length >= 2 && (
+                <Badge variant="secondary">
+                  Comparing {properties.length} properties
+                </Badge>
+              )}
+            </div>
             <p className="text-muted-foreground">
-              Compare 2-4 properties side-by-side with intelligent diff highlighting
+              Side-by-side analysis with intelligent diff highlighting
             </p>
           </div>
 
           {properties.length > 0 && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <Button
                 variant="outline"
                 size="sm"
@@ -122,12 +165,46 @@ export default function Compare() {
                 disabled={properties.length >= maxProperties}
               >
                 <Plus className="h-4 w-4 mr-2" />
-                Add Property
+                Add
               </Button>
-              <Button variant="outline" size="sm" onClick={handleExportCSV}>
-                <Download className="h-4 w-4 mr-2" />
-                Export
-              </Button>
+
+              {properties.length >= 2 && (
+                <>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowDecisionDialog(true)}
+                  >
+                    <Trophy className="h-4 w-4 mr-2" />
+                    Rank
+                  </Button>
+
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm">
+                        <Download className="h-4 w-4 mr-2" />
+                        Export
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem onClick={handleExportCSV}>
+                        <Download className="h-4 w-4 mr-2" />
+                        Export CSV
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setShowMemoDialog(true)}>
+                        <FileText className="h-4 w-4 mr-2" />
+                        Investment Memo
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem disabled>
+                        <Share2 className="h-4 w-4 mr-2" />
+                        Share Link
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </>
+              )}
+
               <Button
                 variant="outline"
                 size="sm"
@@ -137,6 +214,7 @@ export default function Compare() {
                 <Save className="h-4 w-4 mr-2" />
                 Save
               </Button>
+
               <Button
                 variant="outline"
                 size="sm"
@@ -155,10 +233,9 @@ export default function Compare() {
           <EmptyComparison onAddProperty={() => setShowSearchModal(true)} />
         )}
 
-        {/* Properties with slots */}
+        {/* Properties with slots when only 1 property */}
         {properties.length > 0 && properties.length < 2 && (
           <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
-            {/* Existing properties would show as cards here */}
             {Array.from({ length: remainingSlots }).map((_, i) => (
               <AddPropertySlot
                 key={i}
@@ -168,6 +245,9 @@ export default function Compare() {
             ))}
           </div>
         )}
+
+        {/* Winner Summary Cards */}
+        {properties.length >= 2 && <WinnerSummaryCards properties={properties} />}
 
         {/* Calculator Bar (when 2+ properties) */}
         {properties.length >= 2 && <CalculatorBar onCalculate={recalculateAll} />}
@@ -190,6 +270,21 @@ export default function Compare() {
         <SaveComparisonDialog
           open={showSaveDialog}
           onClose={() => setShowSaveDialog(false)}
+        />
+
+        {/* Decision Dialog */}
+        <DecisionDialog
+          open={showDecisionDialog}
+          onOpenChange={setShowDecisionDialog}
+          properties={properties}
+          onDecisionMade={handleDecisionMade}
+        />
+
+        {/* Investment Memo Dialog */}
+        <InvestmentMemoDialog
+          open={showMemoDialog}
+          onOpenChange={setShowMemoDialog}
+          properties={properties}
         />
       </div>
     </AppLayout>
