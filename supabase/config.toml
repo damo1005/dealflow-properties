@@ -65,3 +65,9 @@ verify_jwt = false
 
 [functions.planning-fetch]
 verify_jwt = false
+
+[functions.flood-risk-fetch]
+verify_jwt = false
+
+[functions.crime-data-fetch]
+verify_jwt = false
