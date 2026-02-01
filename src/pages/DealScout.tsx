@@ -2,17 +2,21 @@ import { useState } from "react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { Plus, Search, Zap, MapPin, BarChart3 } from "lucide-react";
+import { Plus, Search, Zap, MapPin, BarChart3, RefreshCw } from "lucide-react";
 import { useDealScoutStore } from "@/stores/dealScoutStore";
 import { ScoutsList } from "@/components/dealscout/ScoutsList";
 import { DiscoveriesList } from "@/components/dealscout/DiscoveriesList";
 import { OffMarketTab } from "@/components/dealscout/OffMarketTab";
 import { MarketIntelTab } from "@/components/dealscout/MarketIntelTab";
 import { CreateScoutWizard } from "@/components/dealscout/CreateScoutWizard";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 export default function DealScout() {
   const [activeTab, setActiveTab] = useState("scouts");
+  const [isScanning, setIsScanning] = useState(false);
   const { scouts, discoveries, setWizardOpen, wizardOpen } = useDealScoutStore();
+  const { toast } = useToast();
 
   // Calculate stats
   const activeScoutsCount = scouts.filter(s => s.is_active).length;
@@ -26,6 +30,43 @@ export default function DealScout() {
     weekAgo.setDate(weekAgo.getDate() - 7);
     return new Date(d.discovered_at) >= weekAgo;
   }).length;
+
+  const handleScanNow = async () => {
+    if (activeScoutsCount === 0) {
+      toast({
+        title: "No Active Scouts",
+        description: "Create a scout first to start scanning for properties.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsScanning(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('scan-deal-scouts', {
+        body: {},
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Scan Complete! 🎯",
+        description: `Found ${data.totalPropertiesFound} properties, ${data.totalNewDiscoveries} new discoveries.`,
+      });
+
+      // Refresh the page data
+      window.location.reload();
+    } catch (error) {
+      console.error('Scan error:', error);
+      toast({
+        title: "Scan Failed",
+        description: "Failed to scan for properties. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsScanning(false);
+    }
+  };
 
   return (
     <AppLayout title="AI Deal Scout">
@@ -41,10 +82,22 @@ export default function DealScout() {
               Let AI hunt properties for you 24/7
             </p>
           </div>
-          <Button onClick={() => setWizardOpen(true)} size="lg" className="gap-2">
-            <Plus className="h-4 w-4" />
-            Create Scout
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="lg"
+              className="gap-2"
+              onClick={handleScanNow}
+              disabled={isScanning || activeScoutsCount === 0}
+            >
+              <RefreshCw className={`h-4 w-4 ${isScanning ? 'animate-spin' : ''}`} />
+              {isScanning ? 'Scanning...' : 'Scan Now'}
+            </Button>
+            <Button onClick={() => setWizardOpen(true)} size="lg" className="gap-2">
+              <Plus className="h-4 w-4" />
+              Create Scout
+            </Button>
+          </div>
         </div>
 
         {/* Quick Stats */}
