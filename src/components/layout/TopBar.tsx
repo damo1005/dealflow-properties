@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import { User, LogOut, Settings, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,9 +16,10 @@ import { NotificationBell } from "@/components/notifications/NotificationBell";
 
 interface TopBarProps {
   title?: string;
+  actions?: ReactNode;
 }
 
-export function TopBar({ title = "Dashboard" }: TopBarProps) {
+export function TopBar({ title = "Dashboard", actions }: TopBarProps) {
   const { sidebarCollapsed } = useAppStore();
   const navigate = useNavigate();
 
@@ -31,6 +33,9 @@ export function TopBar({ title = "Dashboard" }: TopBarProps) {
       <h1 className="text-lg font-semibold text-foreground">{title}</h1>
 
       <div className="flex items-center gap-3">
+        {/* Custom Actions */}
+        {actions}
+        
         {/* Notifications */}
         <NotificationBell />
 

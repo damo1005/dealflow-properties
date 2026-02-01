@@ -4,10 +4,14 @@ import { MetricCard } from "@/components/dashboard/MetricCard";
 import { QuickActions } from "@/components/dashboard/QuickActions";
 import { ActivityFeed } from "@/components/dashboard/ActivityFeed";
 import { PropertiesChart } from "@/components/dashboard/PropertiesChart";
+import { UpgradeButton } from "@/components/billing/UpgradeButton";
 
 export default function Dashboard() {
   return (
-    <AppLayout title="Dashboard">
+    <AppLayout 
+      title="Dashboard"
+      actions={<UpgradeButton variant="outline" size="sm" />}
+    >
       <div className="space-y-6">
         {/* Metrics */}
         <div className="grid gap-4 md:grid-cols-3">
