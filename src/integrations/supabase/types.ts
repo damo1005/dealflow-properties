@@ -3801,6 +3801,105 @@ export type Database = {
         }
         Relationships: []
       }
+      land_registry_data: {
+        Row: {
+          api_response: Json | null
+          boundary_polygon: Json | null
+          charge_count: number | null
+          charges: Json | null
+          company_registration_number: string | null
+          created_at: string | null
+          data_quality: string | null
+          date_proprietor_added: string | null
+          ground_rent: number | null
+          has_charges: boolean | null
+          has_restrictions: boolean | null
+          id: string
+          last_refreshed_at: string | null
+          last_sale_date: string | null
+          last_sale_price: number | null
+          last_sale_type: string | null
+          lease_expiry_date: string | null
+          lease_start_date: string | null
+          lease_term_years: number | null
+          postcode: string
+          property_address: string
+          proprietor_address: string | null
+          proprietor_name: string | null
+          proprietorship_category: string | null
+          restrictions: Json | null
+          tenure: string | null
+          title_number: string | null
+          title_plan_url: string | null
+          updated_at: string | null
+          uprn: string | null
+        }
+        Insert: {
+          api_response?: Json | null
+          boundary_polygon?: Json | null
+          charge_count?: number | null
+          charges?: Json | null
+          company_registration_number?: string | null
+          created_at?: string | null
+          data_quality?: string | null
+          date_proprietor_added?: string | null
+          ground_rent?: number | null
+          has_charges?: boolean | null
+          has_restrictions?: boolean | null
+          id?: string
+          last_refreshed_at?: string | null
+          last_sale_date?: string | null
+          last_sale_price?: number | null
+          last_sale_type?: string | null
+          lease_expiry_date?: string | null
+          lease_start_date?: string | null
+          lease_term_years?: number | null
+          postcode: string
+          property_address: string
+          proprietor_address?: string | null
+          proprietor_name?: string | null
+          proprietorship_category?: string | null
+          restrictions?: Json | null
+          tenure?: string | null
+          title_number?: string | null
+          title_plan_url?: string | null
+          updated_at?: string | null
+          uprn?: string | null
+        }
+        Update: {
+          api_response?: Json | null
+          boundary_polygon?: Json | null
+          charge_count?: number | null
+          charges?: Json | null
+          company_registration_number?: string | null
+          created_at?: string | null
+          data_quality?: string | null
+          date_proprietor_added?: string | null
+          ground_rent?: number | null
+          has_charges?: boolean | null
+          has_restrictions?: boolean | null
+          id?: string
+          last_refreshed_at?: string | null
+          last_sale_date?: string | null
+          last_sale_price?: number | null
+          last_sale_type?: string | null
+          lease_expiry_date?: string | null
+          lease_start_date?: string | null
+          lease_term_years?: number | null
+          postcode?: string
+          property_address?: string
+          proprietor_address?: string | null
+          proprietor_name?: string | null
+          proprietorship_category?: string | null
+          restrictions?: Json | null
+          tenure?: string | null
+          title_number?: string | null
+          title_plan_url?: string | null
+          updated_at?: string | null
+          uprn?: string | null
+        }
+        Relationships: []
+      }
       listing_generations: {
         Row: {
           applied_to_listing: boolean | null
@@ -5149,6 +5248,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      price_paid_history: {
+        Row: {
+          created_at: string | null
+          duration: string | null
+          id: string
+          old_new: string | null
+          postcode: string
+          property_address: string
+          property_type: string | null
+          record_status: string | null
+          sale_date: string
+          sale_price: number
+          transaction_category: string | null
+          transaction_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          duration?: string | null
+          id?: string
+          old_new?: string | null
+          postcode: string
+          property_address: string
+          property_type?: string | null
+          record_status?: string | null
+          sale_date: string
+          sale_price: number
+          transaction_category?: string | null
+          transaction_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          duration?: string | null
+          id?: string
+          old_new?: string | null
+          postcode?: string
+          property_address?: string
+          property_type?: string | null
+          record_status?: string | null
+          sale_date?: string
+          sale_price?: number
+          transaction_category?: string | null
+          transaction_id?: string | null
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
