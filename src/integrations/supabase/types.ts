@@ -914,6 +914,60 @@ export type Database = {
           },
         ]
       }
+      cma_reports: {
+        Row: {
+          active_comparables: Json | null
+          confidence_level: number | null
+          created_at: string | null
+          estimated_rent: number | null
+          estimated_yield: number | null
+          id: string
+          market_value_estimate: number | null
+          price_vs_market_pct: number | null
+          property_id: string | null
+          rental_comparables: Json | null
+          sold_comparables: Json | null
+          subject_address: string
+          subject_postcode: string
+          subject_price: number | null
+          user_id: string
+        }
+        Insert: {
+          active_comparables?: Json | null
+          confidence_level?: number | null
+          created_at?: string | null
+          estimated_rent?: number | null
+          estimated_yield?: number | null
+          id?: string
+          market_value_estimate?: number | null
+          price_vs_market_pct?: number | null
+          property_id?: string | null
+          rental_comparables?: Json | null
+          sold_comparables?: Json | null
+          subject_address: string
+          subject_postcode: string
+          subject_price?: number | null
+          user_id: string
+        }
+        Update: {
+          active_comparables?: Json | null
+          confidence_level?: number | null
+          created_at?: string | null
+          estimated_rent?: number | null
+          estimated_yield?: number | null
+          id?: string
+          market_value_estimate?: number | null
+          price_vs_market_pct?: number | null
+          property_id?: string | null
+          rental_comparables?: Json | null
+          sold_comparables?: Json | null
+          subject_address?: string
+          subject_postcode?: string
+          subject_price?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       commission_tiers: {
         Row: {
           created_at: string | null
@@ -1822,6 +1876,99 @@ export type Database = {
         }
         Relationships: []
       }
+      distressed_properties: {
+        Row: {
+          address: string
+          current_price: number | null
+          days_on_market: number | null
+          detected_at: string | null
+          distress_score: number | null
+          distress_type: string[] | null
+          epc_rating: string | null
+          estimated_value: number | null
+          id: string
+          is_active: boolean | null
+          last_reduction_pct: number | null
+          postcode: string
+          potential_discount_pct: number | null
+          price_reductions: number | null
+          property_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          address: string
+          current_price?: number | null
+          days_on_market?: number | null
+          detected_at?: string | null
+          distress_score?: number | null
+          distress_type?: string[] | null
+          epc_rating?: string | null
+          estimated_value?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_reduction_pct?: number | null
+          postcode: string
+          potential_discount_pct?: number | null
+          price_reductions?: number | null
+          property_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string
+          current_price?: number | null
+          days_on_market?: number | null
+          detected_at?: string | null
+          distress_score?: number | null
+          distress_type?: string[] | null
+          epc_rating?: string | null
+          estimated_value?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_reduction_pct?: number | null
+          postcode?: string
+          potential_discount_pct?: number | null
+          price_reductions?: number | null
+          property_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      distressed_watches: {
+        Row: {
+          alert_frequency: string | null
+          created_at: string | null
+          email_alerts: boolean | null
+          id: string
+          max_price: number | null
+          min_discount_pct: number | null
+          postcodes: string[] | null
+          property_types: string[] | null
+          user_id: string
+        }
+        Insert: {
+          alert_frequency?: string | null
+          created_at?: string | null
+          email_alerts?: boolean | null
+          id?: string
+          max_price?: number | null
+          min_discount_pct?: number | null
+          postcodes?: string[] | null
+          property_types?: string[] | null
+          user_id: string
+        }
+        Update: {
+          alert_frequency?: string | null
+          created_at?: string | null
+          email_alerts?: boolean | null
+          id?: string
+          max_price?: number | null
+          min_discount_pct?: number | null
+          postcodes?: string[] | null
+          property_types?: string[] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       email_logs: {
         Row: {
           clicked_at: string | null
@@ -2044,6 +2191,69 @@ export type Database = {
         }
         Relationships: []
       }
+      investment_hotspots: {
+        Row: {
+          area_name: string
+          avg_price: number | null
+          avg_yield: number | null
+          calculated_at: string | null
+          demographic_trends: Json | null
+          entry_price_range: string | null
+          forecast_growth_12m: number | null
+          hotspot_type: string | null
+          id: string
+          infrastructure_projects: string[] | null
+          is_active: boolean | null
+          opportunity_score: number | null
+          postcode_district: string
+          price_growth_12m: number | null
+          rank: number | null
+          reasons: string[] | null
+          risk_level: string | null
+          suitable_strategies: string[] | null
+        }
+        Insert: {
+          area_name: string
+          avg_price?: number | null
+          avg_yield?: number | null
+          calculated_at?: string | null
+          demographic_trends?: Json | null
+          entry_price_range?: string | null
+          forecast_growth_12m?: number | null
+          hotspot_type?: string | null
+          id?: string
+          infrastructure_projects?: string[] | null
+          is_active?: boolean | null
+          opportunity_score?: number | null
+          postcode_district: string
+          price_growth_12m?: number | null
+          rank?: number | null
+          reasons?: string[] | null
+          risk_level?: string | null
+          suitable_strategies?: string[] | null
+        }
+        Update: {
+          area_name?: string
+          avg_price?: number | null
+          avg_yield?: number | null
+          calculated_at?: string | null
+          demographic_trends?: Json | null
+          entry_price_range?: string | null
+          forecast_growth_12m?: number | null
+          hotspot_type?: string | null
+          id?: string
+          infrastructure_projects?: string[] | null
+          is_active?: boolean | null
+          opportunity_score?: number | null
+          postcode_district?: string
+          price_growth_12m?: number | null
+          rank?: number | null
+          reasons?: string[] | null
+          risk_level?: string | null
+          suitable_strategies?: string[] | null
+        }
+        Relationships: []
+      }
       jv_preferences: {
         Row: {
           capital_available: number | null
@@ -2181,6 +2391,105 @@ export type Database = {
           id?: string
           inflation_rate?: number | null
           snapshot_date?: string | null
+        }
+        Relationships: []
+      }
+      market_data: {
+        Row: {
+          area_type: string | null
+          avg_income: number | null
+          avg_rent_1bed: number | null
+          avg_rent_2bed: number | null
+          avg_rent_3bed: number | null
+          avg_rent_pcm: number | null
+          avg_sold_price: number | null
+          avg_sold_price_12m: number | null
+          avg_sold_price_3m: number | null
+          avg_time_on_market_days: number | null
+          btl_score: number | null
+          cached_at: string | null
+          demand_score: number | null
+          employment_rate: number | null
+          expires_at: string | null
+          gross_yield: number | null
+          growth_score: number | null
+          hmo_score: number | null
+          id: string
+          median_age: number | null
+          overall_investment_score: number | null
+          population: number | null
+          postcode: string
+          price_growth_pct: number | null
+          price_per_sqft: number | null
+          properties_for_sale: number | null
+          properties_sold_3m: number | null
+          raw_data: Json | null
+          sale_vs_asking_pct: number | null
+          supply_score: number | null
+        }
+        Insert: {
+          area_type?: string | null
+          avg_income?: number | null
+          avg_rent_1bed?: number | null
+          avg_rent_2bed?: number | null
+          avg_rent_3bed?: number | null
+          avg_rent_pcm?: number | null
+          avg_sold_price?: number | null
+          avg_sold_price_12m?: number | null
+          avg_sold_price_3m?: number | null
+          avg_time_on_market_days?: number | null
+          btl_score?: number | null
+          cached_at?: string | null
+          demand_score?: number | null
+          employment_rate?: number | null
+          expires_at?: string | null
+          gross_yield?: number | null
+          growth_score?: number | null
+          hmo_score?: number | null
+          id?: string
+          median_age?: number | null
+          overall_investment_score?: number | null
+          population?: number | null
+          postcode: string
+          price_growth_pct?: number | null
+          price_per_sqft?: number | null
+          properties_for_sale?: number | null
+          properties_sold_3m?: number | null
+          raw_data?: Json | null
+          sale_vs_asking_pct?: number | null
+          supply_score?: number | null
+        }
+        Update: {
+          area_type?: string | null
+          avg_income?: number | null
+          avg_rent_1bed?: number | null
+          avg_rent_2bed?: number | null
+          avg_rent_3bed?: number | null
+          avg_rent_pcm?: number | null
+          avg_sold_price?: number | null
+          avg_sold_price_12m?: number | null
+          avg_sold_price_3m?: number | null
+          avg_time_on_market_days?: number | null
+          btl_score?: number | null
+          cached_at?: string | null
+          demand_score?: number | null
+          employment_rate?: number | null
+          expires_at?: string | null
+          gross_yield?: number | null
+          growth_score?: number | null
+          hmo_score?: number | null
+          id?: string
+          median_age?: number | null
+          overall_investment_score?: number | null
+          population?: number | null
+          postcode?: string
+          price_growth_pct?: number | null
+          price_per_sqft?: number | null
+          properties_for_sale?: number | null
+          properties_sold_3m?: number | null
+          raw_data?: Json | null
+          sale_vs_asking_pct?: number | null
+          supply_score?: number | null
         }
         Relationships: []
       }
@@ -2768,6 +3077,87 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      planning_alerts: {
+        Row: {
+          alert_types: string[] | null
+          created_at: string | null
+          email_alerts: boolean | null
+          id: string
+          postcodes: string[] | null
+          radius_miles: number | null
+          user_id: string
+        }
+        Insert: {
+          alert_types?: string[] | null
+          created_at?: string | null
+          email_alerts?: boolean | null
+          id?: string
+          postcodes?: string[] | null
+          radius_miles?: number | null
+          user_id: string
+        }
+        Update: {
+          alert_types?: string[] | null
+          created_at?: string | null
+          email_alerts?: boolean | null
+          id?: string
+          postcodes?: string[] | null
+          radius_miles?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      planning_applications: {
+        Row: {
+          address: string
+          applicant: string | null
+          application_type: string | null
+          case_officer: string | null
+          consultation_end_date: string | null
+          created_at: string | null
+          decision_date: string | null
+          description: string | null
+          id: string
+          postcode: string
+          property_impact: Json | null
+          reference: string
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          address: string
+          applicant?: string | null
+          application_type?: string | null
+          case_officer?: string | null
+          consultation_end_date?: string | null
+          created_at?: string | null
+          decision_date?: string | null
+          description?: string | null
+          id?: string
+          postcode: string
+          property_impact?: Json | null
+          reference: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string
+          applicant?: string | null
+          application_type?: string | null
+          case_officer?: string | null
+          consultation_end_date?: string | null
+          created_at?: string | null
+          decision_date?: string | null
+          description?: string | null
+          id?: string
+          postcode?: string
+          property_impact?: Json | null
+          reference?: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       portfolio_properties: {
         Row: {
@@ -3537,6 +3927,38 @@ export type Database = {
             columns: ["request_id"]
             isOneToOne: false
             referencedRelation: "accommodation_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      saved_hotspots: {
+        Row: {
+          created_at: string | null
+          hotspot_id: string | null
+          id: string
+          notes: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          hotspot_id?: string | null
+          id?: string
+          notes?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          hotspot_id?: string | null
+          id?: string
+          notes?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_hotspots_hotspot_id_fkey"
+            columns: ["hotspot_id"]
+            isOneToOne: false
+            referencedRelation: "investment_hotspots"
             referencedColumns: ["id"]
           },
         ]

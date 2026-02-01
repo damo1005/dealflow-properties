@@ -16,7 +16,8 @@ import {
   Users,
   Bell,
   Radar,
-  Plug
+  Plug,
+  TrendingUp
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -27,6 +28,7 @@ import { Button } from "@/components/ui/button";
 const navItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Search Properties", url: "/search", icon: Search },
+  { title: "Market Intel", url: "/market-intel", icon: TrendingUp },
   { title: "My Pipeline", url: "/pipeline", icon: GitBranch },
   { title: "Portfolio", url: "/portfolio", icon: Briefcase },
   { title: "Calculators", url: "/calculators", icon: Calculator },
