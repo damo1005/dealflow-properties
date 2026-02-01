@@ -1531,6 +1531,75 @@ export type Database = {
         }
         Relationships: []
       }
+      bridging_calculations: {
+        Row: {
+          arrangement_fee: number | null
+          arrangement_fee_percent: number | null
+          created_at: string | null
+          exit_fee: number | null
+          exit_fee_percent: number | null
+          exit_strategy: string | null
+          gross_interest: number | null
+          id: string
+          interest_rate_monthly: number | null
+          legal_fee: number | null
+          loan_amount: number | null
+          loan_purpose: string | null
+          ltv: number | null
+          property_value: number | null
+          purchase_price: number | null
+          term_months: number | null
+          total_cost: number | null
+          total_repayable: number | null
+          user_id: string
+          valuation_fee: number | null
+        }
+        Insert: {
+          arrangement_fee?: number | null
+          arrangement_fee_percent?: number | null
+          created_at?: string | null
+          exit_fee?: number | null
+          exit_fee_percent?: number | null
+          exit_strategy?: string | null
+          gross_interest?: number | null
+          id?: string
+          interest_rate_monthly?: number | null
+          legal_fee?: number | null
+          loan_amount?: number | null
+          loan_purpose?: string | null
+          ltv?: number | null
+          property_value?: number | null
+          purchase_price?: number | null
+          term_months?: number | null
+          total_cost?: number | null
+          total_repayable?: number | null
+          user_id: string
+          valuation_fee?: number | null
+        }
+        Update: {
+          arrangement_fee?: number | null
+          arrangement_fee_percent?: number | null
+          created_at?: string | null
+          exit_fee?: number | null
+          exit_fee_percent?: number | null
+          exit_strategy?: string | null
+          gross_interest?: number | null
+          id?: string
+          interest_rate_monthly?: number | null
+          legal_fee?: number | null
+          loan_amount?: number | null
+          loan_purpose?: string | null
+          ltv?: number | null
+          property_value?: number | null
+          purchase_price?: number | null
+          term_months?: number | null
+          total_cost?: number | null
+          total_repayable?: number | null
+          user_id?: string
+          valuation_fee?: number | null
+        }
+        Relationships: []
+      }
       cached_properties: {
         Row: {
           address: string
@@ -3923,6 +3992,111 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      development_appraisals: {
+        Row: {
+          address: string | null
+          arrangement_fee: number | null
+          build_months: number | null
+          construction_cost: number | null
+          contingency_percent: number | null
+          created_at: string | null
+          estimated_rent_pcm: number | null
+          estimated_yield: number | null
+          existing_units: number | null
+          exit_strategy: string | null
+          finance_type: string | null
+          gdv: number | null
+          gross_profit: number | null
+          id: string
+          interest_rate: number | null
+          loan_amount: number | null
+          loan_term_months: number | null
+          net_profit: number | null
+          postcode: string | null
+          professional_fees: number | null
+          profit_on_cost: number | null
+          project_name: string
+          project_type: string | null
+          proposed_units: number | null
+          purchase_costs: number | null
+          purchase_price: number | null
+          roi: number | null
+          sales_costs: number | null
+          status: string | null
+          total_costs: number | null
+          unit_breakdown: Json | null
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          arrangement_fee?: number | null
+          build_months?: number | null
+          construction_cost?: number | null
+          contingency_percent?: number | null
+          created_at?: string | null
+          estimated_rent_pcm?: number | null
+          estimated_yield?: number | null
+          existing_units?: number | null
+          exit_strategy?: string | null
+          finance_type?: string | null
+          gdv?: number | null
+          gross_profit?: number | null
+          id?: string
+          interest_rate?: number | null
+          loan_amount?: number | null
+          loan_term_months?: number | null
+          net_profit?: number | null
+          postcode?: string | null
+          professional_fees?: number | null
+          profit_on_cost?: number | null
+          project_name: string
+          project_type?: string | null
+          proposed_units?: number | null
+          purchase_costs?: number | null
+          purchase_price?: number | null
+          roi?: number | null
+          sales_costs?: number | null
+          status?: string | null
+          total_costs?: number | null
+          unit_breakdown?: Json | null
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          arrangement_fee?: number | null
+          build_months?: number | null
+          construction_cost?: number | null
+          contingency_percent?: number | null
+          created_at?: string | null
+          estimated_rent_pcm?: number | null
+          estimated_yield?: number | null
+          existing_units?: number | null
+          exit_strategy?: string | null
+          finance_type?: string | null
+          gdv?: number | null
+          gross_profit?: number | null
+          id?: string
+          interest_rate?: number | null
+          loan_amount?: number | null
+          loan_term_months?: number | null
+          net_profit?: number | null
+          postcode?: string | null
+          professional_fees?: number | null
+          profit_on_cost?: number | null
+          project_name?: string
+          project_type?: string | null
+          proposed_units?: number | null
+          purchase_costs?: number | null
+          purchase_price?: number | null
+          roi?: number | null
+          sales_costs?: number | null
+          status?: string | null
+          total_costs?: number | null
+          unit_breakdown?: Json | null
+          user_id?: string
+        }
+        Relationships: []
       }
       distressed_properties: {
         Row: {
@@ -9508,6 +9682,139 @@ export type Database = {
         }
         Relationships: []
       }
+      property_tours: {
+        Row: {
+          created_at: string | null
+          embed_code: string | null
+          external_id: string | null
+          id: string
+          is_public: boolean | null
+          password_hash: string | null
+          password_protected: boolean | null
+          portfolio_property_id: string | null
+          provider: string | null
+          thumbnail_url: string | null
+          tour_type: string | null
+          tour_url: string | null
+          user_id: string
+          view_count: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          embed_code?: string | null
+          external_id?: string | null
+          id?: string
+          is_public?: boolean | null
+          password_hash?: string | null
+          password_protected?: boolean | null
+          portfolio_property_id?: string | null
+          provider?: string | null
+          thumbnail_url?: string | null
+          tour_type?: string | null
+          tour_url?: string | null
+          user_id: string
+          view_count?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          embed_code?: string | null
+          external_id?: string | null
+          id?: string
+          is_public?: boolean | null
+          password_hash?: string | null
+          password_protected?: boolean | null
+          portfolio_property_id?: string | null
+          provider?: string | null
+          thumbnail_url?: string | null
+          tour_type?: string | null
+          tour_url?: string | null
+          user_id?: string
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_tours_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_utilities: {
+        Row: {
+          account_number: string | null
+          annual_cost: number | null
+          contract_end_date: string | null
+          created_at: string | null
+          exit_fee: number | null
+          id: string
+          meter_type: string | null
+          monthly_cost: number | null
+          mpan: string | null
+          mprn: string | null
+          paid_by: string | null
+          portfolio_property_id: string | null
+          standing_charge: number | null
+          status: string | null
+          supplier: string | null
+          tariff_name: string | null
+          unit_rate: number | null
+          user_id: string
+          utility_type: string
+        }
+        Insert: {
+          account_number?: string | null
+          annual_cost?: number | null
+          contract_end_date?: string | null
+          created_at?: string | null
+          exit_fee?: number | null
+          id?: string
+          meter_type?: string | null
+          monthly_cost?: number | null
+          mpan?: string | null
+          mprn?: string | null
+          paid_by?: string | null
+          portfolio_property_id?: string | null
+          standing_charge?: number | null
+          status?: string | null
+          supplier?: string | null
+          tariff_name?: string | null
+          unit_rate?: number | null
+          user_id: string
+          utility_type: string
+        }
+        Update: {
+          account_number?: string | null
+          annual_cost?: number | null
+          contract_end_date?: string | null
+          created_at?: string | null
+          exit_fee?: number | null
+          id?: string
+          meter_type?: string | null
+          monthly_cost?: number | null
+          mpan?: string | null
+          mprn?: string | null
+          paid_by?: string | null
+          portfolio_property_id?: string | null
+          standing_charge?: number | null
+          status?: string | null
+          supplier?: string | null
+          tariff_name?: string | null
+          unit_rate?: number | null
+          user_id?: string
+          utility_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_utilities_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       property_valuations: {
         Row: {
           address: string | null
@@ -9721,6 +10028,143 @@ export type Database = {
             columns: ["click_id"]
             isOneToOne: false
             referencedRelation: "referral_clicks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rent_guarantee_claims: {
+        Row: {
+          arrears_start_date: string | null
+          claim_reference: string | null
+          created_at: string | null
+          eviction_date: string | null
+          eviction_started: boolean | null
+          id: string
+          months_claimed: number | null
+          payments_received: number | null
+          policy_id: string | null
+          status: string | null
+          total_arrears: number | null
+          user_id: string
+        }
+        Insert: {
+          arrears_start_date?: string | null
+          claim_reference?: string | null
+          created_at?: string | null
+          eviction_date?: string | null
+          eviction_started?: boolean | null
+          id?: string
+          months_claimed?: number | null
+          payments_received?: number | null
+          policy_id?: string | null
+          status?: string | null
+          total_arrears?: number | null
+          user_id: string
+        }
+        Update: {
+          arrears_start_date?: string | null
+          claim_reference?: string | null
+          created_at?: string | null
+          eviction_date?: string | null
+          eviction_started?: boolean | null
+          id?: string
+          months_claimed?: number | null
+          payments_received?: number | null
+          policy_id?: string | null
+          status?: string | null
+          total_arrears?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rent_guarantee_claims_policy_id_fkey"
+            columns: ["policy_id"]
+            isOneToOne: false
+            referencedRelation: "rent_guarantee_policies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rent_guarantee_policies: {
+        Row: {
+          annual_premium: number | null
+          created_at: string | null
+          end_date: string | null
+          id: string
+          legal_expenses_cover: number | null
+          max_claim_amount: number | null
+          max_claim_months: number | null
+          monthly_rent_covered: number | null
+          policy_document_url: string | null
+          policy_number: string | null
+          portfolio_property_id: string | null
+          premium_rate: number | null
+          provider: string
+          reference_date: string | null
+          reference_provider: string | null
+          start_date: string | null
+          status: string | null
+          tenant_id: string | null
+          tenant_referenced: boolean | null
+          user_id: string
+        }
+        Insert: {
+          annual_premium?: number | null
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          legal_expenses_cover?: number | null
+          max_claim_amount?: number | null
+          max_claim_months?: number | null
+          monthly_rent_covered?: number | null
+          policy_document_url?: string | null
+          policy_number?: string | null
+          portfolio_property_id?: string | null
+          premium_rate?: number | null
+          provider: string
+          reference_date?: string | null
+          reference_provider?: string | null
+          start_date?: string | null
+          status?: string | null
+          tenant_id?: string | null
+          tenant_referenced?: boolean | null
+          user_id: string
+        }
+        Update: {
+          annual_premium?: number | null
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          legal_expenses_cover?: number | null
+          max_claim_amount?: number | null
+          max_claim_months?: number | null
+          monthly_rent_covered?: number | null
+          policy_document_url?: string | null
+          policy_number?: string | null
+          portfolio_property_id?: string | null
+          premium_rate?: number | null
+          provider?: string
+          reference_date?: string | null
+          reference_provider?: string | null
+          start_date?: string | null
+          status?: string | null
+          tenant_id?: string | null
+          tenant_referenced?: boolean | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rent_guarantee_policies_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "rent_guarantee_policies_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
             referencedColumns: ["id"]
           },
         ]
@@ -13222,6 +13666,47 @@ export type Database = {
           },
         ]
       }
+      utility_readings: {
+        Row: {
+          created_at: string | null
+          id: string
+          photo_url: string | null
+          reading_date: string
+          reading_type: string | null
+          reading_value: number
+          submitted_to_supplier: boolean | null
+          utility_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          photo_url?: string | null
+          reading_date: string
+          reading_type?: string | null
+          reading_value: number
+          submitted_to_supplier?: boolean | null
+          utility_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          photo_url?: string | null
+          reading_date?: string
+          reading_type?: string | null
+          reading_value?: number
+          submitted_to_supplier?: boolean | null
+          utility_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "utility_readings_utility_id_fkey"
+            columns: ["utility_id"]
+            isOneToOne: false
+            referencedRelation: "property_utilities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       valuation_history: {
         Row: {
           created_at: string | null
@@ -13250,6 +13735,103 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "valuation_history_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      viewing_availability: {
+        Row: {
+          day_of_week: number | null
+          end_time: string | null
+          id: string
+          is_active: boolean | null
+          portfolio_property_id: string | null
+          start_time: string | null
+          user_id: string
+        }
+        Insert: {
+          day_of_week?: number | null
+          end_time?: string | null
+          id?: string
+          is_active?: boolean | null
+          portfolio_property_id?: string | null
+          start_time?: string | null
+          user_id: string
+        }
+        Update: {
+          day_of_week?: number | null
+          end_time?: string | null
+          id?: string
+          is_active?: boolean | null
+          portfolio_property_id?: string | null
+          start_time?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "viewing_availability_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      viewing_requests: {
+        Row: {
+          confirmed_date: string | null
+          created_at: string | null
+          feedback: string | null
+          id: string
+          interest_level: string | null
+          notes: string | null
+          portfolio_property_id: string | null
+          preferred_dates: Json | null
+          requester_email: string
+          requester_name: string
+          requester_phone: string | null
+          status: string | null
+          user_id: string
+          viewing_type: string | null
+        }
+        Insert: {
+          confirmed_date?: string | null
+          created_at?: string | null
+          feedback?: string | null
+          id?: string
+          interest_level?: string | null
+          notes?: string | null
+          portfolio_property_id?: string | null
+          preferred_dates?: Json | null
+          requester_email: string
+          requester_name: string
+          requester_phone?: string | null
+          status?: string | null
+          user_id: string
+          viewing_type?: string | null
+        }
+        Update: {
+          confirmed_date?: string | null
+          created_at?: string | null
+          feedback?: string | null
+          id?: string
+          interest_level?: string | null
+          notes?: string | null
+          portfolio_property_id?: string | null
+          preferred_dates?: Json | null
+          requester_email?: string
+          requester_name?: string
+          requester_phone?: string | null
+          status?: string | null
+          user_id?: string
+          viewing_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "viewing_requests_portfolio_property_id_fkey"
             columns: ["portfolio_property_id"]
             isOneToOne: false
             referencedRelation: "portfolio_properties"
