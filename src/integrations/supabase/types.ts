@@ -5810,6 +5810,51 @@ export type Database = {
           },
         ]
       }
+      email_digest_log: {
+        Row: {
+          created_at: string | null
+          digest_type: string
+          email_id: string | null
+          email_sent: boolean | null
+          id: string
+          new_listings_count: number | null
+          period_end: string | null
+          period_start: string | null
+          price_drops_count: number | null
+          saved_searches_count: number | null
+          sent_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          digest_type: string
+          email_id?: string | null
+          email_sent?: boolean | null
+          id?: string
+          new_listings_count?: number | null
+          period_end?: string | null
+          period_start?: string | null
+          price_drops_count?: number | null
+          saved_searches_count?: number | null
+          sent_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          digest_type?: string
+          email_id?: string | null
+          email_sent?: boolean | null
+          id?: string
+          new_listings_count?: number | null
+          period_end?: string | null
+          period_start?: string | null
+          price_drops_count?: number | null
+          saved_searches_count?: number | null
+          sent_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       email_logs: {
         Row: {
           clicked_at: string | null
@@ -11951,6 +11996,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      push_subscriptions: {
+        Row: {
+          auth_key: string
+          created_at: string | null
+          device_name: string | null
+          endpoint: string
+          failed_count: number | null
+          id: string
+          is_active: boolean | null
+          last_used: string | null
+          p256dh_key: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          auth_key: string
+          created_at?: string | null
+          device_name?: string | null
+          endpoint: string
+          failed_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_used?: string | null
+          p256dh_key: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          auth_key?: string
+          created_at?: string | null
+          device_name?: string | null
+          endpoint?: string
+          failed_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_used?: string | null
+          p256dh_key?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       referral_clicks: {
         Row: {

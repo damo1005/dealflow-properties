@@ -95,3 +95,9 @@ verify_jwt = false
 
 [functions.check-price-drops]
 verify_jwt = false
+
+[functions.send-push-notification]
+verify_jwt = false
+
+[functions.send-daily-digest]
+verify_jwt = false
