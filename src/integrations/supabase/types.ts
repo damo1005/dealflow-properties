@@ -14,6 +14,117 @@ export type Database = {
   }
   public: {
     Tables: {
+      accommodation_requests: {
+        Row: {
+          budget_max: number
+          budget_min: number | null
+          contact_email: string | null
+          contact_name: string | null
+          contact_phone: string | null
+          created_at: string | null
+          description: string | null
+          duration_months: number | null
+          enquiry_count: number | null
+          expires_at: string | null
+          furnished: boolean | null
+          has_children: boolean | null
+          has_pets: boolean | null
+          id: string
+          is_public: boolean | null
+          location: string
+          move_in_date: string | null
+          move_out_date: string | null
+          no_sharing: boolean | null
+          number_of_guests: number | null
+          parking_required: boolean | null
+          postcode_area: string | null
+          preferred_contact_method: string | null
+          property_type: string[] | null
+          request_type: string
+          self_contained: boolean | null
+          show_contact_details: boolean | null
+          special_requirements: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+          user_id: string
+          view_count: number | null
+          whatsapp_number: string | null
+        }
+        Insert: {
+          budget_max: number
+          budget_min?: number | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          description?: string | null
+          duration_months?: number | null
+          enquiry_count?: number | null
+          expires_at?: string | null
+          furnished?: boolean | null
+          has_children?: boolean | null
+          has_pets?: boolean | null
+          id?: string
+          is_public?: boolean | null
+          location: string
+          move_in_date?: string | null
+          move_out_date?: string | null
+          no_sharing?: boolean | null
+          number_of_guests?: number | null
+          parking_required?: boolean | null
+          postcode_area?: string | null
+          preferred_contact_method?: string | null
+          property_type?: string[] | null
+          request_type: string
+          self_contained?: boolean | null
+          show_contact_details?: boolean | null
+          special_requirements?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+          view_count?: number | null
+          whatsapp_number?: string | null
+        }
+        Update: {
+          budget_max?: number
+          budget_min?: number | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          description?: string | null
+          duration_months?: number | null
+          enquiry_count?: number | null
+          expires_at?: string | null
+          furnished?: boolean | null
+          has_children?: boolean | null
+          has_pets?: boolean | null
+          id?: string
+          is_public?: boolean | null
+          location?: string
+          move_in_date?: string | null
+          move_out_date?: string | null
+          no_sharing?: boolean | null
+          number_of_guests?: number | null
+          parking_required?: boolean | null
+          postcode_area?: string | null
+          preferred_contact_method?: string | null
+          property_type?: string[] | null
+          request_type?: string
+          self_contained?: boolean | null
+          show_contact_details?: boolean | null
+          special_requirements?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+          view_count?: number | null
+          whatsapp_number?: string | null
+        }
+        Relationships: []
+      }
       api_usage: {
         Row: {
           cost_credits: number | null
@@ -617,6 +728,62 @@ export type Database = {
         }
         Relationships: []
       }
+      request_enquiries: {
+        Row: {
+          available_from: string | null
+          contact_details_shared: boolean | null
+          contact_email: string | null
+          contact_name: string | null
+          contact_phone: string | null
+          created_at: string | null
+          enquirer_user_id: string
+          id: string
+          message: string
+          offered_price: number | null
+          property_id: string | null
+          request_id: string
+          status: string | null
+        }
+        Insert: {
+          available_from?: string | null
+          contact_details_shared?: boolean | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          enquirer_user_id: string
+          id?: string
+          message: string
+          offered_price?: number | null
+          property_id?: string | null
+          request_id: string
+          status?: string | null
+        }
+        Update: {
+          available_from?: string | null
+          contact_details_shared?: boolean | null
+          contact_email?: string | null
+          contact_name?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          enquirer_user_id?: string
+          id?: string
+          message?: string
+          offered_price?: number | null
+          property_id?: string | null
+          request_id?: string
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_enquiries_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "accommodation_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       saved_properties: {
         Row: {
           created_at: string
@@ -648,6 +815,38 @@ export type Database = {
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "cached_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      saved_requests: {
+        Row: {
+          created_at: string | null
+          id: string
+          notes: string | null
+          request_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          request_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          request_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_requests_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "accommodation_requests"
             referencedColumns: ["id"]
           },
         ]
