@@ -4713,100 +4713,85 @@ export type Database = {
       }
       market_data: {
         Row: {
-          area_type: string | null
-          avg_income: number | null
-          avg_rent_1bed: number | null
-          avg_rent_2bed: number | null
-          avg_rent_3bed: number | null
-          avg_rent_pcm: number | null
-          avg_sold_price: number | null
-          avg_sold_price_12m: number | null
-          avg_sold_price_3m: number | null
-          avg_time_on_market_days: number | null
-          btl_score: number | null
-          cached_at: string | null
+          average_days_to_sell: number | null
+          average_gross_yield: number | null
+          average_price: number | null
+          average_rent: number | null
+          created_at: string | null
+          data_date: string
+          data_source: string | null
           demand_score: number | null
-          employment_rate: number | null
-          expires_at: string | null
-          gross_yield: number | null
-          growth_score: number | null
-          hmo_score: number | null
           id: string
-          median_age: number | null
-          overall_investment_score: number | null
-          population: number | null
-          postcode: string
-          price_growth_pct: number | null
+          lower_quartile_price: number | null
+          median_price: number | null
+          median_rent: number | null
+          new_listings: number | null
+          period_type: string | null
+          postcode_area: string
+          postcode_district: string | null
+          price_change_mom: number | null
+          price_change_yoy: number | null
           price_per_sqft: number | null
-          properties_for_sale: number | null
-          properties_sold_3m: number | null
-          raw_data: Json | null
-          sale_vs_asking_pct: number | null
-          supply_score: number | null
+          property_types: Json | null
+          region: string | null
+          sales_volume: number | null
+          stock_for_sale: number | null
+          stock_to_rent: number | null
+          upper_quartile_price: number | null
         }
         Insert: {
-          area_type?: string | null
-          avg_income?: number | null
-          avg_rent_1bed?: number | null
-          avg_rent_2bed?: number | null
-          avg_rent_3bed?: number | null
-          avg_rent_pcm?: number | null
-          avg_sold_price?: number | null
-          avg_sold_price_12m?: number | null
-          avg_sold_price_3m?: number | null
-          avg_time_on_market_days?: number | null
-          btl_score?: number | null
-          cached_at?: string | null
+          average_days_to_sell?: number | null
+          average_gross_yield?: number | null
+          average_price?: number | null
+          average_rent?: number | null
+          created_at?: string | null
+          data_date: string
+          data_source?: string | null
           demand_score?: number | null
-          employment_rate?: number | null
-          expires_at?: string | null
-          gross_yield?: number | null
-          growth_score?: number | null
-          hmo_score?: number | null
           id?: string
-          median_age?: number | null
-          overall_investment_score?: number | null
-          population?: number | null
-          postcode: string
-          price_growth_pct?: number | null
+          lower_quartile_price?: number | null
+          median_price?: number | null
+          median_rent?: number | null
+          new_listings?: number | null
+          period_type?: string | null
+          postcode_area: string
+          postcode_district?: string | null
+          price_change_mom?: number | null
+          price_change_yoy?: number | null
           price_per_sqft?: number | null
-          properties_for_sale?: number | null
-          properties_sold_3m?: number | null
-          raw_data?: Json | null
-          sale_vs_asking_pct?: number | null
-          supply_score?: number | null
+          property_types?: Json | null
+          region?: string | null
+          sales_volume?: number | null
+          stock_for_sale?: number | null
+          stock_to_rent?: number | null
+          upper_quartile_price?: number | null
         }
         Update: {
-          area_type?: string | null
-          avg_income?: number | null
-          avg_rent_1bed?: number | null
-          avg_rent_2bed?: number | null
-          avg_rent_3bed?: number | null
-          avg_rent_pcm?: number | null
-          avg_sold_price?: number | null
-          avg_sold_price_12m?: number | null
-          avg_sold_price_3m?: number | null
-          avg_time_on_market_days?: number | null
-          btl_score?: number | null
-          cached_at?: string | null
+          average_days_to_sell?: number | null
+          average_gross_yield?: number | null
+          average_price?: number | null
+          average_rent?: number | null
+          created_at?: string | null
+          data_date?: string
+          data_source?: string | null
           demand_score?: number | null
-          employment_rate?: number | null
-          expires_at?: string | null
-          gross_yield?: number | null
-          growth_score?: number | null
-          hmo_score?: number | null
           id?: string
-          median_age?: number | null
-          overall_investment_score?: number | null
-          population?: number | null
-          postcode?: string
-          price_growth_pct?: number | null
+          lower_quartile_price?: number | null
+          median_price?: number | null
+          median_rent?: number | null
+          new_listings?: number | null
+          period_type?: string | null
+          postcode_area?: string
+          postcode_district?: string | null
+          price_change_mom?: number | null
+          price_change_yoy?: number | null
           price_per_sqft?: number | null
-          properties_for_sale?: number | null
-          properties_sold_3m?: number | null
-          raw_data?: Json | null
-          sale_vs_asking_pct?: number | null
-          supply_score?: number | null
+          property_types?: Json | null
+          region?: string | null
+          sales_volume?: number | null
+          stock_for_sale?: number | null
+          stock_to_rent?: number | null
+          upper_quartile_price?: number | null
         }
         Relationships: []
       }
