@@ -31,6 +31,42 @@ serve(async (req) => {
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
   );
 
+  // Helper to log revenue events
+  async function logRevenueEvent(eventType: string, data: {
+    stripeEventId: string;
+    amountCents?: number;
+    currency?: string;
+    customerId?: string;
+    userId?: string;
+    subscriptionId?: string;
+    planName?: string;
+    metadata?: Record<string, any>;
+  }) {
+    try {
+      const { error } = await supabase
+        .from('revenue_events')
+        .insert({
+          stripe_event_id: data.stripeEventId,
+          event_type: eventType,
+          amount_cents: data.amountCents || 0,
+          currency: data.currency || 'gbp',
+          customer_id: data.customerId,
+          user_id: data.userId,
+          subscription_id: data.subscriptionId,
+          plan_name: data.planName,
+          metadata: data.metadata || {}
+        });
+
+      if (error) {
+        logStep("Failed to log revenue event", { error });
+      } else {
+        logStep("Revenue event logged", { eventType, amount: data.amountCents });
+      }
+    } catch (err) {
+      logStep("Error logging revenue event", { error: err });
+    }
+  }
+
   try {
     const body = await req.text();
     const signature = req.headers.get("stripe-signature");
@@ -77,7 +113,42 @@ serve(async (req) => {
           } else {
             logStep("Profile updated successfully", { userId, tier });
           }
+
+          // Log revenue event for subscription created
+          await logRevenueEvent('subscription_created', {
+            stripeEventId: event.id,
+            amountCents: session.amount_total || 0,
+            currency: session.currency || 'gbp',
+            customerId,
+            userId,
+            planName: tier,
+            metadata: { sessionId: session.id }
+          });
         }
+        break;
+      }
+
+      case "customer.subscription.created": {
+        const subscription = event.data.object as Stripe.Subscription;
+        const customerId = subscription.customer as string;
+        
+        logStep("Subscription created", { customerId });
+        
+        // Find user by stripe_customer_id
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("id, subscription_tier")
+          .eq("stripe_customer_id", customerId)
+          .single();
+
+        await logRevenueEvent('subscription_created', {
+          stripeEventId: event.id,
+          customerId,
+          userId: profile?.id,
+          subscriptionId: subscription.id,
+          planName: profile?.subscription_tier,
+          metadata: { status: subscription.status }
+        });
         break;
       }
 
@@ -146,6 +217,42 @@ serve(async (req) => {
           
           logStep("Profile reverted to free tier", { userId: profile.id });
         }
+
+        // Log cancellation
+        await logRevenueEvent('subscription_cancelled', {
+          stripeEventId: event.id,
+          customerId,
+          userId: profile?.id,
+          subscriptionId: subscription.id,
+          metadata: { cancelledAt: subscription.canceled_at }
+        });
+        break;
+      }
+
+      case "invoice.payment_succeeded": {
+        const invoice = event.data.object as Stripe.Invoice;
+        const customerId = invoice.customer as string;
+        
+        logStep("Payment succeeded", { customerId, amount: invoice.amount_paid });
+        
+        // Find user by stripe_customer_id
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("id, subscription_tier")
+          .eq("stripe_customer_id", customerId)
+          .single();
+
+        // Log revenue event
+        await logRevenueEvent('payment_succeeded', {
+          stripeEventId: event.id,
+          amountCents: invoice.amount_paid,
+          currency: invoice.currency,
+          customerId,
+          userId: profile?.id,
+          subscriptionId: invoice.subscription as string || undefined,
+          planName: profile?.subscription_tier,
+          metadata: { invoiceId: invoice.id }
+        });
         break;
       }
 
@@ -155,8 +262,23 @@ serve(async (req) => {
         
         logStep("Payment failed", { customerId, invoiceId: invoice.id });
         
-        // Could send an email notification here
-        // For now, just log it
+        // Find user
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("id")
+          .eq("stripe_customer_id", customerId)
+          .single();
+
+        // Log failed payment
+        await logRevenueEvent('payment_failed', {
+          stripeEventId: event.id,
+          amountCents: invoice.amount_due,
+          currency: invoice.currency,
+          customerId,
+          userId: profile?.id,
+          subscriptionId: invoice.subscription as string || undefined,
+          metadata: { invoiceId: invoice.id, reason: 'payment_failed' }
+        });
         break;
       }
 
