@@ -320,6 +320,75 @@ export type Database = {
         }
         Relationships: []
       }
+      brand_profiles: {
+        Row: {
+          address: string | null
+          company_name: string
+          company_number: string | null
+          created_at: string | null
+          email: string | null
+          font_family: string | null
+          id: string
+          instagram_handle: string | null
+          is_default: boolean | null
+          linkedin_url: string | null
+          logo_url: string | null
+          phone: string | null
+          primary_color: string | null
+          secondary_color: string | null
+          tagline: string | null
+          twitter_handle: string | null
+          updated_at: string | null
+          user_id: string
+          vat_number: string | null
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          company_name: string
+          company_number?: string | null
+          created_at?: string | null
+          email?: string | null
+          font_family?: string | null
+          id?: string
+          instagram_handle?: string | null
+          is_default?: boolean | null
+          linkedin_url?: string | null
+          logo_url?: string | null
+          phone?: string | null
+          primary_color?: string | null
+          secondary_color?: string | null
+          tagline?: string | null
+          twitter_handle?: string | null
+          updated_at?: string | null
+          user_id: string
+          vat_number?: string | null
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          company_name?: string
+          company_number?: string | null
+          created_at?: string | null
+          email?: string | null
+          font_family?: string | null
+          id?: string
+          instagram_handle?: string | null
+          is_default?: boolean | null
+          linkedin_url?: string | null
+          logo_url?: string | null
+          phone?: string | null
+          primary_color?: string | null
+          secondary_color?: string | null
+          tagline?: string | null
+          twitter_handle?: string | null
+          updated_at?: string | null
+          user_id?: string
+          vat_number?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
       cached_properties: {
         Row: {
           address: string
@@ -770,39 +839,304 @@ export type Database = {
         }
         Relationships: []
       }
-      deal_packs: {
+      deal_pack_comments: {
         Row: {
-          content: Json | null
+          comment_text: string
+          commenter_email: string
+          commenter_name: string
           created_at: string | null
+          deal_pack_id: string | null
           id: string
-          pdf_url: string | null
-          property_id: string | null
-          share_link: string | null
-          template_name: string | null
-          user_id: string
-          views: number | null
+          is_resolved: boolean | null
+          resolved_at: string | null
+          resolved_by: string | null
+          section_id: string | null
         }
         Insert: {
-          content?: Json | null
+          comment_text: string
+          commenter_email: string
+          commenter_name: string
           created_at?: string | null
+          deal_pack_id?: string | null
           id?: string
-          pdf_url?: string | null
-          property_id?: string | null
-          share_link?: string | null
-          template_name?: string | null
-          user_id: string
-          views?: number | null
+          is_resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          section_id?: string | null
         }
         Update: {
-          content?: Json | null
+          comment_text?: string
+          commenter_email?: string
+          commenter_name?: string
+          created_at?: string | null
+          deal_pack_id?: string | null
+          id?: string
+          is_resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          section_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deal_pack_comments_deal_pack_id_fkey"
+            columns: ["deal_pack_id"]
+            isOneToOne: false
+            referencedRelation: "deal_packs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deal_pack_section_library: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          is_default: boolean | null
+          section_type: string
+          title: string
+          usage_count: number | null
+          user_id: string
+        }
+        Insert: {
+          content: string
           created_at?: string | null
           id?: string
-          pdf_url?: string | null
-          property_id?: string | null
-          share_link?: string | null
-          template_name?: string | null
+          is_default?: boolean | null
+          section_type: string
+          title: string
+          usage_count?: number | null
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          is_default?: boolean | null
+          section_type?: string
+          title?: string
+          usage_count?: number | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      deal_pack_templates: {
+        Row: {
+          color_scheme: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          font_family: string | null
+          id: string
+          include_area_analysis: boolean | null
+          include_comparables: boolean | null
+          include_floor_plan: boolean | null
+          include_photos: boolean | null
+          include_risk_assessment: boolean | null
+          is_default: boolean | null
+          is_system_template: boolean | null
+          name: string
+          primary_color: string | null
+          sections: Json
+          template_type: string
+          updated_at: string | null
+          usage_count: number | null
+        }
+        Insert: {
+          color_scheme?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          font_family?: string | null
+          id?: string
+          include_area_analysis?: boolean | null
+          include_comparables?: boolean | null
+          include_floor_plan?: boolean | null
+          include_photos?: boolean | null
+          include_risk_assessment?: boolean | null
+          is_default?: boolean | null
+          is_system_template?: boolean | null
+          name: string
+          primary_color?: string | null
+          sections?: Json
+          template_type: string
+          updated_at?: string | null
+          usage_count?: number | null
+        }
+        Update: {
+          color_scheme?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          font_family?: string | null
+          id?: string
+          include_area_analysis?: boolean | null
+          include_comparables?: boolean | null
+          include_floor_plan?: boolean | null
+          include_photos?: boolean | null
+          include_risk_assessment?: boolean | null
+          is_default?: boolean | null
+          is_system_template?: boolean | null
+          name?: string
+          primary_color?: string | null
+          sections?: Json
+          template_type?: string
+          updated_at?: string | null
+          usage_count?: number | null
+        }
+        Relationships: []
+      }
+      deal_pack_views: {
+        Row: {
+          clicked_links: string[] | null
+          deal_pack_id: string | null
+          downloaded: boolean | null
+          duration_seconds: number | null
+          id: string
+          pages_viewed: number | null
+          sections_viewed: string[] | null
+          viewed_at: string | null
+          viewer_email: string | null
+          viewer_ip: unknown
+          viewer_name: string | null
+        }
+        Insert: {
+          clicked_links?: string[] | null
+          deal_pack_id?: string | null
+          downloaded?: boolean | null
+          duration_seconds?: number | null
+          id?: string
+          pages_viewed?: number | null
+          sections_viewed?: string[] | null
+          viewed_at?: string | null
+          viewer_email?: string | null
+          viewer_ip?: unknown
+          viewer_name?: string | null
+        }
+        Update: {
+          clicked_links?: string[] | null
+          deal_pack_id?: string | null
+          downloaded?: boolean | null
+          duration_seconds?: number | null
+          id?: string
+          pages_viewed?: number | null
+          sections_viewed?: string[] | null
+          viewed_at?: string | null
+          viewer_email?: string | null
+          viewer_ip?: unknown
+          viewer_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deal_pack_views_deal_pack_id_fkey"
+            columns: ["deal_pack_id"]
+            isOneToOne: false
+            referencedRelation: "deal_packs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      deal_packs: {
+        Row: {
+          calculations: Json | null
+          color_scheme: string | null
+          company_name: string | null
+          contact_details: Json | null
+          content: Json | null
+          created_at: string | null
+          custom_content: Json | null
+          download_count: number | null
+          expires_at: string | null
+          id: string
+          is_public: boolean | null
+          last_viewed_at: string | null
+          logo_url: string | null
+          pack_type: string | null
+          parent_pack_id: string | null
+          password_hash: string | null
+          pdf_url: string | null
+          powerpoint_url: string | null
+          property_data: Json | null
+          property_id: string | null
+          sections: Json | null
+          share_link: string | null
+          status: string | null
+          subtitle: string | null
+          template_name: string | null
+          title: string | null
+          updated_at: string | null
+          user_id: string
+          version: number | null
+          view_count: number | null
+          views: number | null
+          word_doc_url: string | null
+        }
+        Insert: {
+          calculations?: Json | null
+          color_scheme?: string | null
+          company_name?: string | null
+          contact_details?: Json | null
+          content?: Json | null
+          created_at?: string | null
+          custom_content?: Json | null
+          download_count?: number | null
+          expires_at?: string | null
+          id?: string
+          is_public?: boolean | null
+          last_viewed_at?: string | null
+          logo_url?: string | null
+          pack_type?: string | null
+          parent_pack_id?: string | null
+          password_hash?: string | null
+          pdf_url?: string | null
+          powerpoint_url?: string | null
+          property_data?: Json | null
+          property_id?: string | null
+          sections?: Json | null
+          share_link?: string | null
+          status?: string | null
+          subtitle?: string | null
+          template_name?: string | null
+          title?: string | null
+          updated_at?: string | null
+          user_id: string
+          version?: number | null
+          view_count?: number | null
           views?: number | null
+          word_doc_url?: string | null
+        }
+        Update: {
+          calculations?: Json | null
+          color_scheme?: string | null
+          company_name?: string | null
+          contact_details?: Json | null
+          content?: Json | null
+          created_at?: string | null
+          custom_content?: Json | null
+          download_count?: number | null
+          expires_at?: string | null
+          id?: string
+          is_public?: boolean | null
+          last_viewed_at?: string | null
+          logo_url?: string | null
+          pack_type?: string | null
+          parent_pack_id?: string | null
+          password_hash?: string | null
+          pdf_url?: string | null
+          powerpoint_url?: string | null
+          property_data?: Json | null
+          property_id?: string | null
+          sections?: Json | null
+          share_link?: string | null
+          status?: string | null
+          subtitle?: string | null
+          template_name?: string | null
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string
+          version?: number | null
+          view_count?: number | null
+          views?: number | null
+          word_doc_url?: string | null
         }
         Relationships: [
           {
