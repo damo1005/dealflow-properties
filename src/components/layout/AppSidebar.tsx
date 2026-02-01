@@ -18,7 +18,8 @@ import {
   Radar,
   Plug,
   TrendingUp,
-  BedDouble
+  BedDouble,
+  FileText
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -38,6 +39,7 @@ const navItems = [
   { title: "Deal Scout", url: "/deal-scout", icon: Radar },
   { title: "Auctions", url: "/auctions", icon: Gavel },
   { title: "Alerts", url: "/alerts", icon: Bell },
+  { title: "Reports", url: "/reports", icon: FileText },
   { title: "Network", url: "/network", icon: Users },
   { title: "Copilot", url: "/copilot", icon: MessageCircle },
   { title: "Integrations", url: "/integrations", icon: Plug },
