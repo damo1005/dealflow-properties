@@ -1646,6 +1646,509 @@ export type Database = {
         }
         Relationships: []
       }
+      contractor_categories: {
+        Row: {
+          category_name: string
+          created_at: string | null
+          description: string | null
+          display_order: number | null
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          slug: string
+          typical_callout_fee: number | null
+          typical_hourly_rate_max: number | null
+          typical_hourly_rate_min: number | null
+        }
+        Insert: {
+          category_name: string
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          slug: string
+          typical_callout_fee?: number | null
+          typical_hourly_rate_max?: number | null
+          typical_hourly_rate_min?: number | null
+        }
+        Update: {
+          category_name?: string
+          created_at?: string | null
+          description?: string | null
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          slug?: string
+          typical_callout_fee?: number | null
+          typical_hourly_rate_max?: number | null
+          typical_hourly_rate_min?: number | null
+        }
+        Relationships: []
+      }
+      contractor_reviews: {
+        Row: {
+          communication_rating: number | null
+          contractor_id: string | null
+          contractor_response: string | null
+          created_at: string | null
+          id: string
+          is_approved: boolean | null
+          is_verified: boolean | null
+          overall_rating: number
+          punctuality_rating: number | null
+          quality_rating: number | null
+          review_text: string | null
+          user_id: string
+          value_rating: number | null
+        }
+        Insert: {
+          communication_rating?: number | null
+          contractor_id?: string | null
+          contractor_response?: string | null
+          created_at?: string | null
+          id?: string
+          is_approved?: boolean | null
+          is_verified?: boolean | null
+          overall_rating: number
+          punctuality_rating?: number | null
+          quality_rating?: number | null
+          review_text?: string | null
+          user_id: string
+          value_rating?: number | null
+        }
+        Update: {
+          communication_rating?: number | null
+          contractor_id?: string | null
+          contractor_response?: string | null
+          created_at?: string | null
+          id?: string
+          is_approved?: boolean | null
+          is_verified?: boolean | null
+          overall_rating?: number
+          punctuality_rating?: number | null
+          quality_rating?: number | null
+          review_text?: string | null
+          user_id?: string
+          value_rating?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contractor_reviews_contractor_id_fkey"
+            columns: ["contractor_id"]
+            isOneToOne: false
+            referencedRelation: "contractors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contractors: {
+        Row: {
+          avg_rating: number | null
+          bio: string | null
+          business_name: string
+          callout_fee: number | null
+          commission_rate: number | null
+          coverage_areas: string[] | null
+          coverage_radius_miles: number | null
+          created_at: string | null
+          day_rate: number | null
+          dbs_checked: boolean | null
+          email: string
+          emergency_callout: boolean | null
+          free_quotes: boolean | null
+          gas_safe_number: string | null
+          half_day_rate: number | null
+          has_public_liability: boolean | null
+          home_postcode: string | null
+          hourly_rate: number | null
+          id: string
+          insurance_expiry_date: string | null
+          is_active: boolean | null
+          is_featured: boolean | null
+          is_gas_safe_registered: boolean | null
+          is_niceic_registered: boolean | null
+          is_vetted: boolean | null
+          logo_url: string | null
+          niceic_number: string | null
+          other_certifications: string[] | null
+          phone: string | null
+          public_liability_amount: number | null
+          references_checked: boolean | null
+          total_jobs_completed: number | null
+          total_reviews: number | null
+          trading_as: string | null
+          updated_at: string | null
+          vetted_at: string | null
+          website_url: string | null
+        }
+        Insert: {
+          avg_rating?: number | null
+          bio?: string | null
+          business_name: string
+          callout_fee?: number | null
+          commission_rate?: number | null
+          coverage_areas?: string[] | null
+          coverage_radius_miles?: number | null
+          created_at?: string | null
+          day_rate?: number | null
+          dbs_checked?: boolean | null
+          email: string
+          emergency_callout?: boolean | null
+          free_quotes?: boolean | null
+          gas_safe_number?: string | null
+          half_day_rate?: number | null
+          has_public_liability?: boolean | null
+          home_postcode?: string | null
+          hourly_rate?: number | null
+          id?: string
+          insurance_expiry_date?: string | null
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          is_gas_safe_registered?: boolean | null
+          is_niceic_registered?: boolean | null
+          is_vetted?: boolean | null
+          logo_url?: string | null
+          niceic_number?: string | null
+          other_certifications?: string[] | null
+          phone?: string | null
+          public_liability_amount?: number | null
+          references_checked?: boolean | null
+          total_jobs_completed?: number | null
+          total_reviews?: number | null
+          trading_as?: string | null
+          updated_at?: string | null
+          vetted_at?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          avg_rating?: number | null
+          bio?: string | null
+          business_name?: string
+          callout_fee?: number | null
+          commission_rate?: number | null
+          coverage_areas?: string[] | null
+          coverage_radius_miles?: number | null
+          created_at?: string | null
+          day_rate?: number | null
+          dbs_checked?: boolean | null
+          email?: string
+          emergency_callout?: boolean | null
+          free_quotes?: boolean | null
+          gas_safe_number?: string | null
+          half_day_rate?: number | null
+          has_public_liability?: boolean | null
+          home_postcode?: string | null
+          hourly_rate?: number | null
+          id?: string
+          insurance_expiry_date?: string | null
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          is_gas_safe_registered?: boolean | null
+          is_niceic_registered?: boolean | null
+          is_vetted?: boolean | null
+          logo_url?: string | null
+          niceic_number?: string | null
+          other_certifications?: string[] | null
+          phone?: string | null
+          public_liability_amount?: number | null
+          references_checked?: boolean | null
+          total_jobs_completed?: number | null
+          total_reviews?: number | null
+          trading_as?: string | null
+          updated_at?: string | null
+          vetted_at?: string | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
+      conveyancing_firms: {
+        Row: {
+          avg_completion_days: number | null
+          commission_amount: number | null
+          commission_type: string | null
+          coverage_areas: string[] | null
+          cqs_accredited: boolean | null
+          created_at: string | null
+          dedicated_conveyancer: boolean | null
+          display_order: number | null
+          firm_name: string
+          handles_btl: boolean | null
+          handles_leasehold: boolean | null
+          handles_ltd_company: boolean | null
+          handles_new_build: boolean | null
+          handles_purchases: boolean | null
+          handles_remortgage: boolean | null
+          handles_sales: boolean | null
+          handles_transfer_equity: boolean | null
+          id: string
+          is_active: boolean | null
+          logo_url: string | null
+          offers_fixed_fee: boolean | null
+          offers_no_sale_no_fee: boolean | null
+          offers_online_tracking: boolean | null
+          purchase_fee_from: number | null
+          referral_link: string | null
+          referral_partner: string | null
+          remortgage_fee_from: number | null
+          reviews_count: number | null
+          sale_fee_from: number | null
+          sra_number: string | null
+          trustpilot_rating: number | null
+          updated_at: string | null
+          website_url: string | null
+        }
+        Insert: {
+          avg_completion_days?: number | null
+          commission_amount?: number | null
+          commission_type?: string | null
+          coverage_areas?: string[] | null
+          cqs_accredited?: boolean | null
+          created_at?: string | null
+          dedicated_conveyancer?: boolean | null
+          display_order?: number | null
+          firm_name: string
+          handles_btl?: boolean | null
+          handles_leasehold?: boolean | null
+          handles_ltd_company?: boolean | null
+          handles_new_build?: boolean | null
+          handles_purchases?: boolean | null
+          handles_remortgage?: boolean | null
+          handles_sales?: boolean | null
+          handles_transfer_equity?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          offers_fixed_fee?: boolean | null
+          offers_no_sale_no_fee?: boolean | null
+          offers_online_tracking?: boolean | null
+          purchase_fee_from?: number | null
+          referral_link?: string | null
+          referral_partner?: string | null
+          remortgage_fee_from?: number | null
+          reviews_count?: number | null
+          sale_fee_from?: number | null
+          sra_number?: string | null
+          trustpilot_rating?: number | null
+          updated_at?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          avg_completion_days?: number | null
+          commission_amount?: number | null
+          commission_type?: string | null
+          coverage_areas?: string[] | null
+          cqs_accredited?: boolean | null
+          created_at?: string | null
+          dedicated_conveyancer?: boolean | null
+          display_order?: number | null
+          firm_name?: string
+          handles_btl?: boolean | null
+          handles_leasehold?: boolean | null
+          handles_ltd_company?: boolean | null
+          handles_new_build?: boolean | null
+          handles_purchases?: boolean | null
+          handles_remortgage?: boolean | null
+          handles_sales?: boolean | null
+          handles_transfer_equity?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          offers_fixed_fee?: boolean | null
+          offers_no_sale_no_fee?: boolean | null
+          offers_online_tracking?: boolean | null
+          purchase_fee_from?: number | null
+          referral_link?: string | null
+          referral_partner?: string | null
+          remortgage_fee_from?: number | null
+          reviews_count?: number | null
+          sale_fee_from?: number | null
+          sra_number?: string | null
+          trustpilot_rating?: number | null
+          updated_at?: string | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
+      conveyancing_instructions: {
+        Row: {
+          actual_completion_date: string | null
+          commission_amount: number | null
+          commission_date: string | null
+          commission_status: string | null
+          completion_statement_url: string | null
+          contract_pdf_url: string | null
+          created_at: string | null
+          disbursements: number | null
+          expected_completion_date: string | null
+          firm_id: string | null
+          firm_name: string | null
+          id: string
+          instructed_date: string | null
+          legal_fee: number | null
+          property_address: string | null
+          quote_id: string | null
+          referral_click_id: string | null
+          status: string | null
+          total_cost: number | null
+          transaction_type: string | null
+          transaction_value: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          actual_completion_date?: string | null
+          commission_amount?: number | null
+          commission_date?: string | null
+          commission_status?: string | null
+          completion_statement_url?: string | null
+          contract_pdf_url?: string | null
+          created_at?: string | null
+          disbursements?: number | null
+          expected_completion_date?: string | null
+          firm_id?: string | null
+          firm_name?: string | null
+          id?: string
+          instructed_date?: string | null
+          legal_fee?: number | null
+          property_address?: string | null
+          quote_id?: string | null
+          referral_click_id?: string | null
+          status?: string | null
+          total_cost?: number | null
+          transaction_type?: string | null
+          transaction_value?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          actual_completion_date?: string | null
+          commission_amount?: number | null
+          commission_date?: string | null
+          commission_status?: string | null
+          completion_statement_url?: string | null
+          contract_pdf_url?: string | null
+          created_at?: string | null
+          disbursements?: number | null
+          expected_completion_date?: string | null
+          firm_id?: string | null
+          firm_name?: string | null
+          id?: string
+          instructed_date?: string | null
+          legal_fee?: number | null
+          property_address?: string | null
+          quote_id?: string | null
+          referral_click_id?: string | null
+          status?: string | null
+          total_cost?: number | null
+          transaction_type?: string | null
+          transaction_value?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conveyancing_instructions_firm_id_fkey"
+            columns: ["firm_id"]
+            isOneToOne: false
+            referencedRelation: "conveyancing_firms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "conveyancing_instructions_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "conveyancing_quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conveyancing_quotes: {
+        Row: {
+          chain_position: string | null
+          created_at: string | null
+          expires_at: string | null
+          has_outstanding_mortgage: boolean | null
+          has_survey: boolean | null
+          id: string
+          is_btl: boolean | null
+          is_cash_buyer: boolean | null
+          is_first_time_buyer: boolean | null
+          is_help_to_buy: boolean | null
+          is_ltd_company: boolean | null
+          is_shared_ownership: boolean | null
+          needs_mortgage: boolean | null
+          purchase_postcode: string | null
+          purchase_price: number | null
+          purchase_property_type: string | null
+          quotes: Json | null
+          remortgage_postcode: string | null
+          remortgage_value: number | null
+          sale_postcode: string | null
+          sale_price: number | null
+          sale_property_type: string | null
+          status: string | null
+          transaction_type: string
+          user_id: string
+        }
+        Insert: {
+          chain_position?: string | null
+          created_at?: string | null
+          expires_at?: string | null
+          has_outstanding_mortgage?: boolean | null
+          has_survey?: boolean | null
+          id?: string
+          is_btl?: boolean | null
+          is_cash_buyer?: boolean | null
+          is_first_time_buyer?: boolean | null
+          is_help_to_buy?: boolean | null
+          is_ltd_company?: boolean | null
+          is_shared_ownership?: boolean | null
+          needs_mortgage?: boolean | null
+          purchase_postcode?: string | null
+          purchase_price?: number | null
+          purchase_property_type?: string | null
+          quotes?: Json | null
+          remortgage_postcode?: string | null
+          remortgage_value?: number | null
+          sale_postcode?: string | null
+          sale_price?: number | null
+          sale_property_type?: string | null
+          status?: string | null
+          transaction_type: string
+          user_id: string
+        }
+        Update: {
+          chain_position?: string | null
+          created_at?: string | null
+          expires_at?: string | null
+          has_outstanding_mortgage?: boolean | null
+          has_survey?: boolean | null
+          id?: string
+          is_btl?: boolean | null
+          is_cash_buyer?: boolean | null
+          is_first_time_buyer?: boolean | null
+          is_help_to_buy?: boolean | null
+          is_ltd_company?: boolean | null
+          is_shared_ownership?: boolean | null
+          needs_mortgage?: boolean | null
+          purchase_postcode?: string | null
+          purchase_price?: number | null
+          purchase_property_type?: string | null
+          quotes?: Json | null
+          remortgage_postcode?: string | null
+          remortgage_value?: number | null
+          sale_postcode?: string | null
+          sale_price?: number | null
+          sale_property_type?: string | null
+          status?: string | null
+          transaction_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       copilot_conversations: {
         Row: {
           context_property_id: string | null
@@ -3117,6 +3620,144 @@ export type Database = {
           suitable_strategies?: string[] | null
         }
         Relationships: []
+      }
+      job_quotes: {
+        Row: {
+          contractor_id: string | null
+          created_at: string | null
+          earliest_start_date: string | null
+          estimated_duration: string | null
+          id: string
+          job_request_id: string | null
+          labour_cost: number | null
+          materials_cost: number | null
+          other_costs: number | null
+          quote_amount: number
+          quote_description: string | null
+          status: string | null
+          valid_until: string | null
+        }
+        Insert: {
+          contractor_id?: string | null
+          created_at?: string | null
+          earliest_start_date?: string | null
+          estimated_duration?: string | null
+          id?: string
+          job_request_id?: string | null
+          labour_cost?: number | null
+          materials_cost?: number | null
+          other_costs?: number | null
+          quote_amount: number
+          quote_description?: string | null
+          status?: string | null
+          valid_until?: string | null
+        }
+        Update: {
+          contractor_id?: string | null
+          created_at?: string | null
+          earliest_start_date?: string | null
+          estimated_duration?: string | null
+          id?: string
+          job_request_id?: string | null
+          labour_cost?: number | null
+          materials_cost?: number | null
+          other_costs?: number | null
+          quote_amount?: number
+          quote_description?: string | null
+          status?: string | null
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_quotes_contractor_id_fkey"
+            columns: ["contractor_id"]
+            isOneToOne: false
+            referencedRelation: "contractors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_quotes_job_request_id_fkey"
+            columns: ["job_request_id"]
+            isOneToOne: false
+            referencedRelation: "job_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      job_requests: {
+        Row: {
+          budget_max: number | null
+          budget_min: number | null
+          category_id: string | null
+          created_at: string | null
+          description: string
+          expires_at: string | null
+          id: string
+          photo_urls: string[] | null
+          preferred_date: string | null
+          preferred_time: string | null
+          property_address: string | null
+          property_postcode: string | null
+          selected_contractor_id: string | null
+          status: string | null
+          title: string
+          urgency: string | null
+          user_id: string
+        }
+        Insert: {
+          budget_max?: number | null
+          budget_min?: number | null
+          category_id?: string | null
+          created_at?: string | null
+          description: string
+          expires_at?: string | null
+          id?: string
+          photo_urls?: string[] | null
+          preferred_date?: string | null
+          preferred_time?: string | null
+          property_address?: string | null
+          property_postcode?: string | null
+          selected_contractor_id?: string | null
+          status?: string | null
+          title: string
+          urgency?: string | null
+          user_id: string
+        }
+        Update: {
+          budget_max?: number | null
+          budget_min?: number | null
+          category_id?: string | null
+          created_at?: string | null
+          description?: string
+          expires_at?: string | null
+          id?: string
+          photo_urls?: string[] | null
+          preferred_date?: string | null
+          preferred_time?: string | null
+          property_address?: string | null
+          property_postcode?: string | null
+          selected_contractor_id?: string | null
+          status?: string | null
+          title?: string
+          urgency?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_requests_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "contractor_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_requests_selected_contractor_id_fkey"
+            columns: ["selected_contractor_id"]
+            isOneToOne: false
+            referencedRelation: "contractors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       jv_preferences: {
         Row: {

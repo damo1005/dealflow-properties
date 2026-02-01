@@ -40,6 +40,8 @@ import Mortgages from "./pages/Mortgages";
 import Integrations from "./pages/Integrations";
 import MarketIntel from "./pages/MarketIntel";
 import STRManagement from "./pages/STRManagement";
+import Conveyancing from "./pages/Conveyancing";
+import Contractors from "./pages/Contractors";
 import NotFound from "./pages/NotFound";
 
 // Admin pages
@@ -308,6 +310,22 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <STRManagement />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/conveyancing"
+              element={
+                <ProtectedRoute>
+                  <Conveyancing />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/contractors"
+              element={
+                <ProtectedRoute>
+                  <Contractors />
                 </ProtectedRoute>
               }
             />
