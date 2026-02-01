@@ -71,3 +71,6 @@ verify_jwt = false
 
 [functions.crime-data-fetch]
 verify_jwt = false
+
+[functions.sync-ccs-projects]
+verify_jwt = false

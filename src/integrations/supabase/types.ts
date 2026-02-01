@@ -1832,6 +1832,153 @@ export type Database = {
         }
         Relationships: []
       }
+      ccs_metadata: {
+        Row: {
+          code: string | null
+          id: string
+          last_synced: string | null
+          metadata_type: string
+          name: string
+          parent_code: string | null
+        }
+        Insert: {
+          code?: string | null
+          id?: string
+          last_synced?: string | null
+          metadata_type: string
+          name: string
+          parent_code?: string | null
+        }
+        Update: {
+          code?: string | null
+          id?: string
+          last_synced?: string | null
+          metadata_type?: string
+          name?: string
+          parent_code?: string | null
+        }
+        Relationships: []
+      }
+      ccs_projects: {
+        Row: {
+          address_line1: string | null
+          address_line2: string | null
+          address_line3: string | null
+          award_details: string | null
+          ccs_project_id: string
+          client_contact: string | null
+          client_name: string | null
+          community_score: number | null
+          contractor_contact: string | null
+          contractor_name: string | null
+          county: string | null
+          created_at: string | null
+          environment_score: number | null
+          has_award: boolean | null
+          id: string
+          is_ultra_site: boolean | null
+          last_synced: string | null
+          last_visit_date: string | null
+          latitude: number | null
+          local_authority: string | null
+          longitude: number | null
+          overall_score: number | null
+          postcode: string | null
+          project_category: string | null
+          project_description: string | null
+          project_name: string | null
+          raw_data: Json | null
+          region: string | null
+          registration_end: string | null
+          registration_start: string | null
+          site_manager_email: string | null
+          site_manager_name: string | null
+          site_manager_phone: string | null
+          town: string | null
+          updated_at: string | null
+          visit_count: number | null
+          workforce_score: number | null
+        }
+        Insert: {
+          address_line1?: string | null
+          address_line2?: string | null
+          address_line3?: string | null
+          award_details?: string | null
+          ccs_project_id: string
+          client_contact?: string | null
+          client_name?: string | null
+          community_score?: number | null
+          contractor_contact?: string | null
+          contractor_name?: string | null
+          county?: string | null
+          created_at?: string | null
+          environment_score?: number | null
+          has_award?: boolean | null
+          id?: string
+          is_ultra_site?: boolean | null
+          last_synced?: string | null
+          last_visit_date?: string | null
+          latitude?: number | null
+          local_authority?: string | null
+          longitude?: number | null
+          overall_score?: number | null
+          postcode?: string | null
+          project_category?: string | null
+          project_description?: string | null
+          project_name?: string | null
+          raw_data?: Json | null
+          region?: string | null
+          registration_end?: string | null
+          registration_start?: string | null
+          site_manager_email?: string | null
+          site_manager_name?: string | null
+          site_manager_phone?: string | null
+          town?: string | null
+          updated_at?: string | null
+          visit_count?: number | null
+          workforce_score?: number | null
+        }
+        Update: {
+          address_line1?: string | null
+          address_line2?: string | null
+          address_line3?: string | null
+          award_details?: string | null
+          ccs_project_id?: string
+          client_contact?: string | null
+          client_name?: string | null
+          community_score?: number | null
+          contractor_contact?: string | null
+          contractor_name?: string | null
+          county?: string | null
+          created_at?: string | null
+          environment_score?: number | null
+          has_award?: boolean | null
+          id?: string
+          is_ultra_site?: boolean | null
+          last_synced?: string | null
+          last_visit_date?: string | null
+          latitude?: number | null
+          local_authority?: string | null
+          longitude?: number | null
+          overall_score?: number | null
+          postcode?: string | null
+          project_category?: string | null
+          project_description?: string | null
+          project_name?: string | null
+          raw_data?: Json | null
+          region?: string | null
+          registration_end?: string | null
+          registration_start?: string | null
+          site_manager_email?: string | null
+          site_manager_name?: string | null
+          site_manager_phone?: string | null
+          town?: string | null
+          updated_at?: string | null
+          visit_count?: number | null
+          workforce_score?: number | null
+        }
+        Relationships: []
+      }
       channel_blocks: {
         Row: {
           created_at: string | null
@@ -12080,6 +12227,63 @@ export type Database = {
           },
         ]
       }
+      saved_contractors: {
+        Row: {
+          active_projects: number | null
+          avg_ccs_score: number | null
+          ccs_entity_id: string | null
+          contact_name: string | null
+          contractor_name: string
+          created_at: string | null
+          email: string | null
+          id: string
+          last_contact_date: string | null
+          notes: string | null
+          phone: string | null
+          status: string | null
+          total_projects: number | null
+          user_id: string
+          user_rating: number | null
+          website: string | null
+        }
+        Insert: {
+          active_projects?: number | null
+          avg_ccs_score?: number | null
+          ccs_entity_id?: string | null
+          contact_name?: string | null
+          contractor_name: string
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          last_contact_date?: string | null
+          notes?: string | null
+          phone?: string | null
+          status?: string | null
+          total_projects?: number | null
+          user_id: string
+          user_rating?: number | null
+          website?: string | null
+        }
+        Update: {
+          active_projects?: number | null
+          avg_ccs_score?: number | null
+          ccs_entity_id?: string | null
+          contact_name?: string | null
+          contractor_name?: string
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          last_contact_date?: string | null
+          notes?: string | null
+          phone?: string | null
+          status?: string | null
+          total_projects?: number | null
+          user_id?: string
+          user_rating?: number | null
+          website?: string | null
+        }
+        Relationships: []
+      }
       saved_hotspots: {
         Row: {
           created_at: string | null
@@ -14403,6 +14607,44 @@ export type Database = {
           },
         ]
       }
+      tracked_ccs_projects: {
+        Row: {
+          alert_on_completion: boolean | null
+          alert_on_score_change: boolean | null
+          ccs_project_id: string
+          created_at: string | null
+          id: string
+          notes: string | null
+          user_id: string
+        }
+        Insert: {
+          alert_on_completion?: boolean | null
+          alert_on_score_change?: boolean | null
+          ccs_project_id: string
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          user_id: string
+        }
+        Update: {
+          alert_on_completion?: boolean | null
+          alert_on_score_change?: boolean | null
+          ccs_project_id?: string
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tracked_ccs_projects_ccs_project_id_fkey"
+            columns: ["ccs_project_id"]
+            isOneToOne: false
+            referencedRelation: "ccs_projects"
+            referencedColumns: ["ccs_project_id"]
+          },
+        ]
+      }
       tracked_projects: {
         Row: {
           alert_on_updates: boolean | null
@@ -15331,11 +15573,60 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      contractor_stats: {
+        Row: {
+          active_projects: number | null
+          avg_score: number | null
+          awards: number | null
+          best_score: number | null
+          categories: string[] | null
+          contractor_name: string | null
+          regions: string[] | null
+          total_projects: number | null
+          ultra_sites: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       clean_all_expired_caches: { Args: never; Returns: undefined }
       clean_expired_cache: { Args: never; Returns: undefined }
+      find_ccs_projects_near: {
+        Args: {
+          category_filter?: string
+          min_score?: number
+          radius_miles?: number
+          search_lat: number
+          search_lng: number
+        }
+        Returns: {
+          address_line1: string
+          award_details: string
+          ccs_project_id: string
+          client_name: string
+          community_score: number
+          contractor_name: string
+          distance_miles: number
+          environment_score: number
+          has_award: boolean
+          id: string
+          is_ultra_site: boolean
+          latitude: number
+          longitude: number
+          overall_score: number
+          postcode: string
+          project_category: string
+          project_description: string
+          project_name: string
+          region: string
+          site_manager_email: string
+          site_manager_name: string
+          site_manager_phone: string
+          town: string
+          visit_count: number
+          workforce_score: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
