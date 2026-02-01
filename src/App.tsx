@@ -3,7 +3,18 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+
+// Public pages
+import Landing from "./pages/Landing";
+import Login from "./pages/auth/Login";
+import Signup from "./pages/auth/Signup";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
+import Onboarding from "./pages/Onboarding";
+
+// Protected pages
 import Dashboard from "./pages/Dashboard";
 import SearchProperties from "./pages/SearchProperties";
 import PropertyDetail from "./pages/PropertyDetail";
@@ -26,50 +37,259 @@ import Auctions from "./pages/Auctions";
 import Network from "./pages/Network";
 import Copilot from "./pages/Copilot";
 import Mortgages from "./pages/Mortgages";
+import Integrations from "./pages/Integrations";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/search" element={<SearchProperties />} />
-          <Route path="/property/:id" element={<PropertyDetail />} />
-          <Route path="/property/:id/record" element={<ViewingNotesRecording />} />
-          <Route path="/property/:id/viewing-notes" element={<ViewingNotesRecording />} />
-          <Route path="/property/:id/viewing-notes/:noteId" element={<ViewingNotesResults />} />
-          <Route path="/compare" element={<Compare />} />
-          <Route path="/comparisons" element={<MyComparisons />} />
-          <Route path="/scenarios" element={<ScenarioBuilder />} />
-          <Route path="/property/:id/scenarios" element={<ScenarioBuilder />} />
-          <Route path="/pipeline" element={<Pipeline />} />
-          <Route path="/saved-searches" element={<SavedSearches />} />
-          <Route path="/calculators" element={<Calculators />} />
-          <Route path="/calculators/:id" element={<Calculators />} />
-          <Route path="/deal-pack" element={<DealPackGenerator />} />
-          <Route path="/deal-pack/new" element={<DealPackGenerator />} />
-          <Route path="/deal-pack/:propertyId" element={<DealPackGenerator />} />
-          <Route path="/deal-packs" element={<DealPacks />} />
-          <Route path="/accommodation" element={<AccommodationRequests />} />
-          <Route path="/deal-scout" element={<DealScout />} />
-          <Route path="/alerts" element={<Alerts />} />
-          <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/auctions" element={<Auctions />} />
-          <Route path="/network" element={<Network />} />
-          <Route path="/copilot" element={<Copilot />} />
-          <Route path="/mortgages" element={<Mortgages />} />
-          <Route path="/settings" element={<Settings />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            {/* Public routes */}
+            <Route path="/" element={<Landing />} />
+            <Route path="/auth/login" element={<Login />} />
+            <Route path="/auth/signup" element={<Signup />} />
+            <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+            <Route path="/auth/reset-password" element={<ResetPassword />} />
+            <Route path="/onboarding" element={<Onboarding />} />
+
+            {/* Protected routes */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/search"
+              element={
+                <ProtectedRoute>
+                  <SearchProperties />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/property/:id"
+              element={
+                <ProtectedRoute>
+                  <PropertyDetail />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/property/:id/record"
+              element={
+                <ProtectedRoute>
+                  <ViewingNotesRecording />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/property/:id/viewing-notes"
+              element={
+                <ProtectedRoute>
+                  <ViewingNotesRecording />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/property/:id/viewing-notes/:noteId"
+              element={
+                <ProtectedRoute>
+                  <ViewingNotesResults />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/compare"
+              element={
+                <ProtectedRoute>
+                  <Compare />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/comparisons"
+              element={
+                <ProtectedRoute>
+                  <MyComparisons />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/scenarios"
+              element={
+                <ProtectedRoute>
+                  <ScenarioBuilder />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/property/:id/scenarios"
+              element={
+                <ProtectedRoute>
+                  <ScenarioBuilder />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/pipeline"
+              element={
+                <ProtectedRoute>
+                  <Pipeline />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/saved-searches"
+              element={
+                <ProtectedRoute>
+                  <SavedSearches />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/calculators"
+              element={
+                <ProtectedRoute>
+                  <Calculators />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/calculators/:id"
+              element={
+                <ProtectedRoute>
+                  <Calculators />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/deal-pack"
+              element={
+                <ProtectedRoute>
+                  <DealPackGenerator />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/deal-pack/new"
+              element={
+                <ProtectedRoute>
+                  <DealPackGenerator />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/deal-pack/:propertyId"
+              element={
+                <ProtectedRoute>
+                  <DealPackGenerator />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/deal-packs"
+              element={
+                <ProtectedRoute>
+                  <DealPacks />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/accommodation"
+              element={
+                <ProtectedRoute>
+                  <AccommodationRequests />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/deal-scout"
+              element={
+                <ProtectedRoute>
+                  <DealScout />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/alerts"
+              element={
+                <ProtectedRoute>
+                  <Alerts />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/portfolio"
+              element={
+                <ProtectedRoute>
+                  <Portfolio />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/auctions"
+              element={
+                <ProtectedRoute>
+                  <Auctions />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/network"
+              element={
+                <ProtectedRoute>
+                  <Network />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/copilot"
+              element={
+                <ProtectedRoute>
+                  <Copilot />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/mortgages"
+              element={
+                <ProtectedRoute>
+                  <Mortgages />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/integrations"
+              element={
+                <ProtectedRoute>
+                  <Integrations />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute>
+                  <Settings />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Catch-all */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { 
   LayoutDashboard, 
   Search, 
@@ -16,7 +15,8 @@ import {
   Gavel,
   Users,
   Bell,
-  Radar
+  Radar,
+  Plug
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -36,6 +36,7 @@ const navItems = [
   { title: "Alerts", url: "/alerts", icon: Bell },
   { title: "Network", url: "/network", icon: Users },
   { title: "Copilot", url: "/copilot", icon: MessageCircle },
+  { title: "Integrations", url: "/integrations", icon: Plug },
   { title: "Accommodation", url: "/accommodation", icon: Home },
   { title: "Saved Searches", url: "/saved-searches", icon: Bookmark },
   { title: "Settings", url: "/settings", icon: Settings },
