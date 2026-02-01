@@ -56,3 +56,12 @@ verify_jwt = false
 
 [functions.send-email]
 verify_jwt = false
+
+[functions.land-registry-fetch]
+verify_jwt = false
+
+[functions.epc-fetch]
+verify_jwt = false
+
+[functions.planning-fetch]
+verify_jwt = false

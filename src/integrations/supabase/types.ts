@@ -3005,6 +3005,180 @@ export type Database = {
         }
         Relationships: []
       }
+      epc_certificates: {
+        Row: {
+          api_response: Json | null
+          assessor_company: string | null
+          assessor_name: string | null
+          building_reference_number: string | null
+          built_form: string | null
+          certificate_hash: string
+          constituency: string | null
+          county: string | null
+          created_at: string | null
+          current_co2_emissions: number | null
+          current_co2_emissions_rating: string | null
+          current_energy_cost: number | null
+          current_energy_efficiency: number | null
+          current_energy_rating: string | null
+          epc_local_authority: string | null
+          floor_description: string | null
+          floor_energy_efficiency: string | null
+          heating_cost_current: number | null
+          heating_cost_potential: number | null
+          hot_water_cost_current: number | null
+          hot_water_cost_potential: number | null
+          hot_water_description: string | null
+          hot_water_energy_efficiency: string | null
+          id: string
+          improvements: Json | null
+          inspection_date: string | null
+          lighting_cost_current: number | null
+          lighting_cost_potential: number | null
+          lighting_description: string | null
+          lighting_energy_efficiency: string | null
+          lodgement_date: string
+          lodgement_datetime: string | null
+          main_fuel: string | null
+          main_heating_description: string | null
+          main_heating_energy_efficiency: string | null
+          number_habitable_rooms: number | null
+          number_heated_rooms: number | null
+          postcode: string
+          potential_co2_emissions: number | null
+          potential_co2_emissions_rating: string | null
+          potential_energy_cost: number | null
+          potential_energy_efficiency: number | null
+          potential_energy_rating: string | null
+          property_address: string
+          property_type: string | null
+          roof_description: string | null
+          roof_energy_efficiency: string | null
+          tenure: string | null
+          total_floor_area: number | null
+          transaction_type: string | null
+          updated_at: string | null
+          walls_description: string | null
+          walls_energy_efficiency: string | null
+          windows_description: string | null
+          windows_energy_efficiency: string | null
+        }
+        Insert: {
+          api_response?: Json | null
+          assessor_company?: string | null
+          assessor_name?: string | null
+          building_reference_number?: string | null
+          built_form?: string | null
+          certificate_hash: string
+          constituency?: string | null
+          county?: string | null
+          created_at?: string | null
+          current_co2_emissions?: number | null
+          current_co2_emissions_rating?: string | null
+          current_energy_cost?: number | null
+          current_energy_efficiency?: number | null
+          current_energy_rating?: string | null
+          epc_local_authority?: string | null
+          floor_description?: string | null
+          floor_energy_efficiency?: string | null
+          heating_cost_current?: number | null
+          heating_cost_potential?: number | null
+          hot_water_cost_current?: number | null
+          hot_water_cost_potential?: number | null
+          hot_water_description?: string | null
+          hot_water_energy_efficiency?: string | null
+          id?: string
+          improvements?: Json | null
+          inspection_date?: string | null
+          lighting_cost_current?: number | null
+          lighting_cost_potential?: number | null
+          lighting_description?: string | null
+          lighting_energy_efficiency?: string | null
+          lodgement_date: string
+          lodgement_datetime?: string | null
+          main_fuel?: string | null
+          main_heating_description?: string | null
+          main_heating_energy_efficiency?: string | null
+          number_habitable_rooms?: number | null
+          number_heated_rooms?: number | null
+          postcode: string
+          potential_co2_emissions?: number | null
+          potential_co2_emissions_rating?: string | null
+          potential_energy_cost?: number | null
+          potential_energy_efficiency?: number | null
+          potential_energy_rating?: string | null
+          property_address: string
+          property_type?: string | null
+          roof_description?: string | null
+          roof_energy_efficiency?: string | null
+          tenure?: string | null
+          total_floor_area?: number | null
+          transaction_type?: string | null
+          updated_at?: string | null
+          walls_description?: string | null
+          walls_energy_efficiency?: string | null
+          windows_description?: string | null
+          windows_energy_efficiency?: string | null
+        }
+        Update: {
+          api_response?: Json | null
+          assessor_company?: string | null
+          assessor_name?: string | null
+          building_reference_number?: string | null
+          built_form?: string | null
+          certificate_hash?: string
+          constituency?: string | null
+          county?: string | null
+          created_at?: string | null
+          current_co2_emissions?: number | null
+          current_co2_emissions_rating?: string | null
+          current_energy_cost?: number | null
+          current_energy_efficiency?: number | null
+          current_energy_rating?: string | null
+          epc_local_authority?: string | null
+          floor_description?: string | null
+          floor_energy_efficiency?: string | null
+          heating_cost_current?: number | null
+          heating_cost_potential?: number | null
+          hot_water_cost_current?: number | null
+          hot_water_cost_potential?: number | null
+          hot_water_description?: string | null
+          hot_water_energy_efficiency?: string | null
+          id?: string
+          improvements?: Json | null
+          inspection_date?: string | null
+          lighting_cost_current?: number | null
+          lighting_cost_potential?: number | null
+          lighting_description?: string | null
+          lighting_energy_efficiency?: string | null
+          lodgement_date?: string
+          lodgement_datetime?: string | null
+          main_fuel?: string | null
+          main_heating_description?: string | null
+          main_heating_energy_efficiency?: string | null
+          number_habitable_rooms?: number | null
+          number_heated_rooms?: number | null
+          postcode?: string
+          potential_co2_emissions?: number | null
+          potential_co2_emissions_rating?: string | null
+          potential_energy_cost?: number | null
+          potential_energy_efficiency?: number | null
+          potential_energy_rating?: string | null
+          property_address?: string
+          property_type?: string | null
+          roof_description?: string | null
+          roof_energy_efficiency?: string | null
+          tenure?: string | null
+          total_floor_area?: number | null
+          transaction_type?: string | null
+          updated_at?: string | null
+          walls_description?: string | null
+          walls_energy_efficiency?: string | null
+          windows_description?: string | null
+          windows_energy_efficiency?: string | null
+        }
+        Relationships: []
+      }
       feature_usage: {
         Row: {
           date: string
@@ -4820,29 +4994,44 @@ export type Database = {
       }
       planning_alerts: {
         Row: {
-          alert_types: string[] | null
           created_at: string | null
-          email_alerts: boolean | null
+          development_types: string[] | null
+          email_frequency: string | null
           id: string
-          postcodes: string[] | null
+          include_approved: boolean | null
+          include_pending: boolean | null
+          include_refused: boolean | null
+          is_active: boolean | null
+          last_notified_at: string | null
+          postcode_area: string | null
           radius_miles: number | null
           user_id: string
         }
         Insert: {
-          alert_types?: string[] | null
           created_at?: string | null
-          email_alerts?: boolean | null
+          development_types?: string[] | null
+          email_frequency?: string | null
           id?: string
-          postcodes?: string[] | null
+          include_approved?: boolean | null
+          include_pending?: boolean | null
+          include_refused?: boolean | null
+          is_active?: boolean | null
+          last_notified_at?: string | null
+          postcode_area?: string | null
           radius_miles?: number | null
           user_id: string
         }
         Update: {
-          alert_types?: string[] | null
           created_at?: string | null
-          email_alerts?: boolean | null
+          development_types?: string[] | null
+          email_frequency?: string | null
           id?: string
-          postcodes?: string[] | null
+          include_approved?: boolean | null
+          include_pending?: boolean | null
+          include_refused?: boolean | null
+          is_active?: boolean | null
+          last_notified_at?: string | null
+          postcode_area?: string | null
           radius_miles?: number | null
           user_id?: string
         }
@@ -4850,54 +5039,176 @@ export type Database = {
       }
       planning_applications: {
         Row: {
-          address: string
-          applicant: string | null
+          agent_company: string | null
+          agent_name: string | null
+          appeal_date: string | null
+          applicant_name: string | null
+          applicant_type: string | null
+          application_reference: string
           application_type: string | null
           case_officer: string | null
+          conditions: Json | null
           consultation_end_date: string | null
           created_at: string | null
+          decision: string | null
           decision_date: string | null
-          description: string | null
+          decision_reason: string | null
+          development_type: string | null
+          documents: Json | null
+          easting: number | null
+          existing_use: string | null
+          gross_internal_area: number | null
           id: string
-          postcode: string
-          property_impact: Json | null
-          reference: string
+          last_checked_at: string | null
+          latitude: number | null
+          local_authority_name: string
+          longitude: number | null
+          neighbour_notification_date: string | null
+          northing: number | null
+          number_of_storeys: number | null
+          number_of_units_existing: number | null
+          number_of_units_proposed: number | null
+          portal_url: string | null
+          postcode: string | null
+          property_address: string
+          proposal_description: string
+          proposed_use: string | null
+          received_date: string | null
+          site_area: number | null
+          site_notice_date: string | null
           status: string | null
           updated_at: string | null
+          validated_date: string | null
+          ward: string | null
         }
         Insert: {
-          address: string
-          applicant?: string | null
+          agent_company?: string | null
+          agent_name?: string | null
+          appeal_date?: string | null
+          applicant_name?: string | null
+          applicant_type?: string | null
+          application_reference: string
           application_type?: string | null
           case_officer?: string | null
+          conditions?: Json | null
           consultation_end_date?: string | null
           created_at?: string | null
+          decision?: string | null
           decision_date?: string | null
-          description?: string | null
+          decision_reason?: string | null
+          development_type?: string | null
+          documents?: Json | null
+          easting?: number | null
+          existing_use?: string | null
+          gross_internal_area?: number | null
           id?: string
-          postcode: string
-          property_impact?: Json | null
-          reference: string
+          last_checked_at?: string | null
+          latitude?: number | null
+          local_authority_name: string
+          longitude?: number | null
+          neighbour_notification_date?: string | null
+          northing?: number | null
+          number_of_storeys?: number | null
+          number_of_units_existing?: number | null
+          number_of_units_proposed?: number | null
+          portal_url?: string | null
+          postcode?: string | null
+          property_address: string
+          proposal_description: string
+          proposed_use?: string | null
+          received_date?: string | null
+          site_area?: number | null
+          site_notice_date?: string | null
           status?: string | null
           updated_at?: string | null
+          validated_date?: string | null
+          ward?: string | null
         }
         Update: {
-          address?: string
-          applicant?: string | null
+          agent_company?: string | null
+          agent_name?: string | null
+          appeal_date?: string | null
+          applicant_name?: string | null
+          applicant_type?: string | null
+          application_reference?: string
           application_type?: string | null
           case_officer?: string | null
+          conditions?: Json | null
           consultation_end_date?: string | null
           created_at?: string | null
+          decision?: string | null
           decision_date?: string | null
-          description?: string | null
+          decision_reason?: string | null
+          development_type?: string | null
+          documents?: Json | null
+          easting?: number | null
+          existing_use?: string | null
+          gross_internal_area?: number | null
           id?: string
-          postcode?: string
-          property_impact?: Json | null
-          reference?: string
+          last_checked_at?: string | null
+          latitude?: number | null
+          local_authority_name?: string
+          longitude?: number | null
+          neighbour_notification_date?: string | null
+          northing?: number | null
+          number_of_storeys?: number | null
+          number_of_units_existing?: number | null
+          number_of_units_proposed?: number | null
+          portal_url?: string | null
+          postcode?: string | null
+          property_address?: string
+          proposal_description?: string
+          proposed_use?: string | null
+          received_date?: string | null
+          site_area?: number | null
+          site_notice_date?: string | null
           status?: string | null
           updated_at?: string | null
+          validated_date?: string | null
+          ward?: string | null
         }
         Relationships: []
+      }
+      planning_comments: {
+        Row: {
+          application_id: string | null
+          comment_date: string | null
+          comment_text: string | null
+          comment_type: string | null
+          commenter_address: string | null
+          commenter_name: string | null
+          created_at: string | null
+          id: string
+        }
+        Insert: {
+          application_id?: string | null
+          comment_date?: string | null
+          comment_text?: string | null
+          comment_type?: string | null
+          commenter_address?: string | null
+          commenter_name?: string | null
+          created_at?: string | null
+          id?: string
+        }
+        Update: {
+          application_id?: string | null
+          comment_date?: string | null
+          comment_text?: string | null
+          comment_type?: string | null
+          commenter_address?: string | null
+          commenter_name?: string | null
+          created_at?: string | null
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "planning_comments_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "planning_applications"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       platform_connections: {
         Row: {

@@ -16,6 +16,8 @@ import { Progress } from "@/components/ui/progress";
 import { PropertyDetail } from "@/data/mockPropertyDetail";
 import { cn } from "@/lib/utils";
 import { LandRegistryTab } from "./LandRegistryTab";
+import { EPCTab } from "./EPCTab";
+import { PlanningTab } from "./PlanningTab";
 
 interface PropertyTabsProps {
   property: PropertyDetail;
@@ -104,56 +106,11 @@ export function PropertyTabs({ property }: PropertyTabsProps) {
           </TabsContent>
 
           {/* Planning Tab */}
-          <TabsContent value="planning" className="mt-0 space-y-4">
-            <h4 className="font-medium text-foreground">Planning Applications</h4>
-            {property.planningApplications.length > 0 ? (
-              <div className="rounded-lg border overflow-hidden">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Reference</TableHead>
-                      <TableHead>Description</TableHead>
-                      <TableHead className="text-center">Status</TableHead>
-                      <TableHead className="text-right">Decision</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {property.planningApplications.map((app) => (
-                      <TableRow key={app.id}>
-                        <TableCell className="font-mono text-sm">
-                          {app.reference}
-                        </TableCell>
-                        <TableCell className="max-w-[200px] truncate">
-                          {app.description}
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <div className="flex items-center justify-center gap-1">
-                            {getStatusIcon(app.status)}
-                            <span className="text-sm">{app.status}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex items-center justify-end gap-2">
-                            <span className="text-sm text-muted-foreground">
-                              {formatDate(app.decisionDate)}
-                            </span>
-                            {app.councilUrl && (
-                              <Button variant="ghost" size="icon" className="h-6 w-6" asChild>
-                                <a href={app.councilUrl} target="_blank" rel="noopener noreferrer">
-                                  <ExternalLink className="h-3 w-3" />
-                                </a>
-                              </Button>
-                            )}
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            ) : (
-              <p className="text-muted-foreground text-sm">No planning applications found for this property.</p>
-            )}
+          <TabsContent value="planning" className="mt-0">
+            <PlanningTab 
+              propertyAddress={property.address} 
+              postcode={property.postcode || property.address.split(',').pop()?.trim() || ''} 
+            />
           </TabsContent>
 
           {/* Ownership Tab */}
@@ -210,83 +167,11 @@ export function PropertyTabs({ property }: PropertyTabsProps) {
           </TabsContent>
 
           {/* EPC Tab */}
-          <TabsContent value="epc" className="mt-0 space-y-4">
-            <h4 className="font-medium text-foreground">Energy Performance Certificate</h4>
-
-            {/* EPC Rating Visual */}
-            <div className="space-y-4">
-              <div className="flex items-center gap-4">
-                <div className={cn(
-                  "flex h-16 w-16 items-center justify-center rounded-lg text-white text-2xl font-bold",
-                  epcColors[property.epcRating]
-                )}>
-                  {property.epcRating}
-                </div>
-                <div>
-                  <p className="font-semibold text-foreground">Current Rating: {property.epcRating}</p>
-                  <p className="text-sm text-muted-foreground">Score: {property.epcScore} out of 100</p>
-                </div>
-              </div>
-
-              {/* EPC Scale */}
-              <div className="space-y-1">
-                {Object.entries(epcScoreRanges).map(([rating, [min, max]]) => (
-                  <div key={rating} className="flex items-center gap-2">
-                    <div className={cn(
-                      "w-8 h-6 rounded flex items-center justify-center text-xs font-bold text-white",
-                      epcColors[rating]
-                    )}>
-                      {rating}
-                    </div>
-                    <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                      <div
-                        className={cn(
-                          "h-full transition-all",
-                          property.epcRating === rating && epcColors[rating]
-                        )}
-                        style={{
-                          width: property.epcRating === rating 
-                            ? `${((property.epcScore - min) / (max - min)) * 100}%` 
-                            : "0%"
-                        }}
-                      />
-                    </div>
-                    <span className="text-xs text-muted-foreground w-16">
-                      {min}-{max}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Recommendations */}
-            <div className="space-y-2">
-              <p className="text-sm text-muted-foreground">Recommended Improvements</p>
-              <div className="rounded-lg border overflow-hidden">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Improvement</TableHead>
-                      <TableHead className="text-right">Cost</TableHead>
-                      <TableHead className="text-right">Saving</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {property.epcRecommendations.map((rec, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{rec.improvement}</TableCell>
-                        <TableCell className="text-right text-sm">{rec.typicalCost}</TableCell>
-                        <TableCell className="text-right">
-                          <Badge variant="secondary" className="text-xs">
-                            {rec.potentialSaving}
-                          </Badge>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
+          <TabsContent value="epc" className="mt-0">
+            <EPCTab 
+              propertyAddress={property.address} 
+              postcode={property.postcode || property.address.split(',').pop()?.trim() || ''} 
+            />
           </TabsContent>
         </CardContent>
       </Tabs>
