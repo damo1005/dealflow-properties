@@ -257,6 +257,92 @@ export type Database = {
         }
         Relationships: []
       }
+      alert_engagement: {
+        Row: {
+          alert_id: string | null
+          id: string
+          metadata: Json | null
+          metric: string
+          timestamp: string | null
+        }
+        Insert: {
+          alert_id?: string | null
+          id?: string
+          metadata?: Json | null
+          metric: string
+          timestamp?: string | null
+        }
+        Update: {
+          alert_id?: string | null
+          id?: string
+          metadata?: Json | null
+          metric?: string
+          timestamp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alert_engagement_alert_id_fkey"
+            columns: ["alert_id"]
+            isOneToOne: false
+            referencedRelation: "request_alerts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      alert_matches: {
+        Row: {
+          alert_id: string | null
+          clicked_at: string | null
+          delivery_method: string | null
+          enquired_at: string | null
+          id: string
+          match_score: number | null
+          request_id: string | null
+          sent_at: string | null
+          was_clicked: boolean | null
+          was_enquired: boolean | null
+        }
+        Insert: {
+          alert_id?: string | null
+          clicked_at?: string | null
+          delivery_method?: string | null
+          enquired_at?: string | null
+          id?: string
+          match_score?: number | null
+          request_id?: string | null
+          sent_at?: string | null
+          was_clicked?: boolean | null
+          was_enquired?: boolean | null
+        }
+        Update: {
+          alert_id?: string | null
+          clicked_at?: string | null
+          delivery_method?: string | null
+          enquired_at?: string | null
+          id?: string
+          match_score?: number | null
+          request_id?: string | null
+          sent_at?: string | null
+          was_clicked?: boolean | null
+          was_enquired?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alert_matches_alert_id_fkey"
+            columns: ["alert_id"]
+            isOneToOne: false
+            referencedRelation: "request_alerts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "alert_matches_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "accommodation_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       api_usage: {
         Row: {
           cost_credits: number | null
@@ -1998,6 +2084,135 @@ export type Database = {
         }
         Relationships: []
       }
+      request_alerts: {
+        Row: {
+          ai_match_threshold: number | null
+          alert_for: string
+          alerts_sent_today: number | null
+          budget_max: number | null
+          budget_min: number | null
+          created_at: string | null
+          delivery_methods: Json | null
+          digest_day: number | null
+          digest_time: string | null
+          duration_max_months: number | null
+          duration_min_months: number | null
+          email_address: string | null
+          exclude_keywords: string[] | null
+          frequency: string | null
+          furnished_preference: string | null
+          id: string
+          include_keywords: string[] | null
+          is_active: boolean | null
+          last_reset_date: string | null
+          last_triggered_at: string | null
+          location_areas: string[] | null
+          location_center_lat: number | null
+          location_center_lng: number | null
+          location_radius_miles: number | null
+          max_alerts_per_day: number | null
+          move_in_date_from: string | null
+          move_in_date_to: string | null
+          must_allow_children: boolean | null
+          must_allow_pets: boolean | null
+          must_be_self_contained: boolean | null
+          must_have_parking: boolean | null
+          name: string
+          phone_number: string | null
+          property_types: string[] | null
+          slack_webhook_url: string | null
+          total_matches_sent: number | null
+          updated_at: string | null
+          user_id: string
+          webhook_url: string | null
+          whatsapp_number: string | null
+        }
+        Insert: {
+          ai_match_threshold?: number | null
+          alert_for?: string
+          alerts_sent_today?: number | null
+          budget_max?: number | null
+          budget_min?: number | null
+          created_at?: string | null
+          delivery_methods?: Json | null
+          digest_day?: number | null
+          digest_time?: string | null
+          duration_max_months?: number | null
+          duration_min_months?: number | null
+          email_address?: string | null
+          exclude_keywords?: string[] | null
+          frequency?: string | null
+          furnished_preference?: string | null
+          id?: string
+          include_keywords?: string[] | null
+          is_active?: boolean | null
+          last_reset_date?: string | null
+          last_triggered_at?: string | null
+          location_areas?: string[] | null
+          location_center_lat?: number | null
+          location_center_lng?: number | null
+          location_radius_miles?: number | null
+          max_alerts_per_day?: number | null
+          move_in_date_from?: string | null
+          move_in_date_to?: string | null
+          must_allow_children?: boolean | null
+          must_allow_pets?: boolean | null
+          must_be_self_contained?: boolean | null
+          must_have_parking?: boolean | null
+          name: string
+          phone_number?: string | null
+          property_types?: string[] | null
+          slack_webhook_url?: string | null
+          total_matches_sent?: number | null
+          updated_at?: string | null
+          user_id: string
+          webhook_url?: string | null
+          whatsapp_number?: string | null
+        }
+        Update: {
+          ai_match_threshold?: number | null
+          alert_for?: string
+          alerts_sent_today?: number | null
+          budget_max?: number | null
+          budget_min?: number | null
+          created_at?: string | null
+          delivery_methods?: Json | null
+          digest_day?: number | null
+          digest_time?: string | null
+          duration_max_months?: number | null
+          duration_min_months?: number | null
+          email_address?: string | null
+          exclude_keywords?: string[] | null
+          frequency?: string | null
+          furnished_preference?: string | null
+          id?: string
+          include_keywords?: string[] | null
+          is_active?: boolean | null
+          last_reset_date?: string | null
+          last_triggered_at?: string | null
+          location_areas?: string[] | null
+          location_center_lat?: number | null
+          location_center_lng?: number | null
+          location_radius_miles?: number | null
+          max_alerts_per_day?: number | null
+          move_in_date_from?: string | null
+          move_in_date_to?: string | null
+          must_allow_children?: boolean | null
+          must_allow_pets?: boolean | null
+          must_be_self_contained?: boolean | null
+          must_have_parking?: boolean | null
+          name?: string
+          phone_number?: string | null
+          property_types?: string[] | null
+          slack_webhook_url?: string | null
+          total_matches_sent?: number | null
+          updated_at?: string | null
+          user_id?: string
+          webhook_url?: string | null
+          whatsapp_number?: string | null
+        }
+        Relationships: []
+      }
       request_enquiries: {
         Row: {
           available_from: string | null
@@ -2715,6 +2930,7 @@ export type Database = {
     Functions: {
       clean_all_expired_caches: { Args: never; Returns: undefined }
       clean_expired_cache: { Args: never; Returns: undefined }
+      reset_daily_alert_counts: { Args: never; Returns: undefined }
     }
     Enums: {
       [_ in never]: never
