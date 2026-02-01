@@ -205,6 +205,33 @@ export const comparisonRows: ComparisonRow[] = [
     format: (v) => formatCurrency(v as number),
     higherIsBetter: true,
   },
+  {
+    key: "reductionPercent",
+    label: "Reduction %",
+    category: "investment",
+    getValue: (p) => {
+      if (p.originalPrice && p.price && p.originalPrice > p.price) {
+        return ((p.originalPrice - p.price) / p.originalPrice) * 100;
+      }
+      return null;
+    },
+    format: (v) => `${(v as number).toFixed(1)}%`,
+    higherIsBetter: true,
+  },
+  {
+    key: "breakEvenRent",
+    label: "Break-Even Rent",
+    category: "investment",
+    getValue: (p) => {
+      // Simplified break-even calculation
+      if (!p.totalCashRequired) return null;
+      const monthlyMortgage = (p.price * 0.75 * 0.05) / 12; // Rough estimate
+      const monthlyCosts = monthlyMortgage * 1.3; // Add buffer for costs
+      return monthlyCosts;
+    },
+    format: (v) => formatCurrency(v as number) + "/mo",
+    higherIsBetter: false,
+  },
 ];
 
 export function getRowsByCategory(
@@ -221,12 +248,22 @@ export function calculateWinnerScores(properties: ComparisonProperty[]): Record<
     scores[p.id] = 0;
   });
   
+  // Define scoring weights by importance
   const scoringRows = [
-    { key: "calculatedCashFlow", points: 5 },
-    { key: "calculatedYield", points: 4 },
-    { key: "calculatedROI", points: 4 },
-    { key: "priceGap", points: 3 },
-    { key: "totalCashRequired", points: 2 },
+    // Financial (40% weight)
+    { key: "calculatedCashFlow", points: 6 },
+    { key: "calculatedYield", points: 5 },
+    { key: "calculatedROI", points: 5 },
+    { key: "totalCashRequired", points: 4 },
+    // Value (30% weight)
+    { key: "priceGap", points: 5 },
+    { key: "priceReduction", points: 3 },
+    { key: "price", points: 3 },
+    // Property quality (20% weight)
+    { key: "bedrooms", points: 2 },
+    { key: "sqft", points: 2 },
+    // Investment (10% weight)
+    { key: "daysOnMarket", points: 2 },
   ];
   
   scoringRows.forEach(({ key, points }) => {
@@ -246,6 +283,16 @@ export function calculateWinnerScores(properties: ComparisonProperty[]): Record<
   });
   
   return scores;
+}
+
+export function calculateOverallScore(
+  property: ComparisonProperty,
+  allProperties: ComparisonProperty[]
+): number {
+  const scores = calculateWinnerScores(allProperties);
+  const maxPossibleScore = 37; // Sum of all points if winning everything
+  const propertyScore = scores[property.id] || 0;
+  return Math.round((propertyScore / maxPossibleScore) * 100);
 }
 
 export function getPropertyBadges(

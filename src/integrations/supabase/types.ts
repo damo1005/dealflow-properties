@@ -188,10 +188,137 @@ export type Database = {
         }
         Relationships: []
       }
+      comparison_shares: {
+        Row: {
+          access_level: string | null
+          comments: Json | null
+          comparison_id: string
+          created_at: string
+          id: string
+          shared_by: string
+          shared_with_email: string
+          viewed_at: string | null
+        }
+        Insert: {
+          access_level?: string | null
+          comments?: Json | null
+          comparison_id: string
+          created_at?: string
+          id?: string
+          shared_by: string
+          shared_with_email: string
+          viewed_at?: string | null
+        }
+        Update: {
+          access_level?: string | null
+          comments?: Json | null
+          comparison_id?: string
+          created_at?: string
+          id?: string
+          shared_by?: string
+          shared_with_email?: string
+          viewed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comparison_shares_comparison_id_fkey"
+            columns: ["comparison_id"]
+            isOneToOne: false
+            referencedRelation: "comparisons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      comparison_snapshots: {
+        Row: {
+          comparison_id: string
+          id: string
+          market_conditions: Json | null
+          property_data: Json
+          snapshot_date: string
+        }
+        Insert: {
+          comparison_id: string
+          id?: string
+          market_conditions?: Json | null
+          property_data: Json
+          snapshot_date?: string
+        }
+        Update: {
+          comparison_id?: string
+          id?: string
+          market_conditions?: Json | null
+          property_data?: Json
+          snapshot_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comparison_snapshots_comparison_id_fkey"
+            columns: ["comparison_id"]
+            isOneToOne: false
+            referencedRelation: "comparisons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      comparison_watches: {
+        Row: {
+          alert_frequency: string | null
+          alert_on_price_change: boolean | null
+          alert_on_status_change: boolean | null
+          comparison_id: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          last_alert_sent: string | null
+          price_threshold: number | null
+          user_id: string
+        }
+        Insert: {
+          alert_frequency?: string | null
+          alert_on_price_change?: boolean | null
+          alert_on_status_change?: boolean | null
+          comparison_id: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          last_alert_sent?: string | null
+          price_threshold?: number | null
+          user_id: string
+        }
+        Update: {
+          alert_frequency?: string | null
+          alert_on_price_change?: boolean | null
+          alert_on_status_change?: boolean | null
+          comparison_id?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          last_alert_sent?: string | null
+          price_threshold?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comparison_watches_comparison_id_fkey"
+            columns: ["comparison_id"]
+            isOneToOne: false
+            referencedRelation: "comparisons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       comparisons: {
         Row: {
+          ai_recommendation: Json | null
           calculator_inputs: Json | null
+          chosen_property_id: string | null
           created_at: string
+          decision_date: string | null
+          decision_made: boolean | null
+          decision_notes: string | null
+          decision_reasons: Json | null
+          description: string | null
           id: string
           name: string
           notes: string | null
@@ -199,10 +326,18 @@ export type Database = {
           property_ids: string[]
           updated_at: string
           user_id: string
+          user_ranking: Json | null
         }
         Insert: {
+          ai_recommendation?: Json | null
           calculator_inputs?: Json | null
+          chosen_property_id?: string | null
           created_at?: string
+          decision_date?: string | null
+          decision_made?: boolean | null
+          decision_notes?: string | null
+          decision_reasons?: Json | null
+          description?: string | null
           id?: string
           name: string
           notes?: string | null
@@ -210,10 +345,18 @@ export type Database = {
           property_ids?: string[]
           updated_at?: string
           user_id: string
+          user_ranking?: Json | null
         }
         Update: {
+          ai_recommendation?: Json | null
           calculator_inputs?: Json | null
+          chosen_property_id?: string | null
           created_at?: string
+          decision_date?: string | null
+          decision_made?: boolean | null
+          decision_notes?: string | null
+          decision_reasons?: Json | null
+          description?: string | null
           id?: string
           name?: string
           notes?: string | null
@@ -221,6 +364,7 @@ export type Database = {
           property_ids?: string[]
           updated_at?: string
           user_id?: string
+          user_ranking?: Json | null
         }
         Relationships: []
       }
