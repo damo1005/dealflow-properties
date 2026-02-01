@@ -102,7 +102,7 @@ export default function PropertyDetailPage() {
       </div>
 
       {/* Sticky Action Bar */}
-      <PropertyActionBar propertyId={property.id} agentPhone={property.agent.phone} />
+      <PropertyActionBar propertyId={property.id} agentPhone={property.agent.phone} propertyPrice={property.price} />
     </AppLayout>
   );
 }

@@ -9,7 +9,14 @@ import {
   ChevronLeft,
   ChevronRight,
   Building2,
-  Home
+  Home,
+  Percent,
+  MessageCircle,
+  Briefcase,
+  Gavel,
+  Users,
+  Bell,
+  Radar
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -21,9 +28,16 @@ const navItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Search Properties", url: "/search", icon: Search },
   { title: "My Pipeline", url: "/pipeline", icon: GitBranch },
+  { title: "Portfolio", url: "/portfolio", icon: Briefcase },
+  { title: "Calculators", url: "/calculators", icon: Calculator },
+  { title: "Mortgages", url: "/mortgages", icon: Percent },
+  { title: "Deal Scout", url: "/deal-scout", icon: Radar },
+  { title: "Auctions", url: "/auctions", icon: Gavel },
+  { title: "Alerts", url: "/alerts", icon: Bell },
+  { title: "Network", url: "/network", icon: Users },
+  { title: "Copilot", url: "/copilot", icon: MessageCircle },
   { title: "Accommodation", url: "/accommodation", icon: Home },
   { title: "Saved Searches", url: "/saved-searches", icon: Bookmark },
-  { title: "Calculators", url: "/calculators", icon: Calculator },
   { title: "Settings", url: "/settings", icon: Settings },
 ];
 
