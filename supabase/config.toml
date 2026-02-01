@@ -86,3 +86,6 @@ verify_jwt = false
 
 [functions.fetch-property-listing]
 verify_jwt = false
+
+[functions.search-properties]
+verify_jwt = false

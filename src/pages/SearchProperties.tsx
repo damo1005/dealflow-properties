@@ -3,107 +3,88 @@ import { Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { FilterPanel } from "@/components/search/FilterPanel";
-import { PropertyCard } from "@/components/search/PropertyCard";
-import { PropertyListRow } from "@/components/search/PropertyListRow";
+import { RealPropertyCard } from "@/components/search/RealPropertyCard";
 import { SearchHeader } from "@/components/search/SearchHeader";
 import { EmptyState } from "@/components/search/EmptyState";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useSearchStore } from "@/stores/searchStore";
-import { mockProperties } from "@/data/mockProperties";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { usePropertySearchMutation, usePropertyListings, useSaveProperty, useSavedProperties } from "@/hooks/usePropertySearch";
 
 export default function SearchProperties() {
   const navigate = useNavigate();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const [savedProperties, setSavedProperties] = useState<string[]>([]);
   const { toast } = useToast();
 
   const {
     viewMode,
-    results,
-    setResults,
+    filters,
+    sortBy,
     isLoading,
-    setLoading,
     totalResults,
     setTotalResults,
     currentPage,
     setCurrentPage,
-    itemsPerPage,
     filtersOpen,
     toggleFilters,
-    selectedProperties,
-    togglePropertySelection,
-    filters,
   } = useSearchStore();
 
-  // Simulate loading properties
+  // Real data hooks
+  const searchMutation = usePropertySearchMutation();
+  const { data: listings, isLoading: isQueryLoading } = usePropertyListings(filters, sortBy);
+  const savePropertyMutation = useSaveProperty();
+  const { data: savedPropertyIds } = useSavedProperties();
+
+  // Update total results when listings change
   useEffect(() => {
-    setLoading(true);
-    const timer = setTimeout(() => {
-      // Filter mock properties based on current filters
-      let filtered = [...mockProperties];
-      
-      if (filters.location) {
-        filtered = filtered.filter(
-          (p) =>
-            p.address.toLowerCase().includes(filters.location.toLowerCase()) ||
-            p.postcode.toLowerCase().includes(filters.location.toLowerCase())
-        );
-      }
-      
-      if (filters.propertyTypes.length > 0) {
-        filtered = filtered.filter((p) =>
-          filters.propertyTypes.includes(p.propertyType)
-        );
-      }
-      
-      if (filters.minPrice > 0) {
-        filtered = filtered.filter((p) => p.price >= filters.minPrice);
-      }
-      
-      if (filters.maxPrice < 1000000) {
-        filtered = filtered.filter((p) => p.price <= filters.maxPrice);
-      }
-      
-      if (filters.minBedrooms > 0) {
-        filtered = filtered.filter((p) => p.bedrooms >= filters.minBedrooms);
-      }
-      
-      if (filters.priceReduced) {
-        filtered = filtered.filter((p) => p.priceReduced);
-      }
-      
-      if (filters.minYield > 0) {
-        filtered = filtered.filter((p) => p.estimatedYield >= filters.minYield);
-      }
+    if (listings) {
+      setTotalResults(listings.length);
+    }
+  }, [listings, setTotalResults]);
 
-      setResults(filtered);
-      setTotalResults(filtered.length);
-      setLoading(false);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [filters, setResults, setTotalResults, setLoading]);
+  // Trigger search when Enter pressed in location field
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === "Enter" && filters.location?.trim()) {
+        searchMutation.mutate(filters);
+      }
+    };
+    window.addEventListener("keypress", handleKeyPress);
+    return () => window.removeEventListener("keypress", handleKeyPress);
+  }, [filters, searchMutation]);
 
   const handleSave = (id: string) => {
-    setSavedProperties((prev) =>
-      prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]
-    );
-    toast({
-      title: savedProperties.includes(id) ? "Removed from saved" : "Property saved",
-      description: savedProperties.includes(id)
-        ? "Property removed from your saved list"
-        : "Property added to your saved list",
+    savePropertyMutation.mutate(id, {
+      onSuccess: () => {
+        toast({
+          title: "Property saved",
+          description: "Added to your saved properties",
+        });
+      },
+      onError: (error: Error) => {
+        toast({
+          title: "Failed to save",
+          description: error.message,
+          variant: "destructive",
+        });
+      },
     });
   };
 
   const handleViewDetails = (id: string) => {
-    navigate(`/property/${id}`);
+    const property = listings?.find(p => p.id === id);
+    if (property?.listing_url) {
+      navigate(`/analyse/deal-analyser?url=${encodeURIComponent(property.listing_url)}`);
+    }
   };
 
-  const handleAddToPipeline = (id: string) => {
+  const handleAnalyze = (listingUrl: string) => {
+    navigate(`/analyse/deal-analyser?url=${encodeURIComponent(listingUrl)}`);
+  };
+
+  const handleAddToPipeline = (_id: string) => {
     toast({
       title: "Added to pipeline",
       description: "Property added to your pipeline",
@@ -112,11 +93,38 @@ export default function SearchProperties() {
 
   const handleLoadMore = () => {
     setCurrentPage(currentPage + 1);
-    // In a real app, this would fetch more results
   };
 
-  const showEmptyState = !isLoading && results.length === 0;
-  const isFirstTime = !filters.location && filters.propertyTypes.length === 0;
+  const handleSearch = () => {
+    if (!filters.location?.trim()) {
+      toast({
+        title: "Location required",
+        description: "Please enter a postcode or town to search",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    searchMutation.mutate(filters, {
+      onSuccess: (data) => {
+        toast({
+          title: `Found ${data.total} properties`,
+          description: data.fromCache ? "Showing cached results" : "Fresh results from property portals",
+        });
+      },
+      onError: (error: Error) => {
+        toast({
+          title: "Search failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      },
+    });
+  };
+
+  const combinedLoading = isLoading || isQueryLoading || searchMutation.isPending;
+  const showEmptyState = !combinedLoading && (!listings || listings.length === 0);
+  const isFirstTime = !filters.location;
 
   return (
     <AppLayout title="Search Properties">
@@ -128,7 +136,7 @@ export default function SearchProperties() {
             filtersOpen ? "w-80" : "w-0"
           )}
         >
-          {filtersOpen && <FilterPanel className="h-full" />}
+          {filtersOpen && <FilterPanel className="h-full" onSearch={handleSearch} />}
         </div>
 
         {/* Mobile Filter Sheet */}
@@ -137,6 +145,7 @@ export default function SearchProperties() {
             <FilterPanel
               isMobile
               onClose={() => setMobileFiltersOpen(false)}
+              onSearch={handleSearch}
             />
           </SheetContent>
         </Sheet>
@@ -154,32 +163,38 @@ export default function SearchProperties() {
                 }
               }}
               filtersVisible={filtersOpen}
+              onSearch={handleSearch}
+              isSearching={searchMutation.isPending}
             />
           </div>
 
           {/* Results */}
           <div className="flex-1 overflow-auto p-4 md:p-6">
-            {isLoading ? (
-              <div className="flex items-center justify-center h-64">
+            {combinedLoading ? (
+              <div className="flex flex-col items-center justify-center h-64 gap-3">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                <p className="text-sm text-muted-foreground">
+                  {searchMutation.isPending ? "Searching property portals..." : "Loading..."}
+                </p>
               </div>
             ) : showEmptyState ? (
               <EmptyState type={isFirstTime ? "first-time" : "no-results"} />
             ) : viewMode === "grid" ? (
               <>
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  {results.map((property) => (
-                    <PropertyCard
+                  {listings?.map((property) => (
+                    <RealPropertyCard
                       key={property.id}
                       property={property}
-                      isSaved={savedProperties.includes(property.id)}
+                      isSaved={savedPropertyIds?.includes(property.id)}
                       onSave={handleSave}
                       onViewDetails={handleViewDetails}
                       onAddToPipeline={handleAddToPipeline}
+                      onAnalyze={handleAnalyze}
                     />
                   ))}
                 </div>
-                {results.length < totalResults && (
+                {listings && listings.length < totalResults && (
                   <div className="flex justify-center mt-8">
                     <Button onClick={handleLoadMore}>Load More</Button>
                   </div>
@@ -188,31 +203,17 @@ export default function SearchProperties() {
             ) : (
               <>
                 <div className="bg-card rounded-lg border border-border overflow-hidden">
-                  {results.map((property) => (
-                    <PropertyListRow
-                      key={property.id}
-                      property={property}
-                      isSelected={selectedProperties.includes(property.id)}
-                      isSaved={savedProperties.includes(property.id)}
-                      onSelect={togglePropertySelection}
-                      onSave={handleSave}
-                      onViewDetails={handleViewDetails}
-                      onAddToPipeline={handleAddToPipeline}
-                    />
-                  ))}
+                  <p className="p-4 text-center text-muted-foreground">
+                    List view coming soon. Use grid view for now.
+                  </p>
                 </div>
-                {results.length < totalResults && (
-                  <div className="flex justify-center mt-8">
-                    <Button onClick={handleLoadMore}>Load More</Button>
-                  </div>
-                )}
               </>
             )}
 
             {/* Results Footer */}
-            {!showEmptyState && !isLoading && (
+            {!showEmptyState && !combinedLoading && listings && listings.length > 0 && (
               <div className="flex items-center justify-center mt-6 text-sm text-muted-foreground">
-                Showing {results.length} of {totalResults} properties
+                Showing {listings.length} of {totalResults} properties
               </div>
             )}
           </div>

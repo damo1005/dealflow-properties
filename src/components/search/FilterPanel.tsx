@@ -41,9 +41,10 @@ interface FilterPanelProps {
   className?: string;
   onClose?: () => void;
   isMobile?: boolean;
+  onSearch?: () => void;
 }
 
-export function FilterPanel({ className, onClose, isMobile }: FilterPanelProps) {
+export function FilterPanel({ className, onClose, isMobile, onSearch }: FilterPanelProps) {
   const { filters, setFilters, resetFilters } = useSearchStore();
 
   const handlePropertyTypeToggle = (type: string) => {
@@ -420,9 +421,12 @@ export function FilterPanel({ className, onClose, isMobile }: FilterPanelProps) 
 
       {/* Apply Button (Mobile) */}
       {isMobile && (
-        <div className="p-4 border-t border-border">
-          <Button className="w-full" onClick={onClose}>
-            Apply Filters
+        <div className="p-4 border-t border-border space-y-2">
+          <Button className="w-full" onClick={() => { onSearch?.(); onClose?.(); }}>
+            Search Properties
+          </Button>
+          <Button variant="outline" className="w-full" onClick={onClose}>
+            Close
           </Button>
         </div>
       )}
