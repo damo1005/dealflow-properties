@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FileText, Zap, Key, ExternalLink, Check, X, AlertCircle } from "lucide-react";
+import { FileText, Zap, Key, ExternalLink, Check, X, AlertCircle, Building } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +15,7 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { PropertyDetail } from "@/data/mockPropertyDetail";
 import { cn } from "@/lib/utils";
+import { LandRegistryTab } from "./LandRegistryTab";
 
 interface PropertyTabsProps {
   property: PropertyDetail;
@@ -71,9 +72,13 @@ export function PropertyTabs({ property }: PropertyTabsProps) {
 
   return (
     <Card className="shadow-card">
-      <Tabs defaultValue="planning" className="w-full">
+      <Tabs defaultValue="land-registry" className="w-full">
         <CardHeader className="pb-0">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="land-registry" className="gap-2">
+              <Building className="h-4 w-4" />
+              <span className="hidden sm:inline">Land Registry</span>
+            </TabsTrigger>
             <TabsTrigger value="planning" className="gap-2">
               <FileText className="h-4 w-4" />
               <span className="hidden sm:inline">Planning</span>
@@ -90,6 +95,14 @@ export function PropertyTabs({ property }: PropertyTabsProps) {
         </CardHeader>
 
         <CardContent className="pt-6">
+          {/* Land Registry Tab */}
+          <TabsContent value="land-registry" className="mt-0">
+            <LandRegistryTab 
+              propertyAddress={property.address} 
+              postcode={property.postcode || property.address.split(',').pop()?.trim() || ''} 
+            />
+          </TabsContent>
+
           {/* Planning Tab */}
           <TabsContent value="planning" className="mt-0 space-y-4">
             <h4 className="font-medium text-foreground">Planning Applications</h4>
