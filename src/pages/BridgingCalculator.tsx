@@ -281,7 +281,7 @@ export default function BridgingCalculator() {
                 <h4 className="font-medium">Cash Required</h4>
                 <div className="text-sm space-y-1">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Deposit ({100 - ltvPurchase.toFixed(0)}%):</span>
+                    <span className="text-muted-foreground">Deposit ({(100 - ltvPurchase).toFixed(0)}%):</span>
                     <span>£{deposit.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between">
