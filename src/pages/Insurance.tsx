@@ -4,42 +4,74 @@ import { InsuranceWizard } from "@/components/insurance/InsuranceWizard";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Shield, FileText, Clock, Plus, ArrowRight, Star, AlertTriangle, Eye, RefreshCw } from "lucide-react";
+import { Shield, FileText, Clock, Plus, Star, Eye, RefreshCw } from "lucide-react";
 import { useInsuranceStore } from "@/stores/insuranceStore";
 
+// Mock policies data for now
+const mockPolicies = [
+  {
+    id: '1',
+    property_address: '14 Oak Street, M14 2AB',
+    provider: 'Simply Business',
+    buildings_cover: 175000,
+    contents_cover: 10000,
+    liability_cover: 2000000,
+    annual_premium: 285,
+    status: 'active',
+    end_date: '2026-03-15',
+  },
+  {
+    id: '2',
+    property_address: '28 Victoria Road, M20 4BW',
+    provider: 'Alan Boswell',
+    buildings_cover: 220000,
+    contents_cover: 15000,
+    liability_cover: 2000000,
+    annual_premium: 342,
+    status: 'active',
+    end_date: '2026-08-22',
+  },
+];
+
 const Insurance = () => {
-  const { policies, getExpiringPolicies } = useInsuranceStore();
-  const expiringPolicies = getExpiringPolicies(90);
+  const { savedQuotes } = useInsuranceStore();
+  
+  // Use mock data for policies
+  const policies = mockPolicies;
+  const expiringPolicies = policies.filter(p => {
+    const daysLeft = getDaysUntilExpiry(p.end_date);
+    return daysLeft <= 90;
+  });
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP', maximumFractionDigits: 0 }).format(amount);
   };
 
-  const getDaysUntilExpiry = (endDate: string) => {
+  function getDaysUntilExpiry(endDate: string) {
     const end = new Date(endDate);
     const now = new Date();
     return Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-  };
+  }
 
   return (
     <AppLayout title="Insurance Manager">
       <div className="space-y-6">
         {/* Renewal Alerts */}
         {expiringPolicies.length > 0 && (
-          <Card className="border-yellow-200 bg-yellow-50">
+          <Card className="border-yellow-500/50 bg-yellow-500/10">
             <CardHeader className="pb-3">
-              <CardTitle className="text-base flex items-center gap-2 text-yellow-800">
-                <AlertTriangle className="h-5 w-5" />
+              <CardTitle className="text-base flex items-center gap-2">
+                <Clock className="h-5 w-5 text-yellow-600" />
                 Renewal Alerts
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
               {expiringPolicies.map((policy) => (
-                <div key={policy.id} className="flex items-center justify-between p-3 bg-white rounded-lg">
+                <div key={policy.id} className="flex items-center justify-between p-3 bg-background rounded-lg border">
                   <div>
                     <p className="font-medium">{policy.property_address}</p>
                     <p className="text-sm text-muted-foreground">
-                      Expires in {getDaysUntilExpiry(policy.end_date!)} days
+                      Expires in {getDaysUntilExpiry(policy.end_date)} days
                     </p>
                   </div>
                   <Button size="sm">Get Quotes</Button>
@@ -69,8 +101,8 @@ const Insurance = () => {
           <TabsContent value="policies" className="mt-6">
             <div className="space-y-4">
               {policies.map((policy) => {
-                const daysLeft = policy.end_date ? getDaysUntilExpiry(policy.end_date) : null;
-                const isExpiringSoon = daysLeft !== null && daysLeft <= 60;
+                const daysLeft = getDaysUntilExpiry(policy.end_date);
+                const isExpiringSoon = daysLeft <= 60;
 
                 return (
                   <Card key={policy.id}>
@@ -92,22 +124,22 @@ const Insurance = () => {
                         <Badge variant="outline" className="capitalize">{policy.status}</Badge>
                       </div>
 
-                      <div className="grid grid-cols-4 gap-4 mb-4 text-sm">
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4 text-sm">
                         <div>
                           <p className="text-muted-foreground">Buildings</p>
-                          <p className="font-medium">{policy.buildings_cover ? formatCurrency(policy.buildings_cover) : '-'}</p>
+                          <p className="font-medium">{formatCurrency(policy.buildings_cover)}</p>
                         </div>
                         <div>
                           <p className="text-muted-foreground">Contents</p>
-                          <p className="font-medium">{policy.contents_cover ? formatCurrency(policy.contents_cover) : '-'}</p>
+                          <p className="font-medium">{formatCurrency(policy.contents_cover)}</p>
                         </div>
                         <div>
                           <p className="text-muted-foreground">Liability</p>
-                          <p className="font-medium">{policy.liability_cover ? formatCurrency(policy.liability_cover) : '-'}</p>
+                          <p className="font-medium">{formatCurrency(policy.liability_cover)}</p>
                         </div>
                         <div>
                           <p className="text-muted-foreground">Premium</p>
-                          <p className="font-medium">{policy.annual_premium ? `${formatCurrency(policy.annual_premium)}/yr` : '-'}</p>
+                          <p className="font-medium">{formatCurrency(policy.annual_premium)}/yr</p>
                         </div>
                       </div>
 
@@ -153,17 +185,23 @@ const Insurance = () => {
                 <CardDescription>Your saved insurance quotes (valid for 14 days)</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-center py-12">
-                  <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                  <h3 className="text-lg font-medium mb-2">No Saved Quotes</h3>
-                  <p className="text-muted-foreground mb-4">
-                    Get a quote and save it to view it later
-                  </p>
-                  <Button>
-                    <Plus className="h-4 w-4 mr-2" />
-                    Get a Quote
-                  </Button>
-                </div>
+                {savedQuotes.length > 0 ? (
+                  <div className="space-y-4">
+                    {/* Display saved quotes here */}
+                  </div>
+                ) : (
+                  <div className="text-center py-12">
+                    <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                    <h3 className="text-lg font-medium mb-2">No Saved Quotes</h3>
+                    <p className="text-muted-foreground mb-4">
+                      Get a quote and save it to view it later
+                    </p>
+                    <Button>
+                      <Plus className="h-4 w-4 mr-2" />
+                      Get a Quote
+                    </Button>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
