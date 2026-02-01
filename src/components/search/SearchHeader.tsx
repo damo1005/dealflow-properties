@@ -1,4 +1,4 @@
-import { Search, SlidersHorizontal, LayoutGrid, List, ChevronDown } from "lucide-react";
+import { Search, SlidersHorizontal, LayoutGrid, List, ChevronDown, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,9 +30,11 @@ const sortOptions = [
 interface SearchHeaderProps {
   onToggleFilters?: () => void;
   filtersVisible?: boolean;
+  onSearch?: () => void;
+  isSearching?: boolean;
 }
 
-export function SearchHeader({ onToggleFilters, filtersVisible }: SearchHeaderProps) {
+export function SearchHeader({ onToggleFilters, filtersVisible, onSearch, isSearching }: SearchHeaderProps) {
   const {
     filters,
     setFilters,
@@ -45,6 +47,12 @@ export function SearchHeader({ onToggleFilters, filtersVisible }: SearchHeaderPr
     setItemsPerPage,
   } = useSearchStore();
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      onSearch?.();
+    }
+  };
+
   return (
     <div className="space-y-4">
       {/* Main Search Bar */}
@@ -52,12 +60,30 @@ export function SearchHeader({ onToggleFilters, filtersVisible }: SearchHeaderPr
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search by address, postcode, or area..."
+            placeholder="Enter postcode or town (e.g. M14, Manchester)"
             className="pl-10"
             value={filters.location}
             onChange={(e) => setFilters({ location: e.target.value })}
+            onKeyDown={handleKeyDown}
           />
         </div>
+        <Button 
+          onClick={onSearch} 
+          disabled={isSearching || !filters.location?.trim()}
+          className="gap-2"
+        >
+          {isSearching ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Searching...
+            </>
+          ) : (
+            <>
+              <Search className="h-4 w-4" />
+              Search
+            </>
+          )}
+        </Button>
         <Button
           variant="outline"
           className="gap-2 sm:hidden"

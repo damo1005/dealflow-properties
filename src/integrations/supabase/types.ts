@@ -11422,6 +11422,126 @@ export type Database = {
           },
         ]
       }
+      property_listings: {
+        Row: {
+          address: string
+          agent_logo_url: string | null
+          agent_name: string | null
+          agent_phone: string | null
+          bathrooms: number | null
+          bedrooms: number | null
+          created_at: string | null
+          description: string | null
+          estimated_rent: number | null
+          external_id: string
+          features: string[] | null
+          first_listed: string | null
+          floorplan_url: string | null
+          gross_yield: number | null
+          id: string
+          images: string[] | null
+          is_reduced: boolean | null
+          last_updated: string | null
+          latitude: number | null
+          listing_url: string
+          longitude: number | null
+          original_price: number | null
+          outcode: string | null
+          postcode: string | null
+          price: number | null
+          price_change_date: string | null
+          price_per_sqft: number | null
+          price_qualifier: string | null
+          property_type: string | null
+          receptions: number | null
+          reduction_percent: number | null
+          source: string
+          status: string | null
+          summary: string | null
+          tenure: string | null
+          thumbnail_url: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          address: string
+          agent_logo_url?: string | null
+          agent_name?: string | null
+          agent_phone?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          created_at?: string | null
+          description?: string | null
+          estimated_rent?: number | null
+          external_id: string
+          features?: string[] | null
+          first_listed?: string | null
+          floorplan_url?: string | null
+          gross_yield?: number | null
+          id?: string
+          images?: string[] | null
+          is_reduced?: boolean | null
+          last_updated?: string | null
+          latitude?: number | null
+          listing_url: string
+          longitude?: number | null
+          original_price?: number | null
+          outcode?: string | null
+          postcode?: string | null
+          price?: number | null
+          price_change_date?: string | null
+          price_per_sqft?: number | null
+          price_qualifier?: string | null
+          property_type?: string | null
+          receptions?: number | null
+          reduction_percent?: number | null
+          source: string
+          status?: string | null
+          summary?: string | null
+          tenure?: string | null
+          thumbnail_url?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          address?: string
+          agent_logo_url?: string | null
+          agent_name?: string | null
+          agent_phone?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          created_at?: string | null
+          description?: string | null
+          estimated_rent?: number | null
+          external_id?: string
+          features?: string[] | null
+          first_listed?: string | null
+          floorplan_url?: string | null
+          gross_yield?: number | null
+          id?: string
+          images?: string[] | null
+          is_reduced?: boolean | null
+          last_updated?: string | null
+          latitude?: number | null
+          listing_url?: string
+          longitude?: number | null
+          original_price?: number | null
+          outcode?: string | null
+          postcode?: string | null
+          price?: number | null
+          price_change_date?: string | null
+          price_per_sqft?: number | null
+          price_qualifier?: string | null
+          property_type?: string | null
+          receptions?: number | null
+          reduction_percent?: number | null
+          source?: string
+          status?: string | null
+          summary?: string | null
+          tenure?: string | null
+          thumbnail_url?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       property_performance: {
         Row: {
           created_at: string | null
@@ -11491,6 +11611,33 @@ export type Database = {
           user_id?: string
           utilities?: number | null
           void_days?: number | null
+        }
+        Relationships: []
+      }
+      property_search_cache: {
+        Row: {
+          expires_at: string | null
+          id: string
+          last_searched: string | null
+          result_count: number | null
+          search_key: string
+          search_params: Json | null
+        }
+        Insert: {
+          expires_at?: string | null
+          id?: string
+          last_searched?: string | null
+          result_count?: number | null
+          search_key: string
+          search_params?: Json | null
+        }
+        Update: {
+          expires_at?: string | null
+          id?: string
+          last_searched?: string | null
+          result_count?: number | null
+          search_key?: string
+          search_params?: Json | null
         }
         Relationships: []
       }
@@ -16058,6 +16205,68 @@ export type Database = {
           updated_at?: string | null
           user_id?: string | null
           vrbo_url?: string | null
+        }
+        Relationships: []
+      }
+      user_saved_properties: {
+        Row: {
+          created_at: string | null
+          id: string
+          listing_id: string | null
+          notes: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          listing_id?: string | null
+          notes?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          listing_id?: string | null
+          notes?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_saved_properties_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "property_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_saved_searches: {
+        Row: {
+          alert_enabled: boolean | null
+          created_at: string | null
+          id: string
+          last_alerted: string | null
+          name: string | null
+          search_params: Json | null
+          user_id: string
+        }
+        Insert: {
+          alert_enabled?: boolean | null
+          created_at?: string | null
+          id?: string
+          last_alerted?: string | null
+          name?: string | null
+          search_params?: Json | null
+          user_id: string
+        }
+        Update: {
+          alert_enabled?: boolean | null
+          created_at?: string | null
+          id?: string
+          last_alerted?: string | null
+          name?: string | null
+          search_params?: Json | null
+          user_id?: string
         }
         Relationships: []
       }
