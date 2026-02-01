@@ -2180,6 +2180,140 @@ export type Database = {
           },
         ]
       }
+      community_comments: {
+        Row: {
+          author_id: string | null
+          content: string
+          created_at: string | null
+          id: string
+          is_demo: boolean | null
+          likes_count: number | null
+          post_id: string | null
+        }
+        Insert: {
+          author_id?: string | null
+          content: string
+          created_at?: string | null
+          id?: string
+          is_demo?: boolean | null
+          likes_count?: number | null
+          post_id?: string | null
+        }
+        Update: {
+          author_id?: string | null
+          content?: string
+          created_at?: string | null
+          id?: string
+          is_demo?: boolean | null
+          likes_count?: number | null
+          post_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_comments_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "community_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "community_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_posts: {
+        Row: {
+          author_id: string | null
+          comments_count: number | null
+          content: string
+          created_at: string | null
+          id: string
+          images: string[] | null
+          is_demo: boolean | null
+          likes_count: number | null
+          post_type: string | null
+        }
+        Insert: {
+          author_id?: string | null
+          comments_count?: number | null
+          content: string
+          created_at?: string | null
+          id?: string
+          images?: string[] | null
+          is_demo?: boolean | null
+          likes_count?: number | null
+          post_type?: string | null
+        }
+        Update: {
+          author_id?: string | null
+          comments_count?: number | null
+          content?: string
+          created_at?: string | null
+          id?: string
+          images?: string[] | null
+          is_demo?: boolean | null
+          likes_count?: number | null
+          post_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_posts_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "community_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          display_name: string
+          experience_years: number | null
+          id: string
+          investor_type: string | null
+          is_demo: boolean | null
+          is_verified: boolean | null
+          location: string | null
+          portfolio_size: string | null
+          specialties: string[] | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name: string
+          experience_years?: number | null
+          id?: string
+          investor_type?: string | null
+          is_demo?: boolean | null
+          is_verified?: boolean | null
+          location?: string | null
+          portfolio_size?: string | null
+          specialties?: string[] | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string
+          experience_years?: number | null
+          id?: string
+          investor_type?: string | null
+          is_demo?: boolean | null
+          is_verified?: boolean | null
+          location?: string | null
+          portfolio_size?: string | null
+          specialties?: string[] | null
+        }
+        Relationships: []
+      }
       company_filings: {
         Row: {
           company_id: string | null
@@ -3977,6 +4111,8 @@ export type Database = {
           alert_frequency: string | null
           alert_methods: Json | null
           alert_score_threshold: number | null
+          alert_threshold: number | null
+          api_calls_used: number | null
           avg_score: number | null
           bedrooms_max: number | null
           bedrooms_min: number | null
@@ -4020,6 +4156,8 @@ export type Database = {
           alert_frequency?: string | null
           alert_methods?: Json | null
           alert_score_threshold?: number | null
+          alert_threshold?: number | null
+          api_calls_used?: number | null
           avg_score?: number | null
           bedrooms_max?: number | null
           bedrooms_min?: number | null
@@ -4063,6 +4201,8 @@ export type Database = {
           alert_frequency?: string | null
           alert_methods?: Json | null
           alert_score_threshold?: number | null
+          alert_threshold?: number | null
+          api_calls_used?: number | null
           avg_score?: number | null
           bedrooms_max?: number | null
           bedrooms_min?: number | null
@@ -11398,6 +11538,48 @@ export type Database = {
           },
         ]
       }
+      revenue_events: {
+        Row: {
+          amount_cents: number
+          created_at: string | null
+          currency: string | null
+          customer_id: string | null
+          event_type: string
+          id: string
+          metadata: Json | null
+          plan_name: string | null
+          stripe_event_id: string | null
+          subscription_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          amount_cents?: number
+          created_at?: string | null
+          currency?: string | null
+          customer_id?: string | null
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          plan_name?: string | null
+          stripe_event_id?: string | null
+          subscription_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string | null
+          currency?: string | null
+          customer_id?: string | null
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          plan_name?: string | null
+          stripe_event_id?: string | null
+          subscription_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       revenue_log: {
         Row: {
           amount: number
@@ -14019,6 +14201,42 @@ export type Database = {
         }
         Relationships: []
       }
+      user_activity: {
+        Row: {
+          activity_type: string
+          created_at: string | null
+          description: string | null
+          entity_id: string | null
+          entity_type: string | null
+          id: string
+          metadata: Json | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          activity_type: string
+          created_at?: string | null
+          description?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          metadata?: Json | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          activity_type?: string
+          created_at?: string | null
+          description?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          metadata?: Json | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_activity_log: {
         Row: {
           activity_details: Json | null
@@ -14045,6 +14263,36 @@ export type Database = {
           id?: string
           ip_address?: string | null
           user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_analytics: {
+        Row: {
+          created_at: string | null
+          event_data: Json | null
+          event_type: string
+          id: string
+          page_path: string | null
+          session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_data?: Json | null
+          event_type: string
+          id?: string
+          page_path?: string | null
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_data?: Json | null
+          event_type?: string
+          id?: string
+          page_path?: string | null
+          session_id?: string | null
           user_id?: string | null
         }
         Relationships: []
