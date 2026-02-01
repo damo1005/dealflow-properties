@@ -2269,6 +2269,165 @@ export type Database = {
         }
         Relationships: []
       }
+      document_folder_items: {
+        Row: {
+          added_at: string | null
+          document_id: string
+          folder_id: string
+        }
+        Insert: {
+          added_at?: string | null
+          document_id: string
+          folder_id: string
+        }
+        Update: {
+          added_at?: string | null
+          document_id?: string
+          folder_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_folder_items_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_folder_items_folder_id_fkey"
+            columns: ["folder_id"]
+            isOneToOne: false
+            referencedRelation: "document_folders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_folders: {
+        Row: {
+          color: string | null
+          created_at: string | null
+          folder_name: string
+          icon: string | null
+          id: string
+          parent_folder_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string | null
+          folder_name: string
+          icon?: string | null
+          id?: string
+          parent_folder_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          color?: string | null
+          created_at?: string | null
+          folder_name?: string
+          icon?: string | null
+          id?: string
+          parent_folder_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_folders_parent_folder_id_fkey"
+            columns: ["parent_folder_id"]
+            isOneToOne: false
+            referencedRelation: "document_folders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      documents: {
+        Row: {
+          category: string | null
+          compliance_item_id: string | null
+          description: string | null
+          file_name: string
+          file_size: number | null
+          file_type: string | null
+          file_url: string
+          id: string
+          is_favorite: boolean | null
+          is_shared: boolean | null
+          portfolio_property_id: string | null
+          share_expires_at: string | null
+          share_token: string | null
+          tags: string[] | null
+          tenancy_id: string | null
+          title: string | null
+          updated_at: string | null
+          uploaded_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          category?: string | null
+          compliance_item_id?: string | null
+          description?: string | null
+          file_name: string
+          file_size?: number | null
+          file_type?: string | null
+          file_url: string
+          id?: string
+          is_favorite?: boolean | null
+          is_shared?: boolean | null
+          portfolio_property_id?: string | null
+          share_expires_at?: string | null
+          share_token?: string | null
+          tags?: string[] | null
+          tenancy_id?: string | null
+          title?: string | null
+          updated_at?: string | null
+          uploaded_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          category?: string | null
+          compliance_item_id?: string | null
+          description?: string | null
+          file_name?: string
+          file_size?: number | null
+          file_type?: string | null
+          file_url?: string
+          id?: string
+          is_favorite?: boolean | null
+          is_shared?: boolean | null
+          portfolio_property_id?: string | null
+          share_expires_at?: string | null
+          share_token?: string | null
+          tags?: string[] | null
+          tenancy_id?: string | null
+          title?: string | null
+          updated_at?: string | null
+          uploaded_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_compliance_item_id_fkey"
+            columns: ["compliance_item_id"]
+            isOneToOne: false
+            referencedRelation: "compliance_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "documents_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "documents_tenancy_id_fkey"
+            columns: ["tenancy_id"]
+            isOneToOne: false
+            referencedRelation: "tenancies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       email_logs: {
         Row: {
           clicked_at: string | null
@@ -2437,6 +2596,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      integration_catalog: {
+        Row: {
+          available_in_tiers: string[] | null
+          category: string | null
+          created_at: string | null
+          description: string | null
+          features: string[] | null
+          id: string
+          integration_key: string
+          is_active: boolean | null
+          is_beta: boolean | null
+          logo_url: string | null
+          name: string
+          requires_api_key: boolean | null
+          requires_oauth: boolean | null
+          total_connections: number | null
+          website_url: string | null
+        }
+        Insert: {
+          available_in_tiers?: string[] | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          integration_key: string
+          is_active?: boolean | null
+          is_beta?: boolean | null
+          logo_url?: string | null
+          name: string
+          requires_api_key?: boolean | null
+          requires_oauth?: boolean | null
+          total_connections?: number | null
+          website_url?: string | null
+        }
+        Update: {
+          available_in_tiers?: string[] | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          integration_key?: string
+          is_active?: boolean | null
+          is_beta?: boolean | null
+          logo_url?: string | null
+          name?: string
+          requires_api_key?: boolean | null
+          requires_oauth?: boolean | null
+          total_connections?: number | null
+          website_url?: string | null
+        }
+        Relationships: []
       }
       integration_syncs: {
         Row: {
@@ -2770,6 +2983,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      map_heat_data: {
+        Row: {
+          avg_price: number | null
+          avg_yield: number | null
+          color: string | null
+          heat_type: string | null
+          id: string
+          intensity: number | null
+          postcode_area: string | null
+          property_count: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          avg_price?: number | null
+          avg_yield?: number | null
+          color?: string | null
+          heat_type?: string | null
+          id?: string
+          intensity?: number | null
+          postcode_area?: string | null
+          property_count?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          avg_price?: number | null
+          avg_yield?: number | null
+          color?: string | null
+          heat_type?: string | null
+          id?: string
+          intensity?: number | null
+          postcode_area?: string | null
+          property_count?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       market_conditions: {
         Row: {
@@ -4678,6 +4927,48 @@ export type Database = {
           },
         ]
       }
+      saved_map_searches: {
+        Row: {
+          center_lat: number | null
+          center_lng: number | null
+          created_at: string | null
+          enable_alerts: boolean | null
+          filters: Json | null
+          id: string
+          last_used_at: string | null
+          search_area: Json | null
+          search_name: string
+          user_id: string | null
+          zoom_level: number | null
+        }
+        Insert: {
+          center_lat?: number | null
+          center_lng?: number | null
+          created_at?: string | null
+          enable_alerts?: boolean | null
+          filters?: Json | null
+          id?: string
+          last_used_at?: string | null
+          search_area?: Json | null
+          search_name: string
+          user_id?: string | null
+          zoom_level?: number | null
+        }
+        Update: {
+          center_lat?: number | null
+          center_lng?: number | null
+          created_at?: string | null
+          enable_alerts?: boolean | null
+          filters?: Json | null
+          id?: string
+          last_used_at?: string | null
+          search_area?: Json | null
+          search_name?: string
+          user_id?: string | null
+          zoom_level?: number | null
+        }
+        Relationships: []
+      }
       saved_properties: {
         Row: {
           created_at: string
@@ -5907,6 +6198,9 @@ export type Database = {
           last_sync_at: string | null
           refresh_token: string | null
           status: string | null
+          sync_errors: number | null
+          sync_frequency: string | null
+          total_syncs: number | null
           user_id: string
         }
         Insert: {
@@ -5922,6 +6216,9 @@ export type Database = {
           last_sync_at?: string | null
           refresh_token?: string | null
           status?: string | null
+          sync_errors?: number | null
+          sync_frequency?: string | null
+          total_syncs?: number | null
           user_id: string
         }
         Update: {
@@ -5937,6 +6234,9 @@ export type Database = {
           last_sync_at?: string | null
           refresh_token?: string | null
           status?: string | null
+          sync_errors?: number | null
+          sync_frequency?: string | null
+          total_syncs?: number | null
           user_id?: string
         }
         Relationships: [
