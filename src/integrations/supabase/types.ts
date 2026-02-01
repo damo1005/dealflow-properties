@@ -897,6 +897,41 @@ export type Database = {
         }
         Relationships: []
       }
+      alert_check_log: {
+        Row: {
+          alerts_sent: number | null
+          checked_at: string | null
+          id: string
+          listings_found: number | null
+          new_listings: number | null
+          saved_search_id: string | null
+        }
+        Insert: {
+          alerts_sent?: number | null
+          checked_at?: string | null
+          id?: string
+          listings_found?: number | null
+          new_listings?: number | null
+          saved_search_id?: string | null
+        }
+        Update: {
+          alerts_sent?: number | null
+          checked_at?: string | null
+          id?: string
+          listings_found?: number | null
+          new_listings?: number | null
+          saved_search_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alert_check_log_saved_search_id_fkey"
+            columns: ["saved_search_id"]
+            isOneToOne: false
+            referencedRelation: "user_saved_searches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       alert_engagement: {
         Row: {
           alert_id: string | null
@@ -8256,6 +8291,35 @@ export type Database = {
           },
         ]
       }
+      listing_price_history: {
+        Row: {
+          id: string
+          listing_id: string
+          price: number
+          recorded_at: string | null
+        }
+        Insert: {
+          id?: string
+          listing_id: string
+          price: number
+          recorded_at?: string | null
+        }
+        Update: {
+          id?: string
+          listing_id?: string
+          price?: number
+          recorded_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_price_history_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "property_listings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       maintenance_jobs: {
         Row: {
           actual_cost: number | null
@@ -9546,12 +9610,20 @@ export type Database = {
         Row: {
           clicked: boolean | null
           created_at: string
+          data: Json | null
+          email_sent: boolean | null
+          email_sent_at: string | null
           id: string
+          is_archived: boolean | null
+          is_read: boolean | null
+          listing_id: string | null
           message: string | null
           property_address: string | null
           property_id: string | null
           property_image: string | null
           property_price: number | null
+          push_sent: boolean | null
+          push_sent_at: string | null
           read: boolean | null
           saved_search_id: string | null
           title: string
@@ -9561,12 +9633,20 @@ export type Database = {
         Insert: {
           clicked?: boolean | null
           created_at?: string
+          data?: Json | null
+          email_sent?: boolean | null
+          email_sent_at?: string | null
           id?: string
+          is_archived?: boolean | null
+          is_read?: boolean | null
+          listing_id?: string | null
           message?: string | null
           property_address?: string | null
           property_id?: string | null
           property_image?: string | null
           property_price?: number | null
+          push_sent?: boolean | null
+          push_sent_at?: string | null
           read?: boolean | null
           saved_search_id?: string | null
           title: string
@@ -9576,12 +9656,20 @@ export type Database = {
         Update: {
           clicked?: boolean | null
           created_at?: string
+          data?: Json | null
+          email_sent?: boolean | null
+          email_sent_at?: string | null
           id?: string
+          is_archived?: boolean | null
+          is_read?: boolean | null
+          listing_id?: string | null
           message?: string | null
           property_address?: string | null
           property_id?: string | null
           property_image?: string | null
           property_price?: number | null
+          push_sent?: boolean | null
+          push_sent_at?: string | null
           read?: boolean | null
           saved_search_id?: string | null
           title?: string
@@ -9589,6 +9677,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "notifications_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "property_listings"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "notifications_saved_search_id_fkey"
             columns: ["saved_search_id"]
@@ -15957,33 +16052,63 @@ export type Database = {
         Row: {
           created_at: string
           default_digest_time: string | null
+          email_digest: boolean | null
+          email_digest_frequency: string | null
+          email_new_listings: boolean | null
           email_notifications_enabled: boolean | null
+          email_price_drops: boolean | null
           global_notifications_enabled: boolean | null
           id: string
           in_app_notifications_enabled: boolean | null
           max_emails_per_day: number | null
+          push_new_listings: boolean | null
+          push_price_drops: boolean | null
+          quiet_hours_enabled: boolean | null
+          quiet_hours_end: string | null
+          quiet_hours_start: string | null
+          timezone: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           created_at?: string
           default_digest_time?: string | null
+          email_digest?: boolean | null
+          email_digest_frequency?: string | null
+          email_new_listings?: boolean | null
           email_notifications_enabled?: boolean | null
+          email_price_drops?: boolean | null
           global_notifications_enabled?: boolean | null
           id?: string
           in_app_notifications_enabled?: boolean | null
           max_emails_per_day?: number | null
+          push_new_listings?: boolean | null
+          push_price_drops?: boolean | null
+          quiet_hours_enabled?: boolean | null
+          quiet_hours_end?: string | null
+          quiet_hours_start?: string | null
+          timezone?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           created_at?: string
           default_digest_time?: string | null
+          email_digest?: boolean | null
+          email_digest_frequency?: string | null
+          email_new_listings?: boolean | null
           email_notifications_enabled?: boolean | null
+          email_price_drops?: boolean | null
           global_notifications_enabled?: boolean | null
           id?: string
           in_app_notifications_enabled?: boolean | null
           max_emails_per_day?: number | null
+          push_new_listings?: boolean | null
+          push_price_drops?: boolean | null
+          quiet_hours_enabled?: boolean | null
+          quiet_hours_end?: string | null
+          quiet_hours_start?: string | null
+          timezone?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -16242,30 +16367,75 @@ export type Database = {
       }
       user_saved_searches: {
         Row: {
+          alert_email: boolean | null
           alert_enabled: boolean | null
+          alert_frequency: string | null
+          alert_in_app: boolean | null
+          alert_push: boolean | null
           created_at: string | null
           id: string
+          include_sstc: boolean | null
           last_alerted: string | null
+          last_checked: string | null
+          location: string | null
+          max_beds: number | null
+          max_price: number | null
+          min_beds: number | null
+          min_price: number | null
           name: string | null
+          new_listings_count: number | null
+          property_types: string[] | null
+          radius: number | null
           search_params: Json | null
+          updated_at: string | null
           user_id: string
         }
         Insert: {
+          alert_email?: boolean | null
           alert_enabled?: boolean | null
+          alert_frequency?: string | null
+          alert_in_app?: boolean | null
+          alert_push?: boolean | null
           created_at?: string | null
           id?: string
+          include_sstc?: boolean | null
           last_alerted?: string | null
+          last_checked?: string | null
+          location?: string | null
+          max_beds?: number | null
+          max_price?: number | null
+          min_beds?: number | null
+          min_price?: number | null
           name?: string | null
+          new_listings_count?: number | null
+          property_types?: string[] | null
+          radius?: number | null
           search_params?: Json | null
+          updated_at?: string | null
           user_id: string
         }
         Update: {
+          alert_email?: boolean | null
           alert_enabled?: boolean | null
+          alert_frequency?: string | null
+          alert_in_app?: boolean | null
+          alert_push?: boolean | null
           created_at?: string | null
           id?: string
+          include_sstc?: boolean | null
           last_alerted?: string | null
+          last_checked?: string | null
+          location?: string | null
+          max_beds?: number | null
+          max_price?: number | null
+          min_beds?: number | null
+          min_price?: number | null
           name?: string | null
+          new_listings_count?: number | null
+          property_types?: string[] | null
+          radius?: number | null
           search_params?: Json | null
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: []
@@ -16969,6 +17139,10 @@ export type Database = {
           status: string
           submitted_date: string
         }[]
+      }
+      get_unread_notification_count: {
+        Args: { p_user_id: string }
+        Returns: number
       }
       has_role: {
         Args: {
