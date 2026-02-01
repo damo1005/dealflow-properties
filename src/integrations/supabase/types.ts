@@ -555,6 +555,348 @@ export type Database = {
           },
         ]
       }
+      airbnb_area_stats: {
+        Row: {
+          area_name: string
+          area_type: string | null
+          avg_annual_revenue: number | null
+          avg_availability_365: number | null
+          avg_listings_per_host: number | null
+          avg_minimum_nights: number | null
+          avg_monthly_revenue: number | null
+          avg_occupancy_rate: number | null
+          avg_price_entire_home: number | null
+          avg_price_private_room: number | null
+          avg_review_score: number | null
+          avg_reviews_per_month: number | null
+          calculated_at: string | null
+          city: string | null
+          data_date: string | null
+          entire_home_count: number | null
+          id: string
+          max_price: number | null
+          median_price_entire_home: number | null
+          median_price_private_room: number | null
+          min_price: number | null
+          multi_listing_hosts: number | null
+          price_25th_percentile: number | null
+          price_75th_percentile: number | null
+          private_room_count: number | null
+          shared_room_count: number | null
+          superhost_count: number | null
+          total_hosts: number | null
+          total_listings: number | null
+        }
+        Insert: {
+          area_name: string
+          area_type?: string | null
+          avg_annual_revenue?: number | null
+          avg_availability_365?: number | null
+          avg_listings_per_host?: number | null
+          avg_minimum_nights?: number | null
+          avg_monthly_revenue?: number | null
+          avg_occupancy_rate?: number | null
+          avg_price_entire_home?: number | null
+          avg_price_private_room?: number | null
+          avg_review_score?: number | null
+          avg_reviews_per_month?: number | null
+          calculated_at?: string | null
+          city?: string | null
+          data_date?: string | null
+          entire_home_count?: number | null
+          id?: string
+          max_price?: number | null
+          median_price_entire_home?: number | null
+          median_price_private_room?: number | null
+          min_price?: number | null
+          multi_listing_hosts?: number | null
+          price_25th_percentile?: number | null
+          price_75th_percentile?: number | null
+          private_room_count?: number | null
+          shared_room_count?: number | null
+          superhost_count?: number | null
+          total_hosts?: number | null
+          total_listings?: number | null
+        }
+        Update: {
+          area_name?: string
+          area_type?: string | null
+          avg_annual_revenue?: number | null
+          avg_availability_365?: number | null
+          avg_listings_per_host?: number | null
+          avg_minimum_nights?: number | null
+          avg_monthly_revenue?: number | null
+          avg_occupancy_rate?: number | null
+          avg_price_entire_home?: number | null
+          avg_price_private_room?: number | null
+          avg_review_score?: number | null
+          avg_reviews_per_month?: number | null
+          calculated_at?: string | null
+          city?: string | null
+          data_date?: string | null
+          entire_home_count?: number | null
+          id?: string
+          max_price?: number | null
+          median_price_entire_home?: number | null
+          median_price_private_room?: number | null
+          min_price?: number | null
+          multi_listing_hosts?: number | null
+          price_25th_percentile?: number | null
+          price_75th_percentile?: number | null
+          private_room_count?: number | null
+          shared_room_count?: number | null
+          superhost_count?: number | null
+          total_hosts?: number | null
+          total_listings?: number | null
+        }
+        Relationships: []
+      }
+      airbnb_listings: {
+        Row: {
+          accommodates: number | null
+          airbnb_id: string
+          amenities: string[] | null
+          availability_30: number | null
+          availability_365: number | null
+          availability_60: number | null
+          availability_90: number | null
+          bathrooms: number | null
+          bedrooms: number | null
+          beds: number | null
+          city: string | null
+          cleaning_fee: number | null
+          created_at: string | null
+          data_date: string | null
+          description: string | null
+          estimated_annual_revenue: number | null
+          estimated_monthly_revenue: number | null
+          estimated_occupancy_rate: number | null
+          first_review: string | null
+          host_id: string | null
+          host_is_superhost: boolean | null
+          host_listings_count: number | null
+          host_name: string | null
+          host_since: string | null
+          id: string
+          instant_bookable: boolean | null
+          last_review: string | null
+          last_scraped: string | null
+          latitude: number | null
+          listing_url: string | null
+          longitude: number | null
+          maximum_nights: number | null
+          minimum_nights: number | null
+          name: string | null
+          neighbourhood: string | null
+          neighbourhood_group: string | null
+          number_of_reviews: number | null
+          number_of_reviews_ltm: number | null
+          picture_url: string | null
+          postcode: string | null
+          price_per_night: number | null
+          property_type: string | null
+          review_scores_accuracy: number | null
+          review_scores_checkin: number | null
+          review_scores_cleanliness: number | null
+          review_scores_communication: number | null
+          review_scores_location: number | null
+          review_scores_rating: number | null
+          review_scores_value: number | null
+          reviews_per_month: number | null
+          room_type: string | null
+          service_fee: number | null
+          source: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          accommodates?: number | null
+          airbnb_id: string
+          amenities?: string[] | null
+          availability_30?: number | null
+          availability_365?: number | null
+          availability_60?: number | null
+          availability_90?: number | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          beds?: number | null
+          city?: string | null
+          cleaning_fee?: number | null
+          created_at?: string | null
+          data_date?: string | null
+          description?: string | null
+          estimated_annual_revenue?: number | null
+          estimated_monthly_revenue?: number | null
+          estimated_occupancy_rate?: number | null
+          first_review?: string | null
+          host_id?: string | null
+          host_is_superhost?: boolean | null
+          host_listings_count?: number | null
+          host_name?: string | null
+          host_since?: string | null
+          id?: string
+          instant_bookable?: boolean | null
+          last_review?: string | null
+          last_scraped?: string | null
+          latitude?: number | null
+          listing_url?: string | null
+          longitude?: number | null
+          maximum_nights?: number | null
+          minimum_nights?: number | null
+          name?: string | null
+          neighbourhood?: string | null
+          neighbourhood_group?: string | null
+          number_of_reviews?: number | null
+          number_of_reviews_ltm?: number | null
+          picture_url?: string | null
+          postcode?: string | null
+          price_per_night?: number | null
+          property_type?: string | null
+          review_scores_accuracy?: number | null
+          review_scores_checkin?: number | null
+          review_scores_cleanliness?: number | null
+          review_scores_communication?: number | null
+          review_scores_location?: number | null
+          review_scores_rating?: number | null
+          review_scores_value?: number | null
+          reviews_per_month?: number | null
+          room_type?: string | null
+          service_fee?: number | null
+          source?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          accommodates?: number | null
+          airbnb_id?: string
+          amenities?: string[] | null
+          availability_30?: number | null
+          availability_365?: number | null
+          availability_60?: number | null
+          availability_90?: number | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          beds?: number | null
+          city?: string | null
+          cleaning_fee?: number | null
+          created_at?: string | null
+          data_date?: string | null
+          description?: string | null
+          estimated_annual_revenue?: number | null
+          estimated_monthly_revenue?: number | null
+          estimated_occupancy_rate?: number | null
+          first_review?: string | null
+          host_id?: string | null
+          host_is_superhost?: boolean | null
+          host_listings_count?: number | null
+          host_name?: string | null
+          host_since?: string | null
+          id?: string
+          instant_bookable?: boolean | null
+          last_review?: string | null
+          last_scraped?: string | null
+          latitude?: number | null
+          listing_url?: string | null
+          longitude?: number | null
+          maximum_nights?: number | null
+          minimum_nights?: number | null
+          name?: string | null
+          neighbourhood?: string | null
+          neighbourhood_group?: string | null
+          number_of_reviews?: number | null
+          number_of_reviews_ltm?: number | null
+          picture_url?: string | null
+          postcode?: string | null
+          price_per_night?: number | null
+          property_type?: string | null
+          review_scores_accuracy?: number | null
+          review_scores_checkin?: number | null
+          review_scores_cleanliness?: number | null
+          review_scores_communication?: number | null
+          review_scores_location?: number | null
+          review_scores_rating?: number | null
+          review_scores_value?: number | null
+          reviews_per_month?: number | null
+          room_type?: string | null
+          service_fee?: number | null
+          source?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      airbnb_price_alerts: {
+        Row: {
+          alert_type: string | null
+          area_name: string | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          last_triggered: string | null
+          postcode: string | null
+          room_type: string | null
+          threshold_value: number | null
+          user_id: string | null
+        }
+        Insert: {
+          alert_type?: string | null
+          area_name?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_triggered?: string | null
+          postcode?: string | null
+          room_type?: string | null
+          threshold_value?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          alert_type?: string | null
+          area_name?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_triggered?: string | null
+          postcode?: string | null
+          room_type?: string | null
+          threshold_value?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      airbnb_sync_log: {
+        Row: {
+          areas_calculated: number | null
+          city: string | null
+          data_date: string | null
+          error_message: string | null
+          id: string
+          listings_imported: number | null
+          source_url: string | null
+          status: string | null
+          synced_at: string | null
+        }
+        Insert: {
+          areas_calculated?: number | null
+          city?: string | null
+          data_date?: string | null
+          error_message?: string | null
+          id?: string
+          listings_imported?: number | null
+          source_url?: string | null
+          status?: string | null
+          synced_at?: string | null
+        }
+        Update: {
+          areas_calculated?: number | null
+          city?: string | null
+          data_date?: string | null
+          error_message?: string | null
+          id?: string
+          listings_imported?: number | null
+          source_url?: string | null
+          status?: string | null
+          synced_at?: string | null
+        }
+        Relationships: []
+      }
       alert_engagement: {
         Row: {
           alert_id: string | null
@@ -15040,6 +15382,48 @@ export type Database = {
         }
         Relationships: []
       }
+      user_competitor_sets: {
+        Row: {
+          created_at: string | null
+          id: string
+          listing_id: string | null
+          notes: string | null
+          sa_property_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          listing_id?: string | null
+          notes?: string | null
+          sa_property_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          listing_id?: string | null
+          notes?: string | null
+          sa_property_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_competitor_sets_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "airbnb_listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_competitor_sets_sa_property_id_fkey"
+            columns: ["sa_property_id"]
+            isOneToOne: false
+            referencedRelation: "user_sa_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_connections: {
         Row: {
           connection_type: string | null
@@ -15392,6 +15776,90 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_sa_properties: {
+        Row: {
+          accommodates: number | null
+          actual_monthly_revenue: number | null
+          actual_occupancy_rate: number | null
+          address: string | null
+          airbnb_url: string | null
+          bathrooms: number | null
+          bedrooms: number | null
+          beds: number | null
+          booking_url: string | null
+          btl_monthly_rent: number | null
+          btl_yield: number | null
+          cleaning_fee: number | null
+          created_at: string | null
+          id: string
+          latitude: number | null
+          longitude: number | null
+          minimum_nights: number | null
+          name: string
+          nightly_rate: number | null
+          notes: string | null
+          postcode: string | null
+          property_type: string | null
+          updated_at: string | null
+          user_id: string | null
+          vrbo_url: string | null
+        }
+        Insert: {
+          accommodates?: number | null
+          actual_monthly_revenue?: number | null
+          actual_occupancy_rate?: number | null
+          address?: string | null
+          airbnb_url?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          beds?: number | null
+          booking_url?: string | null
+          btl_monthly_rent?: number | null
+          btl_yield?: number | null
+          cleaning_fee?: number | null
+          created_at?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          minimum_nights?: number | null
+          name: string
+          nightly_rate?: number | null
+          notes?: string | null
+          postcode?: string | null
+          property_type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          vrbo_url?: string | null
+        }
+        Update: {
+          accommodates?: number | null
+          actual_monthly_revenue?: number | null
+          actual_occupancy_rate?: number | null
+          address?: string | null
+          airbnb_url?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          beds?: number | null
+          booking_url?: string | null
+          btl_monthly_rent?: number | null
+          btl_yield?: number | null
+          cleaning_fee?: number | null
+          created_at?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          minimum_nights?: number | null
+          name?: string
+          nightly_rate?: number | null
+          notes?: string | null
+          postcode?: string | null
+          property_type?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          vrbo_url?: string | null
         }
         Relationships: []
       }
@@ -15967,6 +16435,14 @@ export type Database = {
       calculate_demand_score: { Args: { district: string }; Returns: number }
       clean_all_expired_caches: { Args: never; Returns: undefined }
       clean_expired_cache: { Args: never; Returns: undefined }
+      estimate_monthly_revenue: {
+        Args: { occupancy_rate: number; price: number }
+        Returns: number
+      }
+      estimate_occupancy: {
+        Args: { review_rate?: number; reviews_per_month: number }
+        Returns: number
+      }
       find_ccs_projects_near: {
         Args: {
           category_filter?: string
