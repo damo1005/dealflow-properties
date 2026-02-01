@@ -2206,6 +2206,39 @@ export type Database = {
           },
         ]
       }
+      email_templates: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          subject: string
+          template_key: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          subject: string
+          template_key: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          subject?: string
+          template_key?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       feature_usage: {
         Row: {
           date: string
@@ -3834,6 +3867,8 @@ export type Database = {
           avatar_url: string | null
           company_name: string | null
           created_at: string | null
+          email_preferences: Json | null
+          email_verified: boolean | null
           full_name: string | null
           id: string
           stripe_customer_id: string | null
@@ -3843,6 +3878,8 @@ export type Database = {
           avatar_url?: string | null
           company_name?: string | null
           created_at?: string | null
+          email_preferences?: Json | null
+          email_verified?: boolean | null
           full_name?: string | null
           id: string
           stripe_customer_id?: string | null
@@ -3852,6 +3889,8 @@ export type Database = {
           avatar_url?: string | null
           company_name?: string | null
           created_at?: string | null
+          email_preferences?: Json | null
+          email_verified?: boolean | null
           full_name?: string | null
           id?: string
           stripe_customer_id?: string | null

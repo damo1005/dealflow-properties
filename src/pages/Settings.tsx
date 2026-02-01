@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SubscriptionManager } from "@/components/billing/SubscriptionManager";
+import { EmailPreferencesCard } from "@/components/settings/EmailPreferencesCard";
 
 export default function Settings() {
   return (
@@ -57,7 +58,9 @@ export default function Settings() {
           <SubscriptionManager />
         </TabsContent>
 
-        <TabsContent value="notifications" className="max-w-3xl">
+        <TabsContent value="notifications" className="max-w-3xl space-y-6">
+          <EmailPreferencesCard />
+          
           <Card className="shadow-card">
             <CardHeader>
               <div className="flex items-center gap-3">
@@ -65,20 +68,12 @@ export default function Settings() {
                   <Bell className="h-5 w-5" />
                 </div>
                 <div>
-                  <CardTitle>Notifications</CardTitle>
-                  <CardDescription>Configure how you receive alerts</CardDescription>
+                  <CardTitle>Push Notifications</CardTitle>
+                  <CardDescription>Configure in-app notifications</CardDescription>
                 </div>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-medium">Email Notifications</p>
-                  <p className="text-sm text-muted-foreground">Receive alerts via email</p>
-                </div>
-                <Switch defaultChecked />
-              </div>
-              <Separator />
               <div className="flex items-center justify-between">
                 <div>
                   <p className="font-medium">Price Drop Alerts</p>
