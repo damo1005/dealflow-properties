@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { sendWelcomeEmail } from "@/lib/email";
 
 interface AuthContextType {
   user: User | null;
@@ -47,7 +48,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => subscription.unsubscribe();
   }, []);
 
-  const createProfileIfNeeded = async (user: User) => {
+  const createProfileIfNeeded = async (user: User, isNewUser = false) => {
     const { data: existingProfile } = await supabase
       .from("profiles")
       .select("id")
@@ -60,6 +61,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         full_name: user.user_metadata?.full_name || "",
         created_at: new Date().toISOString(),
       });
+      
+      // Send welcome email for new users
+      if (user.email) {
+        sendWelcomeEmail(
+          user.email,
+          user.user_metadata?.full_name || "",
+          user.id
+        ).catch(console.error);
+      }
     }
   };
 
