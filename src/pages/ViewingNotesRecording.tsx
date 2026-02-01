@@ -1,19 +1,23 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Loader2, Trash2, Sparkles, Edit } from "lucide-react";
+import { Loader2, Trash2, Sparkles, Edit, ArrowLeft } from "lucide-react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { useVoiceRecording } from "@/hooks/useVoiceRecording";
+import { useViewingStats } from "@/hooks/useViewingStats";
 import { PropertyContextHeader } from "@/components/voicenotes/PropertyContextHeader";
 import { RecordButton } from "@/components/voicenotes/RecordButton";
 import { WaveformVisualizer } from "@/components/voicenotes/WaveformVisualizer";
 import { TranscriptPreview } from "@/components/voicenotes/TranscriptPreview";
 import { ManualTranscriptInput } from "@/components/voicenotes/ManualTranscriptInput";
+import { TemplateSelector } from "@/components/voicenotes/TemplateSelector";
+import { TemplateChecklist } from "@/components/voicenotes/TemplateChecklist";
 import { mockPropertyDetail } from "@/data/mockPropertyDetail";
 import { supabase } from "@/integrations/supabase/client";
 import type { StructuredAnalysis } from "@/types/voiceNotes";
+import type { ViewingTemplate } from "@/data/viewingTemplates";
 import {
   Dialog,
   DialogContent,
@@ -21,12 +25,23 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Textarea } from "@/components/ui/textarea";
 
 export default function ViewingNotesRecording() {
   const { id: propertyId } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { updateStats } = useViewingStats();
 
   const {
     isRecording,
@@ -43,7 +58,10 @@ export default function ViewingNotesRecording() {
 
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
+  const [showDiscardDialog, setShowDiscardDialog] = useState(false);
   const [editedTranscript, setEditedTranscript] = useState("");
+  const [selectedTemplate, setSelectedTemplate] = useState<ViewingTemplate | null>(null);
+  const [manualChecks, setManualChecks] = useState<string[]>([]);
 
   // Use mock data for now - in production this would fetch real property
   const property = mockPropertyDetail;
@@ -56,14 +74,28 @@ export default function ViewingNotesRecording() {
     }
   };
 
+  const handleManualCheck = useCallback((itemId: string, checked: boolean) => {
+    setManualChecks((prev) =>
+      checked ? [...prev, itemId] : prev.filter((id) => id !== itemId)
+    );
+  }, []);
+
   const handleDiscard = () => {
     if (transcript.length > 0) {
-      if (window.confirm("Are you sure you want to discard your recording?")) {
-        resetRecording();
-      }
+      setShowDiscardDialog(true);
     } else {
       navigate(`/property/${propertyId}`);
     }
+  };
+
+  const confirmDiscard = () => {
+    resetRecording();
+    setManualChecks([]);
+    setShowDiscardDialog(false);
+    toast({
+      title: "Recording discarded",
+      description: "Your voice note has been deleted.",
+    });
   };
 
   const handleSaveAndAnalyze = async () => {
@@ -84,6 +116,7 @@ export default function ViewingNotesRecording() {
         body: {
           transcript: transcript.trim(),
           propertyAddress: property.address,
+          templateUsed: selectedTemplate?.name,
         },
       });
 
@@ -109,6 +142,7 @@ export default function ViewingNotesRecording() {
             duration_seconds: duration,
             transcript: transcript.trim(),
             structured_analysis: JSON.parse(JSON.stringify(analysis)),
+            template_used: selectedTemplate?.name || null,
           }])
           .select()
           .single();
@@ -116,14 +150,14 @@ export default function ViewingNotesRecording() {
         if (saveError) {
           console.error("Save error:", saveError);
           // Still navigate with analysis even if save fails
-        navigate(`/property/${propertyId}/viewing-notes/temp`, {
-          state: { analysis, transcript: transcript.trim(), duration },
-        });
           navigate(`/property/${propertyId}/viewing-notes/temp`, {
             state: { analysis, transcript: transcript.trim(), duration },
           });
           return;
         }
+
+        // Update user stats and check for badges
+        await updateStats(user.id, duration, selectedTemplate?.name);
 
         toast({
           title: "Analysis complete!",
@@ -168,7 +202,10 @@ export default function ViewingNotesRecording() {
   // Keyboard shortcut for recording
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.code === "Space" && !e.target?.toString().includes("Input")) {
+      const target = e.target as HTMLElement;
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") return;
+      
+      if (e.code === "Space") {
         e.preventDefault();
         handleToggleRecording();
       }
@@ -181,13 +218,42 @@ export default function ViewingNotesRecording() {
   return (
     <AppLayout title="Viewing Notes">
       <div className="flex flex-col h-full min-h-[calc(100vh-4rem)]">
-        {/* Property Context Header */}
-        <PropertyContextHeader
-          propertyId={propertyId || ""}
-          address={property.address}
-          price={property.price}
-          image={property.images[0]}
-        />
+        {/* Header with back button and template selector */}
+        <div className="sticky top-0 z-10 bg-background border-b">
+          <div className="flex items-center justify-between p-4">
+            <div className="flex items-center gap-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => navigate(`/property/${propertyId}`)}
+              >
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              <PropertyContextHeader
+                propertyId={propertyId || ""}
+                address={property.address}
+                price={property.price}
+                image={property.images[0]}
+              />
+            </div>
+            <TemplateSelector
+              selectedTemplate={selectedTemplate}
+              onSelectTemplate={setSelectedTemplate}
+            />
+          </div>
+        </div>
+
+        {/* Template Checklist */}
+        {selectedTemplate && (
+          <div className="flex justify-center px-4 pt-4">
+            <TemplateChecklist
+              template={selectedTemplate}
+              transcript={transcript}
+              manualChecks={manualChecks}
+              onManualCheck={handleManualCheck}
+            />
+          </div>
+        )}
 
         {/* Main Recording Area */}
         <div className="flex-1 flex flex-col items-center justify-center p-6 space-y-8">
@@ -290,6 +356,28 @@ export default function ViewingNotesRecording() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        {/* Discard Confirmation Dialog */}
+        <AlertDialog open={showDiscardDialog} onOpenChange={setShowDiscardDialog}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Discard recording?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This will permanently delete your voice recording and transcript.
+                This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={confirmDiscard}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                Discard
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </AppLayout>
   );

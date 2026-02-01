@@ -565,9 +565,89 @@ export type Database = {
         }
         Relationships: []
       }
+      user_viewing_stats: {
+        Row: {
+          badges_earned: Json | null
+          created_at: string
+          last_viewing_date: string | null
+          most_detailed_note_id: string | null
+          streak_days: number | null
+          total_minutes_recorded: number | null
+          total_viewings: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          badges_earned?: Json | null
+          created_at?: string
+          last_viewing_date?: string | null
+          most_detailed_note_id?: string | null
+          streak_days?: number | null
+          total_minutes_recorded?: number | null
+          total_viewings?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          badges_earned?: Json | null
+          created_at?: string
+          last_viewing_date?: string | null
+          most_detailed_note_id?: string | null
+          streak_days?: number | null
+          total_minutes_recorded?: number | null
+          total_viewings?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_viewing_stats_most_detailed_note_id_fkey"
+            columns: ["most_detailed_note_id"]
+            isOneToOne: false
+            referencedRelation: "voice_notes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      voice_note_shares: {
+        Row: {
+          created_at: string
+          id: string
+          opened_at: string | null
+          shared_by: string
+          shared_with_email: string
+          voice_note_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          opened_at?: string | null
+          shared_by: string
+          shared_with_email: string
+          voice_note_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          opened_at?: string | null
+          shared_by?: string
+          shared_with_email?: string
+          voice_note_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "voice_note_shares_voice_note_id_fkey"
+            columns: ["voice_note_id"]
+            isOneToOne: false
+            referencedRelation: "voice_notes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       voice_notes: {
         Row: {
           audio_url: string | null
+          confidence_score: number | null
           created_at: string
           duration_seconds: number | null
           id: string
@@ -575,12 +655,14 @@ export type Database = {
           property_id: string | null
           recording_date: string
           structured_analysis: Json | null
+          template_used: string | null
           transcript: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           audio_url?: string | null
+          confidence_score?: number | null
           created_at?: string
           duration_seconds?: number | null
           id?: string
@@ -588,12 +670,14 @@ export type Database = {
           property_id?: string | null
           recording_date?: string
           structured_analysis?: Json | null
+          template_used?: string | null
           transcript?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           audio_url?: string | null
+          confidence_score?: number | null
           created_at?: string
           duration_seconds?: number | null
           id?: string
@@ -601,6 +685,7 @@ export type Database = {
           property_id?: string | null
           recording_date?: string
           structured_analysis?: Json | null
+          template_used?: string | null
           transcript?: string | null
           updated_at?: string
           user_id?: string
