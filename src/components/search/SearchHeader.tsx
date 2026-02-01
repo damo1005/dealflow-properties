@@ -108,7 +108,7 @@ export function SearchHeader({ onToggleFilters, filtersVisible, onSearch, isSear
             Filters
           </Button>
           <span className="text-sm text-muted-foreground">
-            <span className="font-medium text-foreground">{totalResults.toLocaleString()}</span> properties found
+            <span className="font-medium text-foreground">{(totalResults ?? 0).toLocaleString()}</span> properties found
           </span>
         </div>
 
