@@ -3,11 +3,12 @@ import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { 
   RotateCcw, 
   Save, 
-  Download, 
   ArrowLeft,
   Lock,
   Calculator,
   TrendingUp,
+  ChevronDown,
+  Download,
 } from "lucide-react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,17 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { useScenarioStore, calculateMetrics } from "@/stores/scenarioStore";
 import { useCalculatorStore, type BTLInputs } from "@/stores/calculatorStore";
@@ -26,9 +38,13 @@ import { SensitivityChart } from "@/components/scenarios/SensitivityChart";
 import { WaterfallChart } from "@/components/scenarios/WaterfallChart";
 import { ScenarioComparisonChart } from "@/components/scenarios/ScenarioComparisonChart";
 import { RiskIndicator } from "@/components/scenarios/RiskIndicator";
+import { ViabilityMeter } from "@/components/scenarios/ViabilityMeter";
+import { CashFlowProjectionChart } from "@/components/scenarios/CashFlowProjectionChart";
+import { BreakEvenChart } from "@/components/scenarios/BreakEvenChart";
 import { SaveScenarioDialog } from "@/components/scenarios/SaveScenarioDialog";
 import { sliderConfigs, applyPresetToInputs, formatCurrency } from "@/lib/scenarioConfig";
 import type { PresetScenario } from "@/types/scenario";
+import { cn } from "@/lib/utils";
 
 export default function ScenarioBuilder() {
   const { id: propertyId } = useParams<{ id: string }>();
@@ -37,7 +53,13 @@ export default function ScenarioBuilder() {
   const { toast } = useToast();
   
   const [showSaveDialog, setShowSaveDialog] = useState(false);
-  const [activeCategory, setActiveCategory] = useState<"purchase" | "financing" | "income" | "expenses">("purchase");
+  const [activeChart, setActiveChart] = useState<"sensitivity" | "cashflow" | "breakeven" | "waterfall" | "comparison">("sensitivity");
+  const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({
+    purchase: true,
+    financing: false,
+    income: false,
+    expenses: false,
+  });
   
   const { btlInputs } = useCalculatorStore();
   const {
@@ -71,6 +93,19 @@ export default function ScenarioBuilder() {
       (key) => currentInputs[key as keyof BTLInputs] !== baseInputs[key as keyof BTLInputs]
     );
   }, [currentInputs, baseInputs]);
+
+  // Count changes per category
+  const categoryChanges = useMemo(() => {
+    const changes: Record<string, number> = { purchase: 0, financing: 0, income: 0, expenses: 0 };
+    sliderConfigs.forEach((config) => {
+      const baseVal = config.getBaseValue(baseInputs);
+      const currentVal = currentInputs[config.key as keyof BTLInputs] as number;
+      if (Math.abs(baseVal - currentVal) > 0.01) {
+        changes[config.category]++;
+      }
+    });
+    return changes;
+  }, [baseInputs, currentInputs]);
 
   // Handle slider change
   const handleSliderChange = useCallback((key: string, value: number) => {
@@ -107,6 +142,11 @@ export default function ScenarioBuilder() {
     navigate("/calculators");
   }, [currentInputs, toast, navigate]);
 
+  // Toggle category
+  const toggleCategory = (category: string) => {
+    setOpenCategories(prev => ({ ...prev, [category]: !prev[category] }));
+  };
+
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -125,7 +165,12 @@ export default function ScenarioBuilder() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [hasChanges, resetToBase]);
 
-  const categorySliders = sliderConfigs.filter((s) => s.category === activeCategory);
+  const categories = [
+    { key: "purchase", label: "Purchase", icon: "🏠" },
+    { key: "financing", label: "Financing", icon: "💰" },
+    { key: "income", label: "Income", icon: "📈" },
+    { key: "expenses", label: "Expenses", icon: "📉" },
+  ] as const;
 
   return (
     <AppLayout title="Scenario Builder">
@@ -143,7 +188,7 @@ export default function ScenarioBuilder() {
                 <TrendingUp className="h-6 w-6 text-primary" />
                 What-If Scenario Builder
               </h1>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 Test different assumptions and see real-time impact on your deal
               </p>
             </div>
@@ -163,9 +208,21 @@ export default function ScenarioBuilder() {
               <Save className="h-4 w-4 mr-2" />
               Save
             </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <Download className="h-4 w-4 mr-2" />
+                  Export
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem>Export as PDF</DropdownMenuItem>
+                <DropdownMenuItem>Export as CSV</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button size="sm" onClick={handleApplyToCalculator}>
               <Calculator className="h-4 w-4 mr-2" />
-              Apply to Calculator
+              Apply
             </Button>
           </div>
         </div>
@@ -173,7 +230,7 @@ export default function ScenarioBuilder() {
         {/* Main Layout */}
         <div className="grid gap-6 lg:grid-cols-5">
           {/* Left Panel - Controls */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-4">
             {/* Base Scenario Card */}
             <Card className="bg-muted/30">
               <CardHeader className="pb-3">
@@ -198,7 +255,12 @@ export default function ScenarioBuilder() {
                   </div>
                   <div>
                     <p className="text-muted-foreground">Cash Flow</p>
-                    <p className="font-medium">{formatCurrency(baseMetrics.monthlyCashFlow)}/mo</p>
+                    <p className={cn(
+                      "font-medium",
+                      baseMetrics.monthlyCashFlow >= 0 ? "text-green-600" : "text-red-600"
+                    )}>
+                      {formatCurrency(baseMetrics.monthlyCashFlow)}/mo
+                    </p>
                   </div>
                 </div>
               </CardContent>
@@ -207,61 +269,94 @@ export default function ScenarioBuilder() {
             {/* Preset Buttons */}
             <PresetButtons onApply={handleApplyPreset} />
 
-            {/* Variable Sliders */}
+            {/* Variable Sliders - Accordion Style */}
             <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg">Adjust Variables</CardTitle>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg flex items-center justify-between">
+                  Adjust Variables
+                  {hasChanges && (
+                    <Badge variant="secondary" className="text-xs">
+                      {Object.values(categoryChanges).reduce((a, b) => a + b, 0)} changed
+                    </Badge>
+                  )}
+                </CardTitle>
               </CardHeader>
               <CardContent className="p-0">
-                <Tabs value={activeCategory} onValueChange={(v) => setActiveCategory(v as typeof activeCategory)}>
-                  <TabsList className="w-full grid grid-cols-4 m-4 mb-0" style={{ width: 'calc(100% - 2rem)' }}>
-                    <TabsTrigger value="purchase" className="text-xs">Purchase</TabsTrigger>
-                    <TabsTrigger value="financing" className="text-xs">Finance</TabsTrigger>
-                    <TabsTrigger value="income" className="text-xs">Income</TabsTrigger>
-                    <TabsTrigger value="expenses" className="text-xs">Costs</TabsTrigger>
-                  </TabsList>
+                <ScrollArea className="h-[400px]">
+                  <div className="p-4 space-y-2">
+                    {categories.map((category) => {
+                      const categorySliders = sliderConfigs.filter((s) => s.category === category.key);
+                      const changeCount = categoryChanges[category.key];
+                      
+                      return (
+                        <Collapsible
+                          key={category.key}
+                          open={openCategories[category.key]}
+                          onOpenChange={() => toggleCategory(category.key)}
+                        >
+                          <CollapsibleTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              className="w-full justify-between p-3 h-auto"
+                            >
+                              <span className="flex items-center gap-2">
+                                <span>{category.icon}</span>
+                                <span className="font-medium">{category.label}</span>
+                                {changeCount > 0 && (
+                                  <Badge variant="secondary" className="text-xs h-5">
+                                    {changeCount}
+                                  </Badge>
+                                )}
+                              </span>
+                              <ChevronDown className={cn(
+                                "h-4 w-4 transition-transform",
+                                openCategories[category.key] && "rotate-180"
+                              )} />
+                            </Button>
+                          </CollapsibleTrigger>
+                          <CollapsibleContent className="space-y-2 pt-2">
+                            {categorySliders.map((config) => {
+                              const baseValue = config.getBaseValue(baseInputs);
+                              const currentValue = currentInputs[config.key as keyof BTLInputs] as number;
+                              
+                              // Determine actual min/max based on unit type
+                              let min = config.min;
+                              let max = config.max;
+                              
+                              if (config.key === "purchasePrice") {
+                                min = baseInputs.purchasePrice * 0.8;
+                                max = baseInputs.purchasePrice * 1.2;
+                              } else if (config.key === "monthlyRent") {
+                                min = baseInputs.monthlyRent * 0.7;
+                                max = baseInputs.monthlyRent * 1.3;
+                              } else if (config.key === "refurbCosts") {
+                                min = 0;
+                                max = Math.max(50000, baseInputs.refurbCosts * 2);
+                              }
 
-                  <ScrollArea className="h-[400px]">
-                    <div className="p-4 space-y-3">
-                      {categorySliders.map((config) => {
-                        const baseValue = config.getBaseValue(baseInputs);
-                        const currentValue = currentInputs[config.key as keyof BTLInputs] as number;
-                        
-                        // Determine actual min/max based on unit type
-                        let min = config.min;
-                        let max = config.max;
-                        
-                        if (config.key === "purchasePrice") {
-                          min = baseInputs.purchasePrice * 0.8;
-                          max = baseInputs.purchasePrice * 1.2;
-                        } else if (config.key === "monthlyRent") {
-                          min = baseInputs.monthlyRent * 0.7;
-                          max = baseInputs.monthlyRent * 1.3;
-                        } else if (config.key === "refurbCosts") {
-                          min = 0;
-                          max = Math.max(50000, baseInputs.refurbCosts * 2);
-                        }
-
-                        return (
-                          <ScenarioSlider
-                            key={config.key}
-                            label={config.label}
-                            description={config.description}
-                            value={currentValue}
-                            baseValue={baseValue}
-                            min={min}
-                            max={max}
-                            step={config.key === "purchasePrice" ? 1000 : 
-                                  config.key === "monthlyRent" ? 25 :
-                                  config.step}
-                            unit={config.unit}
-                            onChange={(v) => handleSliderChange(config.key, v)}
-                          />
-                        );
-                      })}
-                    </div>
-                  </ScrollArea>
-                </Tabs>
+                              return (
+                                <ScenarioSlider
+                                  key={config.key}
+                                  label={config.label}
+                                  description={config.description}
+                                  value={currentValue}
+                                  baseValue={baseValue}
+                                  min={min}
+                                  max={max}
+                                  step={config.key === "purchasePrice" ? 1000 : 
+                                        config.key === "monthlyRent" ? 25 :
+                                        config.step}
+                                  unit={config.unit}
+                                  onChange={(v) => handleSliderChange(config.key, v)}
+                                />
+                              );
+                            })}
+                          </CollapsibleContent>
+                        </Collapsible>
+                      );
+                    })}
+                  </div>
+                </ScrollArea>
               </CardContent>
             </Card>
 
@@ -333,28 +428,58 @@ export default function ScenarioBuilder() {
                   </div>
                   <div className="text-right">
                     <p className="text-sm text-muted-foreground">Current buffer</p>
-                    <p className="text-lg font-bold text-green-600">
-                      +{formatCurrency(currentInputs.monthlyRent - currentMetrics.breakEvenRent)}/mo
+                    <p className={cn(
+                      "text-lg font-bold",
+                      currentInputs.monthlyRent >= currentMetrics.breakEvenRent ? "text-green-600" : "text-red-600"
+                    )}>
+                      {currentInputs.monthlyRent >= currentMetrics.breakEvenRent ? "+" : ""}
+                      {formatCurrency(currentInputs.monthlyRent - currentMetrics.breakEvenRent)}/mo
                     </p>
                   </div>
                 </CardContent>
               </Card>
             )}
 
-            {/* Charts */}
+            {/* Viability Meter and Risk Indicator */}
             <div className="grid gap-6 lg:grid-cols-2">
-              <SensitivityChart baseInputs={baseInputs} currentInputs={currentInputs} />
-              <WaterfallChart inputs={currentInputs} />
-            </div>
-
-            <div className="grid gap-6 lg:grid-cols-2">
-              <ScenarioComparisonChart
+              <ViabilityMeter
+                metrics={currentMetrics}
                 baseMetrics={baseMetrics}
-                currentMetrics={currentMetrics}
-                variations={variations}
+                inputs={currentInputs}
               />
               <RiskIndicator metrics={currentMetrics} inputs={currentInputs} />
             </div>
+
+            {/* Charts with Tabs */}
+            <Tabs value={activeChart} onValueChange={(v) => setActiveChart(v as typeof activeChart)}>
+              <TabsList className="grid w-full grid-cols-5 mb-4">
+                <TabsTrigger value="sensitivity" className="text-xs">Sensitivity</TabsTrigger>
+                <TabsTrigger value="cashflow" className="text-xs">Projection</TabsTrigger>
+                <TabsTrigger value="breakeven" className="text-xs">Break-even</TabsTrigger>
+                <TabsTrigger value="waterfall" className="text-xs">Waterfall</TabsTrigger>
+                <TabsTrigger value="comparison" className="text-xs">Compare</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="sensitivity">
+                <SensitivityChart baseInputs={baseInputs} currentInputs={currentInputs} />
+              </TabsContent>
+              <TabsContent value="cashflow">
+                <CashFlowProjectionChart inputs={currentInputs} />
+              </TabsContent>
+              <TabsContent value="breakeven">
+                <BreakEvenChart inputs={currentInputs} />
+              </TabsContent>
+              <TabsContent value="waterfall">
+                <WaterfallChart inputs={currentInputs} />
+              </TabsContent>
+              <TabsContent value="comparison">
+                <ScenarioComparisonChart
+                  baseMetrics={baseMetrics}
+                  currentMetrics={currentMetrics}
+                  variations={variations}
+                />
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
 

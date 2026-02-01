@@ -409,6 +409,39 @@ export type Database = {
           },
         ]
       }
+      market_conditions: {
+        Row: {
+          avg_mortgage_rate: number | null
+          avg_yields_by_area: Json | null
+          boe_base_rate: number | null
+          created_at: string | null
+          data_source: string | null
+          id: string
+          inflation_rate: number | null
+          snapshot_date: string | null
+        }
+        Insert: {
+          avg_mortgage_rate?: number | null
+          avg_yields_by_area?: Json | null
+          boe_base_rate?: number | null
+          created_at?: string | null
+          data_source?: string | null
+          id?: string
+          inflation_rate?: number | null
+          snapshot_date?: string | null
+        }
+        Update: {
+          avg_mortgage_rate?: number | null
+          avg_yields_by_area?: Json | null
+          boe_base_rate?: number | null
+          created_at?: string | null
+          data_source?: string | null
+          id?: string
+          inflation_rate?: number | null
+          snapshot_date?: string | null
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           clicked: boolean | null
@@ -705,6 +738,42 @@ export type Database = {
           in_app_notifications_enabled?: boolean | null
           max_emails_per_day?: number | null
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_risk_profiles: {
+        Row: {
+          created_at: string | null
+          investment_goals: Json | null
+          max_ltv_percentage: number | null
+          max_negative_cashflow: number | null
+          min_yield_percentage: number | null
+          preferred_strategies: string[] | null
+          risk_tolerance: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          investment_goals?: Json | null
+          max_ltv_percentage?: number | null
+          max_negative_cashflow?: number | null
+          min_yield_percentage?: number | null
+          preferred_strategies?: string[] | null
+          risk_tolerance?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          investment_goals?: Json | null
+          max_ltv_percentage?: number | null
+          max_negative_cashflow?: number | null
+          min_yield_percentage?: number | null
+          preferred_strategies?: string[] | null
+          risk_tolerance?: string | null
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: []
