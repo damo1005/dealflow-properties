@@ -70,6 +70,16 @@ import Rewards from "./pages/Rewards";
 import BankTransactions from "./pages/BankTransactions";
 import MileageTracker from "./pages/MileageTracker";
 import RegionalCalculators from "./pages/RegionalCalculators";
+import RentGuarantee from "./pages/RentGuarantee";
+import Utilities from "./pages/Utilities";
+import DevelopmentAppraisal from "./pages/DevelopmentAppraisal";
+import BridgingCalculator from "./pages/BridgingCalculator";
+import VirtualTours from "./pages/VirtualTours";
+import Accreditations from "./pages/Accreditations";
+import Companies from "./pages/Companies";
+import RentalListings from "./pages/RentalListings";
+import SmartHome from "./pages/SmartHome";
+import CarbonFootprint from "./pages/CarbonFootprint";
 import { AIChatWidget } from "./components/copilot/AIChatWidget";
 // Admin pages
 import {
@@ -470,6 +480,20 @@ const App = () => (
             <Route path="/portfolio/bank-transactions" element={<ProtectedRoute><BankTransactions /></ProtectedRoute>} />
             <Route path="/tools/mileage" element={<ProtectedRoute><MileageTracker /></ProtectedRoute>} />
             <Route path="/calculators/regional" element={<ProtectedRoute><RegionalCalculators /></ProtectedRoute>} />
+            <Route path="/calculators/bridging" element={<ProtectedRoute><BridgingCalculator /></ProtectedRoute>} />
+            
+            {/* Phase 13 routes */}
+            <Route path="/insurance/rent-guarantee" element={<ProtectedRoute><RentGuarantee /></ProtectedRoute>} />
+            <Route path="/portfolio/utilities" element={<ProtectedRoute><Utilities /></ProtectedRoute>} />
+            <Route path="/tools/development-appraisal" element={<ProtectedRoute><DevelopmentAppraisal /></ProtectedRoute>} />
+            <Route path="/portfolio/virtual-tours" element={<ProtectedRoute><VirtualTours /></ProtectedRoute>} />
+            
+            {/* Phase 14 routes */}
+            <Route path="/compliance/accreditations" element={<ProtectedRoute><Accreditations /></ProtectedRoute>} />
+            <Route path="/companies" element={<ProtectedRoute><Companies /></ProtectedRoute>} />
+            <Route path="/lettings/listings" element={<ProtectedRoute><RentalListings /></ProtectedRoute>} />
+            <Route path="/portfolio/smart-home" element={<ProtectedRoute><SmartHome /></ProtectedRoute>} />
+            <Route path="/tools/carbon" element={<ProtectedRoute><CarbonFootprint /></ProtectedRoute>} />
 
             {/* Admin routes */}
             <Route path="/admin" element={<AdminDashboard />} />

@@ -1719,6 +1719,107 @@ export type Database = {
           },
         ]
       }
+      carbon_assessments: {
+        Row: {
+          assessment_year: number | null
+          carbon_per_sqm: number | null
+          carbon_rating: string | null
+          created_at: string | null
+          electricity_carbon: number | null
+          electricity_kwh: number | null
+          gas_carbon: number | null
+          gas_kwh: number | null
+          id: string
+          oil_carbon: number | null
+          oil_litres: number | null
+          portfolio_property_id: string | null
+          total_carbon: number | null
+          uk_average_carbon: number | null
+          user_id: string
+          vs_average_percent: number | null
+        }
+        Insert: {
+          assessment_year?: number | null
+          carbon_per_sqm?: number | null
+          carbon_rating?: string | null
+          created_at?: string | null
+          electricity_carbon?: number | null
+          electricity_kwh?: number | null
+          gas_carbon?: number | null
+          gas_kwh?: number | null
+          id?: string
+          oil_carbon?: number | null
+          oil_litres?: number | null
+          portfolio_property_id?: string | null
+          total_carbon?: number | null
+          uk_average_carbon?: number | null
+          user_id: string
+          vs_average_percent?: number | null
+        }
+        Update: {
+          assessment_year?: number | null
+          carbon_per_sqm?: number | null
+          carbon_rating?: string | null
+          created_at?: string | null
+          electricity_carbon?: number | null
+          electricity_kwh?: number | null
+          gas_carbon?: number | null
+          gas_kwh?: number | null
+          id?: string
+          oil_carbon?: number | null
+          oil_litres?: number | null
+          portfolio_property_id?: string | null
+          total_carbon?: number | null
+          uk_average_carbon?: number | null
+          user_id?: string
+          vs_average_percent?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "carbon_assessments_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      carbon_offsets: {
+        Row: {
+          certificate_url: string | null
+          cost: number | null
+          created_at: string | null
+          id: string
+          project_name: string | null
+          provider: string | null
+          purchase_date: string | null
+          tonnes_offset: number | null
+          user_id: string
+        }
+        Insert: {
+          certificate_url?: string | null
+          cost?: number | null
+          created_at?: string | null
+          id?: string
+          project_name?: string | null
+          provider?: string | null
+          purchase_date?: string | null
+          tonnes_offset?: number | null
+          user_id: string
+        }
+        Update: {
+          certificate_url?: string | null
+          cost?: number | null
+          created_at?: string | null
+          id?: string
+          project_name?: string | null
+          provider?: string | null
+          purchase_date?: string | null
+          tonnes_offset?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       channel_blocks: {
         Row: {
           created_at: string | null
@@ -2063,6 +2164,53 @@ export type Database = {
             columns: ["referral_id"]
             isOneToOne: false
             referencedRelation: "referrals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_filings: {
+        Row: {
+          company_id: string | null
+          created_at: string | null
+          due_date: string
+          filed_date: string | null
+          filing_reference: string | null
+          filing_type: string
+          id: string
+          period_end: string | null
+          period_start: string | null
+          status: string | null
+        }
+        Insert: {
+          company_id?: string | null
+          created_at?: string | null
+          due_date: string
+          filed_date?: string | null
+          filing_reference?: string | null
+          filing_type: string
+          id?: string
+          period_end?: string | null
+          period_start?: string | null
+          status?: string | null
+        }
+        Update: {
+          company_id?: string | null
+          created_at?: string | null
+          due_date?: string
+          filed_date?: string | null
+          filing_reference?: string | null
+          filing_type?: string
+          id?: string
+          period_end?: string | null
+          period_start?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_filings_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "property_companies"
             referencedColumns: ["id"]
           },
         ]
@@ -3019,6 +3167,50 @@ export type Database = {
             columns: ["conversation_id"]
             isOneToOne: false
             referencedRelation: "copilot_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cpd_activities: {
+        Row: {
+          accreditation_id: string | null
+          activity_date: string | null
+          activity_name: string
+          certificate_url: string | null
+          created_at: string | null
+          hours: number | null
+          id: string
+          provider: string | null
+          user_id: string
+        }
+        Insert: {
+          accreditation_id?: string | null
+          activity_date?: string | null
+          activity_name: string
+          certificate_url?: string | null
+          created_at?: string | null
+          hours?: number | null
+          id?: string
+          provider?: string | null
+          user_id: string
+        }
+        Update: {
+          accreditation_id?: string | null
+          activity_date?: string | null
+          activity_name?: string
+          certificate_url?: string | null
+          created_at?: string | null
+          hours?: number | null
+          id?: string
+          provider?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cpd_activities_accreditation_id_fkey"
+            columns: ["accreditation_id"]
+            isOneToOne: false
+            referencedRelation: "landlord_accreditations"
             referencedColumns: ["id"]
           },
         ]
@@ -4097,6 +4289,145 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      device_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          alert_type: string
+          created_at: string | null
+          device_id: string | null
+          id: string
+          message: string | null
+          portfolio_property_id: string | null
+          resolved_at: string | null
+          severity: string | null
+          status: string | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          alert_type: string
+          created_at?: string | null
+          device_id?: string | null
+          id?: string
+          message?: string | null
+          portfolio_property_id?: string | null
+          resolved_at?: string | null
+          severity?: string | null
+          status?: string | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          alert_type?: string
+          created_at?: string | null
+          device_id?: string | null
+          id?: string
+          message?: string | null
+          portfolio_property_id?: string | null
+          resolved_at?: string | null
+          severity?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "device_alerts_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "smart_devices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "device_alerts_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      device_readings: {
+        Row: {
+          device_id: string | null
+          id: string
+          reading_type: string | null
+          reading_unit: string | null
+          reading_value: number | null
+          recorded_at: string | null
+        }
+        Insert: {
+          device_id?: string | null
+          id?: string
+          reading_type?: string | null
+          reading_unit?: string | null
+          reading_value?: number | null
+          recorded_at?: string | null
+        }
+        Update: {
+          device_id?: string | null
+          id?: string
+          reading_type?: string | null
+          reading_unit?: string | null
+          reading_value?: number | null
+          recorded_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "device_readings_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "smart_devices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      director_loans: {
+        Row: {
+          amount: number | null
+          amount_repaid: number | null
+          balance: number | null
+          company_id: string | null
+          created_at: string | null
+          direction: string | null
+          director_name: string | null
+          id: string
+          interest_rate: number | null
+          loan_date: string | null
+          status: string | null
+        }
+        Insert: {
+          amount?: number | null
+          amount_repaid?: number | null
+          balance?: number | null
+          company_id?: string | null
+          created_at?: string | null
+          direction?: string | null
+          director_name?: string | null
+          id?: string
+          interest_rate?: number | null
+          loan_date?: string | null
+          status?: string | null
+        }
+        Update: {
+          amount?: number | null
+          amount_repaid?: number | null
+          balance?: number | null
+          company_id?: string | null
+          created_at?: string | null
+          direction?: string | null
+          director_name?: string | null
+          id?: string
+          interest_rate?: number | null
+          loan_date?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "director_loans_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "property_companies"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       distressed_properties: {
         Row: {
@@ -6679,6 +7010,60 @@ export type Database = {
           title_plan_url?: string | null
           updated_at?: string | null
           uprn?: string | null
+        }
+        Relationships: []
+      }
+      landlord_accreditations: {
+        Row: {
+          accreditation_level: string | null
+          annual_fee: number | null
+          auto_renew: boolean | null
+          certificate_url: string | null
+          cpd_hours_completed: number | null
+          cpd_hours_required: number | null
+          created_at: string | null
+          expiry_date: string | null
+          id: string
+          membership_number: string | null
+          provider: string | null
+          scheme_name: string
+          start_date: string | null
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          accreditation_level?: string | null
+          annual_fee?: number | null
+          auto_renew?: boolean | null
+          certificate_url?: string | null
+          cpd_hours_completed?: number | null
+          cpd_hours_required?: number | null
+          created_at?: string | null
+          expiry_date?: string | null
+          id?: string
+          membership_number?: string | null
+          provider?: string | null
+          scheme_name: string
+          start_date?: string | null
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          accreditation_level?: string | null
+          annual_fee?: number | null
+          auto_renew?: boolean | null
+          certificate_url?: string | null
+          cpd_hours_completed?: number | null
+          cpd_hours_required?: number | null
+          created_at?: string | null
+          expiry_date?: string | null
+          id?: string
+          membership_number?: string | null
+          provider?: string | null
+          scheme_name?: string
+          start_date?: string | null
+          status?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -9438,6 +9823,63 @@ export type Database = {
           },
         ]
       }
+      property_companies: {
+        Row: {
+          account_number_masked: string | null
+          accounting_reference_date: string | null
+          bank_name: string | null
+          company_name: string
+          company_number: string | null
+          company_type: string | null
+          created_at: string | null
+          directors: Json | null
+          id: string
+          incorporation_date: string | null
+          registered_address: string | null
+          shareholders: Json | null
+          user_id: string
+          vat_number: string | null
+          vat_registered: boolean | null
+          year_end_month: number | null
+        }
+        Insert: {
+          account_number_masked?: string | null
+          accounting_reference_date?: string | null
+          bank_name?: string | null
+          company_name: string
+          company_number?: string | null
+          company_type?: string | null
+          created_at?: string | null
+          directors?: Json | null
+          id?: string
+          incorporation_date?: string | null
+          registered_address?: string | null
+          shareholders?: Json | null
+          user_id: string
+          vat_number?: string | null
+          vat_registered?: boolean | null
+          year_end_month?: number | null
+        }
+        Update: {
+          account_number_masked?: string | null
+          accounting_reference_date?: string | null
+          bank_name?: string | null
+          company_name?: string
+          company_number?: string | null
+          company_type?: string | null
+          created_at?: string | null
+          directors?: Json | null
+          id?: string
+          incorporation_date?: string | null
+          registered_address?: string | null
+          shareholders?: Json | null
+          user_id?: string
+          vat_number?: string | null
+          vat_registered?: boolean | null
+          year_end_month?: number | null
+        }
+        Relationships: []
+      }
       property_expenses: {
         Row: {
           amount: number
@@ -9603,6 +10045,68 @@ export type Database = {
           },
           {
             foreignKeyName: "property_issues_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_licenses: {
+        Row: {
+          application_date: string | null
+          application_fee: number | null
+          conditions: Json | null
+          created_at: string | null
+          expiry_date: string | null
+          granted_date: string | null
+          id: string
+          license_document_url: string | null
+          license_number: string | null
+          license_type: string
+          local_authority: string
+          max_occupants: number | null
+          portfolio_property_id: string | null
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          application_date?: string | null
+          application_fee?: number | null
+          conditions?: Json | null
+          created_at?: string | null
+          expiry_date?: string | null
+          granted_date?: string | null
+          id?: string
+          license_document_url?: string | null
+          license_number?: string | null
+          license_type: string
+          local_authority: string
+          max_occupants?: number | null
+          portfolio_property_id?: string | null
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          application_date?: string | null
+          application_fee?: number | null
+          conditions?: Json | null
+          created_at?: string | null
+          expiry_date?: string | null
+          granted_date?: string | null
+          id?: string
+          license_document_url?: string | null
+          license_number?: string | null
+          license_type?: string
+          local_authority?: string
+          max_occupants?: number | null
+          portfolio_property_id?: string | null
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_licenses_portfolio_property_id_fkey"
             columns: ["portfolio_property_id"]
             isOneToOne: false
             referencedRelation: "portfolio_properties"
@@ -10453,6 +10957,142 @@ export type Database = {
           property_type?: string | null
         }
         Relationships: []
+      }
+      rental_listings: {
+        Row: {
+          accept_dss: boolean | null
+          accept_pets: boolean | null
+          accept_smokers: boolean | null
+          asking_rent: number
+          available_from: string | null
+          bidding_enabled: boolean | null
+          bidding_end_date: string | null
+          created_at: string | null
+          enquiry_count: number | null
+          id: string
+          min_acceptable_rent: number | null
+          min_tenancy_months: number | null
+          portfolio_property_id: string | null
+          show_highest_bid: boolean | null
+          status: string | null
+          user_id: string
+          view_count: number | null
+        }
+        Insert: {
+          accept_dss?: boolean | null
+          accept_pets?: boolean | null
+          accept_smokers?: boolean | null
+          asking_rent: number
+          available_from?: string | null
+          bidding_enabled?: boolean | null
+          bidding_end_date?: string | null
+          created_at?: string | null
+          enquiry_count?: number | null
+          id?: string
+          min_acceptable_rent?: number | null
+          min_tenancy_months?: number | null
+          portfolio_property_id?: string | null
+          show_highest_bid?: boolean | null
+          status?: string | null
+          user_id: string
+          view_count?: number | null
+        }
+        Update: {
+          accept_dss?: boolean | null
+          accept_pets?: boolean | null
+          accept_smokers?: boolean | null
+          asking_rent?: number
+          available_from?: string | null
+          bidding_enabled?: boolean | null
+          bidding_end_date?: string | null
+          created_at?: string | null
+          enquiry_count?: number | null
+          id?: string
+          min_acceptable_rent?: number | null
+          min_tenancy_months?: number | null
+          portfolio_property_id?: string | null
+          show_highest_bid?: boolean | null
+          status?: string | null
+          user_id?: string
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rental_listings_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rental_offers: {
+        Row: {
+          annual_income: number | null
+          applicant_email: string
+          applicant_name: string
+          applicant_phone: string | null
+          cover_message: string | null
+          created_at: string | null
+          employment_status: string | null
+          has_pets: boolean | null
+          id: string
+          landlord_notes: string | null
+          listing_id: string | null
+          move_in_date: string | null
+          num_occupants: number | null
+          offered_rent: number
+          pet_details: string | null
+          status: string | null
+          tenancy_length_months: number | null
+        }
+        Insert: {
+          annual_income?: number | null
+          applicant_email: string
+          applicant_name: string
+          applicant_phone?: string | null
+          cover_message?: string | null
+          created_at?: string | null
+          employment_status?: string | null
+          has_pets?: boolean | null
+          id?: string
+          landlord_notes?: string | null
+          listing_id?: string | null
+          move_in_date?: string | null
+          num_occupants?: number | null
+          offered_rent: number
+          pet_details?: string | null
+          status?: string | null
+          tenancy_length_months?: number | null
+        }
+        Update: {
+          annual_income?: number | null
+          applicant_email?: string
+          applicant_name?: string
+          applicant_phone?: string | null
+          cover_message?: string | null
+          created_at?: string | null
+          employment_status?: string | null
+          has_pets?: boolean | null
+          id?: string
+          landlord_notes?: string | null
+          listing_id?: string | null
+          move_in_date?: string | null
+          num_occupants?: number | null
+          offered_rent?: number
+          pet_details?: string | null
+          status?: string | null
+          tenancy_length_months?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rental_offers_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "rental_listings"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       report_sections: {
         Row: {
@@ -11841,6 +12481,68 @@ export type Database = {
             columns: ["request_id"]
             isOneToOne: false
             referencedRelation: "signature_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      smart_devices: {
+        Row: {
+          alerts_enabled: boolean | null
+          battery_level: number | null
+          created_at: string | null
+          device_name: string | null
+          device_type: string
+          external_id: string | null
+          id: string
+          is_online: boolean | null
+          last_seen_at: string | null
+          manufacturer: string | null
+          model: string | null
+          platform: string | null
+          portfolio_property_id: string | null
+          room: string | null
+          user_id: string
+        }
+        Insert: {
+          alerts_enabled?: boolean | null
+          battery_level?: number | null
+          created_at?: string | null
+          device_name?: string | null
+          device_type: string
+          external_id?: string | null
+          id?: string
+          is_online?: boolean | null
+          last_seen_at?: string | null
+          manufacturer?: string | null
+          model?: string | null
+          platform?: string | null
+          portfolio_property_id?: string | null
+          room?: string | null
+          user_id: string
+        }
+        Update: {
+          alerts_enabled?: boolean | null
+          battery_level?: number | null
+          created_at?: string | null
+          device_name?: string | null
+          device_type?: string
+          external_id?: string | null
+          id?: string
+          is_online?: boolean | null
+          last_seen_at?: string | null
+          manufacturer?: string | null
+          model?: string | null
+          platform?: string | null
+          portfolio_property_id?: string | null
+          room?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "smart_devices_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
             referencedColumns: ["id"]
           },
         ]
