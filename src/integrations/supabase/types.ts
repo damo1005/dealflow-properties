@@ -406,6 +406,284 @@ export type Database = {
         }
         Relationships: []
       }
+      auction_houses: {
+        Row: {
+          buyer_premium_pct: number | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          last_sync_at: string | null
+          logo_url: string | null
+          name: string
+          regions: string[] | null
+          website: string | null
+        }
+        Insert: {
+          buyer_premium_pct?: number | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          logo_url?: string | null
+          name: string
+          regions?: string[] | null
+          website?: string | null
+        }
+        Update: {
+          buyer_premium_pct?: number | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          logo_url?: string | null
+          name?: string
+          regions?: string[] | null
+          website?: string | null
+        }
+        Relationships: []
+      }
+      auction_lots: {
+        Row: {
+          address: string
+          ai_score: number | null
+          auction_id: string | null
+          bedrooms: number | null
+          buyer_premium: number | null
+          created_at: string | null
+          description: string | null
+          estimated_value: number | null
+          guide_price: number | null
+          has_issues: boolean | null
+          has_tenants: boolean | null
+          id: string
+          images: string[] | null
+          issues_summary: string | null
+          legal_pack_url: string | null
+          lot_number: string
+          opportunity_flags: Json | null
+          postcode: string | null
+          property_type: string | null
+          reserve_price: number | null
+          risk_flags: Json | null
+          sale_price: number | null
+          sold: boolean | null
+          status: string | null
+          tenure: string | null
+          total_price: number | null
+        }
+        Insert: {
+          address: string
+          ai_score?: number | null
+          auction_id?: string | null
+          bedrooms?: number | null
+          buyer_premium?: number | null
+          created_at?: string | null
+          description?: string | null
+          estimated_value?: number | null
+          guide_price?: number | null
+          has_issues?: boolean | null
+          has_tenants?: boolean | null
+          id?: string
+          images?: string[] | null
+          issues_summary?: string | null
+          legal_pack_url?: string | null
+          lot_number: string
+          opportunity_flags?: Json | null
+          postcode?: string | null
+          property_type?: string | null
+          reserve_price?: number | null
+          risk_flags?: Json | null
+          sale_price?: number | null
+          sold?: boolean | null
+          status?: string | null
+          tenure?: string | null
+          total_price?: number | null
+        }
+        Update: {
+          address?: string
+          ai_score?: number | null
+          auction_id?: string | null
+          bedrooms?: number | null
+          buyer_premium?: number | null
+          created_at?: string | null
+          description?: string | null
+          estimated_value?: number | null
+          guide_price?: number | null
+          has_issues?: boolean | null
+          has_tenants?: boolean | null
+          id?: string
+          images?: string[] | null
+          issues_summary?: string | null
+          legal_pack_url?: string | null
+          lot_number?: string
+          opportunity_flags?: Json | null
+          postcode?: string | null
+          property_type?: string | null
+          reserve_price?: number | null
+          risk_flags?: Json | null
+          sale_price?: number | null
+          sold?: boolean | null
+          status?: string | null
+          tenure?: string | null
+          total_price?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "auction_lots_auction_id_fkey"
+            columns: ["auction_id"]
+            isOneToOne: false
+            referencedRelation: "auctions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      auction_watches: {
+        Row: {
+          bid_rationale: string | null
+          created_at: string | null
+          id: string
+          lot_id: string | null
+          max_bid: number | null
+          notes: string | null
+          remind_before_hours: number | null
+          reminded: boolean | null
+          user_id: string
+        }
+        Insert: {
+          bid_rationale?: string | null
+          created_at?: string | null
+          id?: string
+          lot_id?: string | null
+          max_bid?: number | null
+          notes?: string | null
+          remind_before_hours?: number | null
+          reminded?: boolean | null
+          user_id: string
+        }
+        Update: {
+          bid_rationale?: string | null
+          created_at?: string | null
+          id?: string
+          lot_id?: string | null
+          max_bid?: number | null
+          notes?: string | null
+          remind_before_hours?: number | null
+          reminded?: boolean | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "auction_watches_lot_id_fkey"
+            columns: ["lot_id"]
+            isOneToOne: false
+            referencedRelation: "auction_lots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      auctions: {
+        Row: {
+          auction_date: string
+          auction_house_id: string | null
+          auction_type: string | null
+          avg_sale_vs_guide: number | null
+          catalogue_url: string | null
+          created_at: string | null
+          id: string
+          lots_sold: number | null
+          name: string
+          status: string | null
+          total_lots: number | null
+        }
+        Insert: {
+          auction_date: string
+          auction_house_id?: string | null
+          auction_type?: string | null
+          avg_sale_vs_guide?: number | null
+          catalogue_url?: string | null
+          created_at?: string | null
+          id?: string
+          lots_sold?: number | null
+          name: string
+          status?: string | null
+          total_lots?: number | null
+        }
+        Update: {
+          auction_date?: string
+          auction_house_id?: string | null
+          auction_type?: string | null
+          avg_sale_vs_guide?: number | null
+          catalogue_url?: string | null
+          created_at?: string | null
+          id?: string
+          lots_sold?: number | null
+          name?: string
+          status?: string | null
+          total_lots?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "auctions_auction_house_id_fkey"
+            columns: ["auction_house_id"]
+            isOneToOne: false
+            referencedRelation: "auction_houses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bid_calculations: {
+        Row: {
+          created_at: string | null
+          id: string
+          lot_id: string | null
+          max_bid: number | null
+          purchase_costs: Json | null
+          recommended_bid: number | null
+          refurb_costs: number | null
+          strategy: string | null
+          target_profit: number | null
+          target_yield: number | null
+          user_id: string
+          walk_away_price: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          lot_id?: string | null
+          max_bid?: number | null
+          purchase_costs?: Json | null
+          recommended_bid?: number | null
+          refurb_costs?: number | null
+          strategy?: string | null
+          target_profit?: number | null
+          target_yield?: number | null
+          user_id: string
+          walk_away_price?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          lot_id?: string | null
+          max_bid?: number | null
+          purchase_costs?: Json | null
+          recommended_bid?: number | null
+          refurb_costs?: number | null
+          strategy?: string | null
+          target_profit?: number | null
+          target_yield?: number | null
+          user_id?: string
+          walk_away_price?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bid_calculations_lot_id_fkey"
+            columns: ["lot_id"]
+            isOneToOne: false
+            referencedRelation: "auction_lots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       brand_profiles: {
         Row: {
           address: string | null
