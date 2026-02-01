@@ -45,6 +45,7 @@ import STRManagement from "./pages/STRManagement";
 import Conveyancing from "./pages/Conveyancing";
 import Contractors from "./pages/Contractors";
 import Reports from "./pages/Reports";
+import DealAnalyser from "./pages/DealAnalyser";
 import NotFound from "./pages/NotFound";
 
 // Admin pages
@@ -353,6 +354,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Reports />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/tools/deal-analyser"
+              element={
+                <ProtectedRoute>
+                  <DealAnalyser />
                 </ProtectedRoute>
               }
             />
