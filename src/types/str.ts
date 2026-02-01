@@ -15,6 +15,13 @@ export type TemplateType =
 
 export type BlockReason = 'maintenance' | 'personal_use' | 'blocked' | 'other';
 
+export type PlatformName = 
+  | 'airbnb' | 'booking_com' | 'vrbo' | 'expedia' 
+  | 'tripadvisor' | 'google' | 'hotels_com' | 'agoda'
+  | 'plum_guide' | 'marriott' | 'direct';
+
+export type ChannelBlockReason = 'booked_other_platform' | 'maintenance' | 'personal' | 'manual';
+
 export interface STRProperty {
   id: string;
   user_id: string;
@@ -161,6 +168,49 @@ export interface CalendarBlock {
   end_date: string;
   reason?: BlockReason;
   notes?: string;
+  created_at?: string;
+}
+
+export interface PlatformConnection {
+  id: string;
+  str_property_id: string;
+  platform_name: PlatformName;
+  listing_url?: string;
+  ical_url?: string;
+  is_active: boolean;
+  last_synced_at?: string;
+  sync_frequency?: string;
+  sync_errors: number;
+  last_error?: string;
+  total_bookings: number;
+  total_revenue: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ChannelBlock {
+  id: string;
+  str_property_id: string;
+  start_date: string;
+  end_date: string;
+  reason?: ChannelBlockReason;
+  source_platform?: string;
+  notes?: string;
+  created_at?: string;
+}
+
+export interface PlatformPerformance {
+  id: string;
+  platform_connection_id: string;
+  period_start: string;
+  period_end: string;
+  bookings_count: number;
+  nights_booked: number;
+  gross_revenue: number;
+  platform_fees: number;
+  net_revenue: number;
+  average_nightly_rate?: number;
+  occupancy_rate?: number;
   created_at?: string;
 }
 

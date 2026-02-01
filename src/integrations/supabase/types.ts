@@ -1069,6 +1069,47 @@ export type Database = {
           },
         ]
       }
+      channel_blocks: {
+        Row: {
+          created_at: string | null
+          end_date: string
+          id: string
+          notes: string | null
+          reason: string | null
+          source_platform: string | null
+          start_date: string
+          str_property_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          end_date: string
+          id?: string
+          notes?: string | null
+          reason?: string | null
+          source_platform?: string | null
+          start_date: string
+          str_property_id: string
+        }
+        Update: {
+          created_at?: string | null
+          end_date?: string
+          id?: string
+          notes?: string | null
+          reason?: string | null
+          source_platform?: string | null
+          start_date?: string
+          str_property_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "channel_blocks_str_property_id_fkey"
+            columns: ["str_property_id"]
+            isOneToOne: false
+            referencedRelation: "str_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cma_reports: {
         Row: {
           active_comparables: Json | null
@@ -3438,6 +3479,118 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_connections: {
+        Row: {
+          created_at: string | null
+          ical_url: string | null
+          id: string
+          is_active: boolean | null
+          last_error: string | null
+          last_synced_at: string | null
+          listing_url: string | null
+          platform_name: string
+          str_property_id: string
+          sync_errors: number | null
+          sync_frequency: string | null
+          total_bookings: number | null
+          total_revenue: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          ical_url?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_error?: string | null
+          last_synced_at?: string | null
+          listing_url?: string | null
+          platform_name: string
+          str_property_id: string
+          sync_errors?: number | null
+          sync_frequency?: string | null
+          total_bookings?: number | null
+          total_revenue?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          ical_url?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_error?: string | null
+          last_synced_at?: string | null
+          listing_url?: string | null
+          platform_name?: string
+          str_property_id?: string
+          sync_errors?: number | null
+          sync_frequency?: string | null
+          total_bookings?: number | null
+          total_revenue?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "platform_connections_str_property_id_fkey"
+            columns: ["str_property_id"]
+            isOneToOne: false
+            referencedRelation: "str_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      platform_performance: {
+        Row: {
+          average_nightly_rate: number | null
+          bookings_count: number | null
+          created_at: string | null
+          gross_revenue: number | null
+          id: string
+          net_revenue: number | null
+          nights_booked: number | null
+          occupancy_rate: number | null
+          period_end: string
+          period_start: string
+          platform_connection_id: string
+          platform_fees: number | null
+        }
+        Insert: {
+          average_nightly_rate?: number | null
+          bookings_count?: number | null
+          created_at?: string | null
+          gross_revenue?: number | null
+          id?: string
+          net_revenue?: number | null
+          nights_booked?: number | null
+          occupancy_rate?: number | null
+          period_end: string
+          period_start: string
+          platform_connection_id: string
+          platform_fees?: number | null
+        }
+        Update: {
+          average_nightly_rate?: number | null
+          bookings_count?: number | null
+          created_at?: string | null
+          gross_revenue?: number | null
+          id?: string
+          net_revenue?: number | null
+          nights_booked?: number | null
+          occupancy_rate?: number | null
+          period_end?: string
+          period_start?: string
+          platform_connection_id?: string
+          platform_fees?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "platform_performance_platform_connection_id_fkey"
+            columns: ["platform_connection_id"]
+            isOneToOne: false
+            referencedRelation: "platform_connections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       platform_settings: {
         Row: {
           category: string | null
@@ -4781,6 +4934,7 @@ export type Database = {
           nightly_rate: number | null
           nights: number | null
           platform: string | null
+          platform_connection_id: string | null
           platform_fee: number | null
           special_requests: string | null
           status: string | null
@@ -4808,6 +4962,7 @@ export type Database = {
           nightly_rate?: number | null
           nights?: number | null
           platform?: string | null
+          platform_connection_id?: string | null
           platform_fee?: number | null
           special_requests?: string | null
           status?: string | null
@@ -4835,6 +4990,7 @@ export type Database = {
           nightly_rate?: number | null
           nights?: number | null
           platform?: string | null
+          platform_connection_id?: string | null
           platform_fee?: number | null
           special_requests?: string | null
           status?: string | null
@@ -4845,6 +5001,13 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "str_bookings_platform_connection_id_fkey"
+            columns: ["platform_connection_id"]
+            isOneToOne: false
+            referencedRelation: "platform_connections"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "str_bookings_str_property_id_fkey"
             columns: ["str_property_id"]
