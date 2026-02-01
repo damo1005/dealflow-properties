@@ -53,6 +53,17 @@ import PortfolioSharing from "./pages/PortfolioSharing";
 import MortgageTracker from "./pages/MortgageTracker";
 import YieldMap from "./pages/YieldMap";
 import ApiSettings from "./pages/ApiSettings";
+import Insurance from "./pages/Insurance";
+import PropertyValuation from "./pages/PropertyValuation";
+import TenantApplications from "./pages/TenantApplications";
+import RentCollection from "./pages/RentCollection";
+import PortfolioBenchmark from "./pages/PortfolioBenchmark";
+import AgentClients from "./pages/AgentClients";
+import AgentSettings from "./pages/AgentSettings";
+import MTDCompliance from "./pages/MTDCompliance";
+import DepositProtection from "./pages/DepositProtection";
+import ESignatures from "./pages/ESignatures";
+import InsuranceClaims from "./pages/InsuranceClaims";
 import NotFound from "./pages/NotFound";
 
 // Admin pages
@@ -436,6 +447,19 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+
+            {/* Phase 9 & 12 routes */}
+            <Route path="/tools/valuation" element={<ProtectedRoute><PropertyValuation /></ProtectedRoute>} />
+            <Route path="/tenants/applications" element={<ProtectedRoute><TenantApplications /></ProtectedRoute>} />
+            <Route path="/portfolio/rent-collection" element={<ProtectedRoute><RentCollection /></ProtectedRoute>} />
+            <Route path="/analytics/benchmark" element={<ProtectedRoute><PortfolioBenchmark /></ProtectedRoute>} />
+            <Route path="/agent/clients" element={<ProtectedRoute><AgentClients /></ProtectedRoute>} />
+            <Route path="/agent/settings" element={<ProtectedRoute><AgentSettings /></ProtectedRoute>} />
+            <Route path="/insurance" element={<ProtectedRoute><Insurance /></ProtectedRoute>} />
+            <Route path="/tax/mtd" element={<ProtectedRoute><MTDCompliance /></ProtectedRoute>} />
+            <Route path="/compliance/deposits" element={<ProtectedRoute><DepositProtection /></ProtectedRoute>} />
+            <Route path="/documents/signatures" element={<ProtectedRoute><ESignatures /></ProtectedRoute>} />
+            <Route path="/insurance/claims" element={<ProtectedRoute><InsuranceClaims /></ProtectedRoute>} />
 
             {/* Admin routes */}
             <Route path="/admin" element={<AdminDashboard />} />

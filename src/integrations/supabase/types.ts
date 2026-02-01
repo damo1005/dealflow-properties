@@ -1401,6 +1401,76 @@ export type Database = {
           },
         ]
       }
+      claim_documents: {
+        Row: {
+          claim_id: string
+          document_name: string | null
+          document_type: string | null
+          document_url: string
+          id: string
+          uploaded_at: string | null
+        }
+        Insert: {
+          claim_id: string
+          document_name?: string | null
+          document_type?: string | null
+          document_url: string
+          id?: string
+          uploaded_at?: string | null
+        }
+        Update: {
+          claim_id?: string
+          document_name?: string | null
+          document_type?: string | null
+          document_url?: string
+          id?: string
+          uploaded_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "claim_documents_claim_id_fkey"
+            columns: ["claim_id"]
+            isOneToOne: false
+            referencedRelation: "insurance_claims"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      claim_timeline: {
+        Row: {
+          claim_id: string
+          created_by: string | null
+          event_date: string | null
+          event_description: string | null
+          event_type: string
+          id: string
+        }
+        Insert: {
+          claim_id: string
+          created_by?: string | null
+          event_date?: string | null
+          event_description?: string | null
+          event_type: string
+          id?: string
+        }
+        Update: {
+          claim_id?: string
+          created_by?: string | null
+          event_date?: string | null
+          event_description?: string | null
+          event_type?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "claim_timeline_claim_id_fkey"
+            columns: ["claim_id"]
+            isOneToOne: false
+            referencedRelation: "insurance_claims"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cma_reports: {
         Row: {
           active_comparables: Json | null
@@ -3379,6 +3449,102 @@ export type Database = {
         }
         Relationships: []
       }
+      deposit_protections: {
+        Row: {
+          amount: number
+          amount_returned: number | null
+          certificate_issued_date: string | null
+          certificate_url: string | null
+          created_at: string | null
+          deductions: Json | null
+          deposit_type: string | null
+          dispute_date: string | null
+          dispute_outcome: string | null
+          dispute_raised: boolean | null
+          id: string
+          portfolio_property_id: string | null
+          prescribed_info_date: string | null
+          prescribed_info_served: boolean | null
+          protected_date: string | null
+          protection_deadline: string | null
+          received_date: string
+          return_date: string | null
+          scheme: string
+          scheme_reference: string | null
+          status: string | null
+          tenant_email: string | null
+          tenant_name: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          amount_returned?: number | null
+          certificate_issued_date?: string | null
+          certificate_url?: string | null
+          created_at?: string | null
+          deductions?: Json | null
+          deposit_type?: string | null
+          dispute_date?: string | null
+          dispute_outcome?: string | null
+          dispute_raised?: boolean | null
+          id?: string
+          portfolio_property_id?: string | null
+          prescribed_info_date?: string | null
+          prescribed_info_served?: boolean | null
+          protected_date?: string | null
+          protection_deadline?: string | null
+          received_date: string
+          return_date?: string | null
+          scheme: string
+          scheme_reference?: string | null
+          status?: string | null
+          tenant_email?: string | null
+          tenant_name: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          amount_returned?: number | null
+          certificate_issued_date?: string | null
+          certificate_url?: string | null
+          created_at?: string | null
+          deductions?: Json | null
+          deposit_type?: string | null
+          dispute_date?: string | null
+          dispute_outcome?: string | null
+          dispute_raised?: boolean | null
+          id?: string
+          portfolio_property_id?: string | null
+          prescribed_info_date?: string | null
+          prescribed_info_served?: boolean | null
+          protected_date?: string | null
+          protection_deadline?: string | null
+          received_date?: string
+          return_date?: string | null
+          scheme?: string
+          scheme_reference?: string | null
+          status?: string | null
+          tenant_email?: string | null
+          tenant_name?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deposit_protections_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deposit_protections_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       distressed_properties: {
         Row: {
           address: string
@@ -3750,6 +3916,78 @@ export type Database = {
         }
         Relationships: []
       }
+      epc_assessments: {
+        Row: {
+          certificate_date: string | null
+          certificate_expiry: string | null
+          created_at: string | null
+          current_rating: string | null
+          current_score: number | null
+          id: string
+          planned_improvements: Json | null
+          portfolio_property_id: string | null
+          projected_rating: string | null
+          projected_score: number | null
+          recommendations: Json | null
+          status: string | null
+          target_deadline: string | null
+          target_rating: string | null
+          total_estimated_cost: number | null
+          user_id: string | null
+        }
+        Insert: {
+          certificate_date?: string | null
+          certificate_expiry?: string | null
+          created_at?: string | null
+          current_rating?: string | null
+          current_score?: number | null
+          id?: string
+          planned_improvements?: Json | null
+          portfolio_property_id?: string | null
+          projected_rating?: string | null
+          projected_score?: number | null
+          recommendations?: Json | null
+          status?: string | null
+          target_deadline?: string | null
+          target_rating?: string | null
+          total_estimated_cost?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          certificate_date?: string | null
+          certificate_expiry?: string | null
+          created_at?: string | null
+          current_rating?: string | null
+          current_score?: number | null
+          id?: string
+          planned_improvements?: Json | null
+          portfolio_property_id?: string | null
+          projected_rating?: string | null
+          projected_score?: number | null
+          recommendations?: Json | null
+          status?: string | null
+          target_deadline?: string | null
+          target_rating?: string | null
+          total_estimated_cost?: number | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "epc_assessments_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "epc_assessments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       epc_certificates: {
         Row: {
           api_response: Json | null
@@ -3923,6 +4161,68 @@ export type Database = {
           windows_energy_efficiency?: string | null
         }
         Relationships: []
+      }
+      epc_improvements: {
+        Row: {
+          actual_cost: number | null
+          annual_savings: number | null
+          assessment_id: string | null
+          completed_date: string | null
+          cost_high: number | null
+          cost_low: number | null
+          created_at: string | null
+          description: string | null
+          grant_amount: number | null
+          grant_eligible: boolean | null
+          grant_name: string | null
+          id: string
+          measure_type: string
+          score_improvement: number | null
+          status: string | null
+        }
+        Insert: {
+          actual_cost?: number | null
+          annual_savings?: number | null
+          assessment_id?: string | null
+          completed_date?: string | null
+          cost_high?: number | null
+          cost_low?: number | null
+          created_at?: string | null
+          description?: string | null
+          grant_amount?: number | null
+          grant_eligible?: boolean | null
+          grant_name?: string | null
+          id?: string
+          measure_type: string
+          score_improvement?: number | null
+          status?: string | null
+        }
+        Update: {
+          actual_cost?: number | null
+          annual_savings?: number | null
+          assessment_id?: string | null
+          completed_date?: string | null
+          cost_high?: number | null
+          cost_low?: number | null
+          created_at?: string | null
+          description?: string | null
+          grant_amount?: number | null
+          grant_eligible?: boolean | null
+          grant_name?: string | null
+          id?: string
+          measure_type?: string
+          score_improvement?: number | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "epc_improvements_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "epc_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       feature_usage: {
         Row: {
@@ -4338,6 +4638,106 @@ export type Database = {
             columns: ["group_id"]
             isOneToOne: false
             referencedRelation: "network_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      insurance_claims: {
+        Row: {
+          acknowledged_date: string | null
+          claim_amount: number | null
+          claim_reference: string | null
+          claim_type: string
+          created_at: string | null
+          decision_date: string | null
+          estimated_loss: number | null
+          excess_amount: number | null
+          handler_email: string | null
+          handler_name: string | null
+          handler_phone: string | null
+          id: string
+          incident_date: string
+          incident_description: string | null
+          insurance_policy_id: string | null
+          notes: string | null
+          portfolio_property_id: string | null
+          rejection_reason: string | null
+          settlement_amount: number | null
+          settlement_date: string | null
+          status: string | null
+          submitted_date: string | null
+          user_id: string
+        }
+        Insert: {
+          acknowledged_date?: string | null
+          claim_amount?: number | null
+          claim_reference?: string | null
+          claim_type: string
+          created_at?: string | null
+          decision_date?: string | null
+          estimated_loss?: number | null
+          excess_amount?: number | null
+          handler_email?: string | null
+          handler_name?: string | null
+          handler_phone?: string | null
+          id?: string
+          incident_date: string
+          incident_description?: string | null
+          insurance_policy_id?: string | null
+          notes?: string | null
+          portfolio_property_id?: string | null
+          rejection_reason?: string | null
+          settlement_amount?: number | null
+          settlement_date?: string | null
+          status?: string | null
+          submitted_date?: string | null
+          user_id: string
+        }
+        Update: {
+          acknowledged_date?: string | null
+          claim_amount?: number | null
+          claim_reference?: string | null
+          claim_type?: string
+          created_at?: string | null
+          decision_date?: string | null
+          estimated_loss?: number | null
+          excess_amount?: number | null
+          handler_email?: string | null
+          handler_name?: string | null
+          handler_phone?: string | null
+          id?: string
+          incident_date?: string
+          incident_description?: string | null
+          insurance_policy_id?: string | null
+          notes?: string | null
+          portfolio_property_id?: string | null
+          rejection_reason?: string | null
+          settlement_amount?: number | null
+          settlement_date?: string | null
+          status?: string | null
+          submitted_date?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "insurance_claims_insurance_policy_id_fkey"
+            columns: ["insurance_policy_id"]
+            isOneToOne: false
+            referencedRelation: "insurance_policies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insurance_claims_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insurance_claims_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -6184,6 +6584,163 @@ export type Database = {
             columns: ["portfolio_property_id"]
             isOneToOne: false
             referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mtd_obligations: {
+        Row: {
+          created_at: string | null
+          due_date: string
+          hmrc_reference: string | null
+          id: string
+          period_end: string
+          period_start: string
+          quarter: number
+          status: string | null
+          submitted_at: string | null
+          tax_year: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          due_date: string
+          hmrc_reference?: string | null
+          id?: string
+          period_end: string
+          period_start: string
+          quarter: number
+          status?: string | null
+          submitted_at?: string | null
+          tax_year: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          due_date?: string
+          hmrc_reference?: string | null
+          id?: string
+          period_end?: string
+          period_start?: string
+          quarter?: number
+          status?: string | null
+          submitted_at?: string | null
+          tax_year?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mtd_obligations_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mtd_settings: {
+        Row: {
+          accounting_type: string | null
+          auto_categorise: boolean | null
+          business_name: string | null
+          created_at: string | null
+          hmrc_connected: boolean | null
+          id: string
+          nino_encrypted: string | null
+          reminder_days_before: number | null
+          user_id: string | null
+          utr_encrypted: string | null
+        }
+        Insert: {
+          accounting_type?: string | null
+          auto_categorise?: boolean | null
+          business_name?: string | null
+          created_at?: string | null
+          hmrc_connected?: boolean | null
+          id?: string
+          nino_encrypted?: string | null
+          reminder_days_before?: number | null
+          user_id?: string | null
+          utr_encrypted?: string | null
+        }
+        Update: {
+          accounting_type?: string | null
+          auto_categorise?: boolean | null
+          business_name?: string | null
+          created_at?: string | null
+          hmrc_connected?: boolean | null
+          id?: string
+          nino_encrypted?: string | null
+          reminder_days_before?: number | null
+          user_id?: string | null
+          utr_encrypted?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mtd_settings_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mtd_submissions: {
+        Row: {
+          created_at: string | null
+          expense_breakdown: Json | null
+          hmrc_response: Json | null
+          id: string
+          income_breakdown: Json | null
+          net_profit: number | null
+          obligation_id: string | null
+          status: string | null
+          submission_id: string | null
+          total_expenses: number | null
+          total_income: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          expense_breakdown?: Json | null
+          hmrc_response?: Json | null
+          id?: string
+          income_breakdown?: Json | null
+          net_profit?: number | null
+          obligation_id?: string | null
+          status?: string | null
+          submission_id?: string | null
+          total_expenses?: number | null
+          total_income?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          expense_breakdown?: Json | null
+          hmrc_response?: Json | null
+          id?: string
+          income_breakdown?: Json | null
+          net_profit?: number | null
+          obligation_id?: string | null
+          status?: string | null
+          submission_id?: string | null
+          total_expenses?: number | null
+          total_income?: number | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mtd_submissions_obligation_id_fkey"
+            columns: ["obligation_id"]
+            isOneToOne: false
+            referencedRelation: "mtd_obligations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mtd_submissions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -9664,6 +10221,174 @@ export type Database = {
             columns: ["portfolio_share_id"]
             isOneToOne: false
             referencedRelation: "portfolio_shares"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      signature_audit_log: {
+        Row: {
+          action: string
+          created_at: string | null
+          id: string
+          ip_address: unknown
+          metadata: Json | null
+          request_id: string | null
+          signer_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          request_id?: string | null
+          signer_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown
+          metadata?: Json | null
+          request_id?: string | null
+          signer_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "signature_audit_log_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "signature_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "signature_audit_log_signer_id_fkey"
+            columns: ["signer_id"]
+            isOneToOne: false
+            referencedRelation: "signature_signers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      signature_requests: {
+        Row: {
+          created_at: string | null
+          document_id: string | null
+          document_name: string
+          document_url: string
+          expires_at: string | null
+          id: string
+          portfolio_property_id: string | null
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          document_id?: string | null
+          document_name: string
+          document_url: string
+          expires_at?: string | null
+          id?: string
+          portfolio_property_id?: string | null
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          document_id?: string | null
+          document_name?: string
+          document_url?: string
+          expires_at?: string | null
+          id?: string
+          portfolio_property_id?: string | null
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "signature_requests_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "signature_requests_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "signature_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      signature_signers: {
+        Row: {
+          created_at: string | null
+          decline_reason: string | null
+          email: string
+          id: string
+          ip_address: unknown
+          name: string
+          request_id: string
+          role: string | null
+          sent_at: string | null
+          sign_order: number | null
+          signature_data: string | null
+          signed_at: string | null
+          status: string | null
+          user_agent: string | null
+          viewed_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          decline_reason?: string | null
+          email: string
+          id?: string
+          ip_address?: unknown
+          name: string
+          request_id: string
+          role?: string | null
+          sent_at?: string | null
+          sign_order?: number | null
+          signature_data?: string | null
+          signed_at?: string | null
+          status?: string | null
+          user_agent?: string | null
+          viewed_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          decline_reason?: string | null
+          email?: string
+          id?: string
+          ip_address?: unknown
+          name?: string
+          request_id?: string
+          role?: string | null
+          sent_at?: string | null
+          sign_order?: number | null
+          signature_data?: string | null
+          signed_at?: string | null
+          status?: string | null
+          user_agent?: string | null
+          viewed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "signature_signers_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "signature_requests"
             referencedColumns: ["id"]
           },
         ]
