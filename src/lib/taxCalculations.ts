@@ -784,3 +784,357 @@ export function calculateSection24Impact(input: Section24Input): Section24Result
     transitionYears
   };
 }
+
+// Incorporation Calculator (Ltd vs Personal)
+
+export interface IncorporationInput {
+  // Property
+  purchasePrice: number;
+  depositPercent: number;
+  interestRate: number;
+  annualRent: number;
+  annualExpenses: number;
+  
+  // Situation
+  isExistingProperty: boolean;
+  originalPurchasePrice: number;
+  currentMarketValue: number;
+  numberOfExistingProperties: number;
+  
+  // Tax
+  currentIncome: number;
+  marginalRate: 'basic' | 'higher' | 'additional';
+  
+  // Strategy
+  willExtractProfits: boolean;
+  annualExtraction: number;
+  
+  // Horizon
+  investmentYears: number;
+  rentGrowth: number;
+  propertyGrowth: number;
+}
+
+export interface IncorporationYearProjection {
+  year: number;
+  rent: number;
+  expenses: number;
+  mortgageInterest: number;
+  personalProfit: number;
+  personalTax: number;
+  personalAfterTax: number;
+  personalCumulative: number;
+  ltdProfit: number;
+  ltdTax: number;
+  ltdAfterTax: number;
+  ltdCumulative: number;
+  savingThisYear: number;
+  cumulativeSaving: number;
+}
+
+export interface IncorporationResult {
+  // Upfront costs
+  personalSDLT: number;
+  ltdSDLT: number;
+  incorporationCosts: number;
+  transferCGT: number;
+  transferCosts: number;
+  totalPersonalUpfront: number;
+  totalLtdUpfront: number;
+  
+  // Mortgage
+  mortgageAmount: number;
+  annualMortgageInterest: number;
+  
+  // Annual comparison - Personal
+  personal: {
+    rentalProfit: number;
+    taxableProfit: number;
+    incomeTax: number;
+    financeCostRelief: number;
+    netTax: number;
+    afterTaxProfit: number;
+  };
+  
+  // Annual comparison - Ltd
+  ltd: {
+    rentalProfit: number;
+    corporationTax: number;
+    afterCorpTaxProfit: number;
+    dividendTax: number;
+    netToShareholder: number;
+  };
+  
+  // Annual savings
+  annualTaxSaving: number;
+  
+  // Breakeven
+  breakevenYears: number;
+  
+  // Long-term projection
+  projections: IncorporationYearProjection[];
+  
+  // Sale analysis
+  saleAnalysis: {
+    propertyValue: number;
+    capitalGain: number;
+    personalCGT: number;
+    ltdCorpTax: number;
+    personalNetProceeds: number;
+    ltdNetProceeds: number;
+    ltdNetIfExtracted: number;
+  };
+  
+  // Totals
+  personalTotalTax: number;
+  ltdTotalTax: number;
+  personalTotalWealth: number;
+  ltdTotalWealth: number;
+  ltdAdvantage: number;
+  
+  // Recommendation
+  recommendation: 'personal' | 'ltd' | 'hybrid';
+  reasons: string[];
+}
+
+// Helper to calculate simple SDLT for incorporation comparison
+function calculateSimpleSDLT(price: number, isAdditional: boolean): number {
+  let tax = 0;
+  
+  if (isAdditional) {
+    // Additional property rates (3% surcharge)
+    if (price > 0) tax += Math.min(price, 250000) * 0.03;
+    if (price > 250000) tax += Math.min(price - 250000, 675000) * 0.08;
+    if (price > 925000) tax += Math.min(price - 925000, 575000) * 0.13;
+    if (price > 1500000) tax += (price - 1500000) * 0.15;
+  } else {
+    // Standard rates
+    if (price > 250000) tax += Math.min(price - 250000, 675000) * 0.05;
+    if (price > 925000) tax += Math.min(price - 925000, 575000) * 0.10;
+    if (price > 1500000) tax += (price - 1500000) * 0.12;
+  }
+  
+  return Math.round(tax);
+}
+
+export function calculateIncorporation(input: IncorporationInput): IncorporationResult {
+  const {
+    purchasePrice,
+    depositPercent,
+    interestRate,
+    annualRent,
+    annualExpenses,
+    isExistingProperty,
+    originalPurchasePrice,
+    currentMarketValue,
+    numberOfExistingProperties,
+    marginalRate,
+    willExtractProfits,
+    annualExtraction,
+    investmentYears,
+    rentGrowth,
+    propertyGrowth
+  } = input;
+
+  // Calculate mortgage
+  const depositAmount = purchasePrice * (depositPercent / 100);
+  const mortgageAmount = purchasePrice - depositAmount;
+  const annualMortgageInterest = mortgageAmount * (interestRate / 100);
+
+  // 1. Upfront costs
+  const isAdditionalProperty = numberOfExistingProperties > 0;
+  const personalSDLT = calculateSimpleSDLT(purchasePrice, isAdditionalProperty);
+  const ltdSDLT = calculateSimpleSDLT(purchasePrice, true); // Companies always pay additional rates
+  const incorporationCosts = 1500; // Average setup costs
+
+  let transferCGT = 0;
+  let transferCosts = 0;
+
+  if (isExistingProperty && originalPurchasePrice && currentMarketValue) {
+    const gain = currentMarketValue - originalPurchasePrice;
+    transferCGT = Math.max(0, gain) * 0.28; // Higher rate CGT
+    transferCosts = ltdSDLT + 5000 + 2000 + 1500; // SDLT + mortgage fees + legal + accountant
+  }
+
+  const totalPersonalUpfront = personalSDLT;
+  const totalLtdUpfront = ltdSDLT + incorporationCosts + (isExistingProperty ? transferCGT + transferCosts : 0);
+
+  // 2. Tax rates
+  const taxRate = marginalRate === 'basic' ? 0.20 : marginalRate === 'higher' ? 0.40 : 0.45;
+  const corpTaxRate = 0.19; // 19% for small profits, 25% for >£250K
+  const dividendRate = marginalRate === 'basic' ? 0.0875 : marginalRate === 'higher' ? 0.3375 : 0.3935;
+
+  // 3. Annual tax - PERSONAL
+  const rentalProfit = annualRent - annualExpenses - annualMortgageInterest;
+  const personalTaxableProfit = annualRent - annualExpenses; // Section 24: can't deduct mortgage
+  const personalIncomeTax = personalTaxableProfit * taxRate;
+  const financeCostRelief = annualMortgageInterest * 0.20; // Only 20% relief
+  const personalNetTax = Math.max(0, personalIncomeTax - financeCostRelief);
+  const personalAfterTaxProfit = rentalProfit - personalNetTax + annualMortgageInterest; // Add back mortgage as it's actual cash flow
+
+  // 4. Annual tax - LTD
+  const ltdRentalProfit = annualRent - annualExpenses - annualMortgageInterest; // Full deduction!
+  const corporationTax = Math.max(0, ltdRentalProfit) * corpTaxRate;
+  const afterCorpTaxProfit = ltdRentalProfit - corporationTax;
+
+  let dividendTax = 0;
+  let netToShareholder = afterCorpTaxProfit;
+
+  if (willExtractProfits && annualExtraction > 0) {
+    const extractionAmount = Math.min(annualExtraction, Math.max(0, afterCorpTaxProfit));
+    dividendTax = extractionAmount * dividendRate;
+    netToShareholder = afterCorpTaxProfit - dividendTax;
+  }
+
+  // 5. Annual savings
+  const annualTaxSaving = personalNetTax - corporationTax;
+
+  // 6. Breakeven
+  const upfrontExtra = totalLtdUpfront - totalPersonalUpfront;
+  const breakevenYears = annualTaxSaving > 0 ? upfrontExtra / annualTaxSaving : 999;
+
+  // 7. Long-term projections
+  const projections: IncorporationYearProjection[] = [];
+  let personalCumulative = 0;
+  let ltdCumulative = 0;
+  let personalTotalTax = 0;
+  let ltdTotalTax = 0;
+
+  for (let year = 1; year <= investmentYears; year++) {
+    const rentThisYear = annualRent * Math.pow(1 + rentGrowth / 100, year - 1);
+    const expensesThisYear = annualExpenses * Math.pow(1.02, year - 1); // 2% inflation
+    
+    // Personal
+    const personalProfitThisYear = rentThisYear - expensesThisYear - annualMortgageInterest;
+    const personalTaxableThisYear = rentThisYear - expensesThisYear;
+    const personalTaxThisYear = Math.max(0, personalTaxableThisYear * taxRate - annualMortgageInterest * 0.20);
+    const personalAfterTaxThisYear = personalProfitThisYear - personalTaxThisYear + annualMortgageInterest;
+    
+    // Ltd
+    const ltdProfitThisYear = rentThisYear - expensesThisYear - annualMortgageInterest;
+    const ltdTaxThisYear = Math.max(0, ltdProfitThisYear) * corpTaxRate;
+    const ltdAfterTaxThisYear = ltdProfitThisYear - ltdTaxThisYear;
+    
+    personalCumulative += Math.max(0, personalProfitThisYear - personalTaxThisYear);
+    ltdCumulative += Math.max(0, ltdProfitThisYear - ltdTaxThisYear);
+    personalTotalTax += personalTaxThisYear;
+    ltdTotalTax += ltdTaxThisYear;
+    
+    const savingThisYear = personalTaxThisYear - ltdTaxThisYear;
+
+    projections.push({
+      year,
+      rent: Math.round(rentThisYear),
+      expenses: Math.round(expensesThisYear),
+      mortgageInterest: Math.round(annualMortgageInterest),
+      personalProfit: Math.round(personalProfitThisYear),
+      personalTax: Math.round(personalTaxThisYear),
+      personalAfterTax: Math.round(Math.max(0, personalProfitThisYear - personalTaxThisYear)),
+      personalCumulative: Math.round(personalCumulative),
+      ltdProfit: Math.round(ltdProfitThisYear),
+      ltdTax: Math.round(ltdTaxThisYear),
+      ltdAfterTax: Math.round(Math.max(0, ltdProfitThisYear - ltdTaxThisYear)),
+      ltdCumulative: Math.round(ltdCumulative),
+      savingThisYear: Math.round(savingThisYear),
+      cumulativeSaving: Math.round(ltdCumulative - personalCumulative)
+    });
+  }
+
+  // 8. Sale analysis
+  const propertyValue = purchasePrice * Math.pow(1 + propertyGrowth / 100, investmentYears);
+  const capitalGain = propertyValue - purchasePrice;
+
+  const personalCGT = capitalGain * 0.24; // 24% higher rate CGT on property
+  const personalNetProceeds = propertyValue - mortgageAmount - personalCGT;
+
+  const ltdCorpTax = capitalGain * corpTaxRate;
+  const ltdNetProceeds = propertyValue - mortgageAmount - ltdCorpTax;
+  const ltdNetIfExtracted = ltdNetProceeds * (1 - dividendRate);
+
+  // 9. Total wealth comparison
+  const personalTotalWealth = personalNetProceeds + personalCumulative;
+  const ltdTotalWealth = ltdNetProceeds + ltdCumulative;
+  const ltdAdvantage = ltdTotalWealth - personalTotalWealth;
+
+  // 10. Recommendation
+  let recommendation: 'personal' | 'ltd' | 'hybrid' = 'personal';
+  const reasons: string[] = [];
+
+  if (marginalRate === 'basic') {
+    recommendation = 'personal';
+    reasons.push('Basic rate taxpayer - minimal benefit from Ltd structure');
+    reasons.push('Simpler administration with personal ownership');
+  } else if (isExistingProperty) {
+    recommendation = 'hybrid';
+    reasons.push('Transfer costs are prohibitive for existing properties');
+    reasons.push('Keep existing properties personal, buy new through Ltd');
+    reasons.push('Avoid CGT and SDLT on transfer');
+  } else if (willExtractProfits && annualExtraction > afterCorpTaxProfit * 0.5) {
+    recommendation = 'personal';
+    reasons.push('Extracting profits triggers dividend tax');
+    reasons.push('Double taxation reduces Ltd benefit');
+    reasons.push('Personal ownership simpler when you need the income');
+  } else if ((marginalRate === 'higher' || marginalRate === 'additional') && !willExtractProfits) {
+    recommendation = 'ltd';
+    reasons.push(`Save ${Math.round((taxRate - corpTaxRate) * 100)}% tax (${Math.round(taxRate * 100)}% vs ${Math.round(corpTaxRate * 100)}%)`);
+    reasons.push('Mortgage fully deductible - Section 24 doesn\'t apply');
+    reasons.push('Reinvest profits for faster portfolio growth');
+    reasons.push(`Breakeven in ${breakevenYears.toFixed(1)} years`);
+  } else if (marginalRate === 'higher' && willExtractProfits) {
+    if (breakevenYears < 3) {
+      recommendation = 'ltd';
+      reasons.push('Tax savings outweigh extraction costs');
+      reasons.push(`Quick breakeven: ${breakevenYears.toFixed(1)} years`);
+    } else {
+      recommendation = 'personal';
+      reasons.push('Dividend tax reduces Ltd advantage');
+      reasons.push('Personal ownership more tax-efficient when extracting');
+    }
+  }
+
+  return {
+    personalSDLT,
+    ltdSDLT,
+    incorporationCosts,
+    transferCGT: Math.round(transferCGT),
+    transferCosts: Math.round(transferCosts),
+    totalPersonalUpfront,
+    totalLtdUpfront: Math.round(totalLtdUpfront),
+    mortgageAmount,
+    annualMortgageInterest: Math.round(annualMortgageInterest),
+    personal: {
+      rentalProfit: Math.round(rentalProfit),
+      taxableProfit: Math.round(personalTaxableProfit),
+      incomeTax: Math.round(personalIncomeTax),
+      financeCostRelief: Math.round(financeCostRelief),
+      netTax: Math.round(personalNetTax),
+      afterTaxProfit: Math.round(personalAfterTaxProfit)
+    },
+    ltd: {
+      rentalProfit: Math.round(ltdRentalProfit),
+      corporationTax: Math.round(corporationTax),
+      afterCorpTaxProfit: Math.round(afterCorpTaxProfit),
+      dividendTax: Math.round(dividendTax),
+      netToShareholder: Math.round(netToShareholder)
+    },
+    annualTaxSaving: Math.round(annualTaxSaving),
+    breakevenYears: Math.round(breakevenYears * 10) / 10,
+    projections,
+    saleAnalysis: {
+      propertyValue: Math.round(propertyValue),
+      capitalGain: Math.round(capitalGain),
+      personalCGT: Math.round(personalCGT),
+      ltdCorpTax: Math.round(ltdCorpTax),
+      personalNetProceeds: Math.round(personalNetProceeds),
+      ltdNetProceeds: Math.round(ltdNetProceeds),
+      ltdNetIfExtracted: Math.round(ltdNetIfExtracted)
+    },
+    personalTotalTax: Math.round(personalTotalTax),
+    ltdTotalTax: Math.round(ltdTotalTax),
+    personalTotalWealth: Math.round(personalTotalWealth),
+    ltdTotalWealth: Math.round(ltdTotalWealth),
+    ltdAdvantage: Math.round(ltdAdvantage),
+    recommendation,
+    reasons
+  };
+}
