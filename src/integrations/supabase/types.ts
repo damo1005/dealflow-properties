@@ -5400,6 +5400,45 @@ export type Database = {
           },
         ]
       }
+      sdlt_rates: {
+        Row: {
+          additional_property_surcharge: number | null
+          buyer_type: string
+          created_at: string | null
+          effective_from: string
+          effective_to: string | null
+          id: string
+          is_current: boolean | null
+          non_uk_resident_surcharge: number | null
+          property_type: string
+          rate_bands: Json
+        }
+        Insert: {
+          additional_property_surcharge?: number | null
+          buyer_type: string
+          created_at?: string | null
+          effective_from: string
+          effective_to?: string | null
+          id?: string
+          is_current?: boolean | null
+          non_uk_resident_surcharge?: number | null
+          property_type: string
+          rate_bands: Json
+        }
+        Update: {
+          additional_property_surcharge?: number | null
+          buyer_type?: string
+          created_at?: string | null
+          effective_from?: string
+          effective_to?: string | null
+          id?: string
+          is_current?: boolean | null
+          non_uk_resident_surcharge?: number | null
+          property_type?: string
+          rate_bands?: Json
+        }
+        Relationships: []
+      }
       str_bookings: {
         Row: {
           booking_notes: string | null
@@ -5934,6 +5973,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      tax_calculations: {
+        Row: {
+          calc_type: string
+          calculation_name: string | null
+          created_at: string | null
+          id: string
+          inputs: Json
+          notes: string | null
+          property_id: string | null
+          results: Json
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          calc_type: string
+          calculation_name?: string | null
+          created_at?: string | null
+          id?: string
+          inputs: Json
+          notes?: string | null
+          property_id?: string | null
+          results: Json
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          calc_type?: string
+          calculation_name?: string | null
+          created_at?: string | null
+          id?: string
+          inputs?: Json
+          notes?: string | null
+          property_id?: string | null
+          results?: Json
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       tenancies: {
         Row: {

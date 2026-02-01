@@ -3,9 +3,9 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { cn } from "@/lib/utils";
 
-interface CurrencyInputProps {
-  id: string;
-  label: string;
+export interface CurrencyInputProps {
+  id?: string;
+  label?: string;
   value: number;
   onChange: (value: number) => void;
   prefix?: string;
@@ -18,6 +18,7 @@ interface CurrencyInputProps {
   sliderMax?: number;
   description?: string;
   className?: string;
+  placeholder?: string;
 }
 
 export function CurrencyInput({
@@ -35,6 +36,7 @@ export function CurrencyInput({
   sliderMax = 100,
   description,
   className,
+  placeholder,
 }: CurrencyInputProps) {
   const formatValue = (val: number) => {
     if (suffix === "%") return val.toString();
@@ -49,18 +51,20 @@ export function CurrencyInput({
 
   return (
     <div className={cn("space-y-2", className)}>
-      <div className="flex items-center justify-between">
-        <Label htmlFor={id} className="text-sm font-medium">
-          {label}
-        </Label>
-        {showSlider && (
-          <span className="text-sm font-medium text-primary">
-            {prefix !== "£" ? "" : prefix}
-            {formatValue(value)}
-            {suffix}
-          </span>
-        )}
-      </div>
+      {label && (
+        <div className="flex items-center justify-between">
+          <Label htmlFor={id} className="text-sm font-medium">
+            {label}
+          </Label>
+          {showSlider && (
+            <span className="text-sm font-medium text-primary">
+              {prefix !== "£" ? "" : prefix}
+              {formatValue(value)}
+              {suffix}
+            </span>
+          )}
+        </div>
+      )}
       
       {showSlider ? (
         <Slider
@@ -83,6 +87,7 @@ export function CurrencyInput({
             type="text"
             value={formatValue(value)}
             onChange={handleInputChange}
+            placeholder={placeholder}
             className={cn(
               prefix && "pl-7",
               suffix && "pr-10"
