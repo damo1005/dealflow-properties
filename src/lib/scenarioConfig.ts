@@ -194,6 +194,31 @@ export const presetScenarios: PresetScenario[] = [
       mortgageRate: 6.5,
     },
   },
+  {
+    id: "high-inflation",
+    name: "High Inflation",
+    description: "Rising costs scenario",
+    icon: "TrendingUp",
+    color: "yellow",
+    changes: {
+      monthlyRent: 1.05, // Rents rise with inflation
+      maintenancePercent: 14, // Costs increase
+      insurance: 400, // Higher insurance
+      mortgageRate: 6.5,
+    },
+  },
+  {
+    id: "market-boom",
+    name: "Market Boom",
+    description: "Strong market conditions",
+    icon: "TrendingUp",
+    color: "green",
+    changes: {
+      monthlyRent: 1.15,
+      voidPercent: 2,
+      purchasePrice: 0.92,
+    },
+  },
 ];
 
 export function applyPresetToInputs(
