@@ -4149,6 +4149,102 @@ export type Database = {
         }
         Relationships: []
       }
+      investment_milestones: {
+        Row: {
+          created_at: string | null
+          id: string
+          milestone_date: string
+          milestone_type: string
+          milestone_value: number | null
+          notes: string | null
+          property_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          milestone_date: string
+          milestone_type: string
+          milestone_value?: number | null
+          notes?: string | null
+          property_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          milestone_date?: string
+          milestone_type?: string
+          milestone_value?: number | null
+          notes?: string | null
+          property_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      investment_targets: {
+        Row: {
+          created_at: string | null
+          id: string
+          property_id: string
+          target_annual_appreciation: number | null
+          target_annual_cash_flow: number | null
+          target_avg_void_days: number | null
+          target_exit_value: number | null
+          target_exit_year: number | null
+          target_gross_yield: number | null
+          target_maintenance_percentage: number | null
+          target_management_percentage: number | null
+          target_monthly_cash_flow: number | null
+          target_net_yield: number | null
+          target_occupancy_rate: number | null
+          target_roi_percentage: number | null
+          target_roi_years: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          property_id: string
+          target_annual_appreciation?: number | null
+          target_annual_cash_flow?: number | null
+          target_avg_void_days?: number | null
+          target_exit_value?: number | null
+          target_exit_year?: number | null
+          target_gross_yield?: number | null
+          target_maintenance_percentage?: number | null
+          target_management_percentage?: number | null
+          target_monthly_cash_flow?: number | null
+          target_net_yield?: number | null
+          target_occupancy_rate?: number | null
+          target_roi_percentage?: number | null
+          target_roi_years?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          property_id?: string
+          target_annual_appreciation?: number | null
+          target_annual_cash_flow?: number | null
+          target_avg_void_days?: number | null
+          target_exit_value?: number | null
+          target_exit_year?: number | null
+          target_gross_yield?: number | null
+          target_maintenance_percentage?: number | null
+          target_management_percentage?: number | null
+          target_monthly_cash_flow?: number | null
+          target_net_yield?: number | null
+          target_occupancy_rate?: number | null
+          target_roi_percentage?: number | null
+          target_roi_years?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       job_quotes: {
         Row: {
           contractor_id: string | null
@@ -5295,6 +5391,132 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      performance_alerts: {
+        Row: {
+          actual_value: number | null
+          alert_message: string
+          alert_type: string
+          created_at: string | null
+          id: string
+          is_resolved: boolean | null
+          metric_name: string | null
+          property_id: string
+          resolved_at: string | null
+          severity: string | null
+          target_value: number | null
+          user_id: string
+          variance: number | null
+        }
+        Insert: {
+          actual_value?: number | null
+          alert_message: string
+          alert_type: string
+          created_at?: string | null
+          id?: string
+          is_resolved?: boolean | null
+          metric_name?: string | null
+          property_id: string
+          resolved_at?: string | null
+          severity?: string | null
+          target_value?: number | null
+          user_id: string
+          variance?: number | null
+        }
+        Update: {
+          actual_value?: number | null
+          alert_message?: string
+          alert_type?: string
+          created_at?: string | null
+          id?: string
+          is_resolved?: boolean | null
+          metric_name?: string | null
+          property_id?: string
+          resolved_at?: string | null
+          severity?: string | null
+          target_value?: number | null
+          user_id?: string
+          variance?: number | null
+        }
+        Relationships: []
+      }
+      performance_snapshots: {
+        Row: {
+          actual_gross_yield: number | null
+          actual_monthly_cash_flow: number | null
+          actual_net_yield: number | null
+          actual_occupancy_rate: number | null
+          actual_roi: number | null
+          cash_flow_variance: number | null
+          created_at: string | null
+          current_equity: number | null
+          current_mortgage_balance: number | null
+          current_property_value: number | null
+          id: string
+          notes: string | null
+          occupancy_variance: number | null
+          performance_rating: string | null
+          performance_score: number | null
+          property_id: string
+          roi_variance: number | null
+          snapshot_date: string
+          user_id: string
+          yield_variance: number | null
+          ytd_expenses: number | null
+          ytd_net_profit: number | null
+          ytd_rental_income: number | null
+        }
+        Insert: {
+          actual_gross_yield?: number | null
+          actual_monthly_cash_flow?: number | null
+          actual_net_yield?: number | null
+          actual_occupancy_rate?: number | null
+          actual_roi?: number | null
+          cash_flow_variance?: number | null
+          created_at?: string | null
+          current_equity?: number | null
+          current_mortgage_balance?: number | null
+          current_property_value?: number | null
+          id?: string
+          notes?: string | null
+          occupancy_variance?: number | null
+          performance_rating?: string | null
+          performance_score?: number | null
+          property_id: string
+          roi_variance?: number | null
+          snapshot_date: string
+          user_id: string
+          yield_variance?: number | null
+          ytd_expenses?: number | null
+          ytd_net_profit?: number | null
+          ytd_rental_income?: number | null
+        }
+        Update: {
+          actual_gross_yield?: number | null
+          actual_monthly_cash_flow?: number | null
+          actual_net_yield?: number | null
+          actual_occupancy_rate?: number | null
+          actual_roi?: number | null
+          cash_flow_variance?: number | null
+          created_at?: string | null
+          current_equity?: number | null
+          current_mortgage_balance?: number | null
+          current_property_value?: number | null
+          id?: string
+          notes?: string | null
+          occupancy_variance?: number | null
+          performance_rating?: string | null
+          performance_score?: number | null
+          property_id?: string
+          roi_variance?: number | null
+          snapshot_date?: string
+          user_id?: string
+          yield_variance?: number | null
+          ytd_expenses?: number | null
+          ytd_net_profit?: number | null
+          ytd_rental_income?: number | null
+        }
+        Relationships: []
       }
       pipeline_properties: {
         Row: {

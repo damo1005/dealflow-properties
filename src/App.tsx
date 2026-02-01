@@ -34,6 +34,7 @@ import DealScout from "./pages/DealScout";
 import Alerts from "./pages/Alerts";
 import Portfolio from "./pages/Portfolio";
 import PortfolioDashboard from "./pages/PortfolioDashboard";
+import PropertyPerformance from "./pages/PropertyPerformance";
 import Auctions from "./pages/Auctions";
 import Network from "./pages/Network";
 import Copilot from "./pages/Copilot";
@@ -255,6 +256,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <PortfolioDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/properties/:id/performance"
+              element={
+                <ProtectedRoute>
+                  <PropertyPerformance />
                 </ProtectedRoute>
               }
             />
