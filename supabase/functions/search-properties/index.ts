@@ -69,17 +69,21 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Build Rightmove search URL
-    const searchUrl = buildRightmoveUrl(params);
+    // First, resolve the location to get a proper Rightmove locationIdentifier
+    const locationId = await resolveLocationIdentifier(params.location);
+    console.log("Resolved location identifier:", locationId);
+
+    // Build Rightmove search URL with proper location identifier
+    const searchUrl = buildRightmoveUrl(params, locationId);
     console.log("Rightmove URL:", searchUrl);
 
     let listings: any[] = [];
 
-    if (APIFY_TOKEN) {
+    if (APIFY_TOKEN && locationId) {
       console.log("Using Apify dhrumil/rightmove-scraper...");
       listings = await fetchFromApify(searchUrl, APIFY_TOKEN);
     } else {
-      console.log("No APIFY_API_TOKEN, trying direct scrape...");
+      console.log("No APIFY_API_TOKEN or location not resolved, trying direct scrape...");
       listings = await directScrape(params);
     }
 
@@ -140,9 +144,46 @@ function generateCacheKey(params: SearchParams): string {
   return btoa(JSON.stringify(normalized));
 }
 
-function buildRightmoveUrl(params: SearchParams): string {
-  const location = encodeURIComponent(params.location);
-  let url = `https://www.rightmove.co.uk/property-for-sale/find.html?searchType=SALE&locationIdentifier=REGION%5E${location}&radius=${params.radius || 10}&sortType=6&includeSSTC=false`;
+// Resolve location to a Rightmove location identifier using their typeAhead API
+async function resolveLocationIdentifier(location: string): Promise<string | null> {
+  try {
+    const response = await fetch(
+      `https://www.rightmove.co.uk/typeAhead/uknocheck/${encodeURIComponent(location)}`,
+      { 
+        headers: { 
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" 
+        } 
+      }
+    );
+    
+    if (!response.ok) {
+      console.log("Location lookup failed:", response.status);
+      return null;
+    }
+    
+    const data = await response.json();
+    const locationId = data.typeAheadLocations?.[0]?.locationIdentifier;
+    
+    if (locationId) {
+      console.log(`Resolved "${location}" to locationIdentifier: ${locationId}`);
+      return locationId;
+    }
+    
+    console.log("No location identifier found for:", location);
+    return null;
+  } catch (e) {
+    console.error("Error resolving location:", e);
+    return null;
+  }
+}
+
+function buildRightmoveUrl(params: SearchParams, locationId: string | null): string {
+  // If we have a proper location identifier, use it; otherwise fall back to postcode search
+  const locationParam = locationId 
+    ? `locationIdentifier=${encodeURIComponent(locationId)}`
+    : `searchLocation=${encodeURIComponent(params.location)}`;
+    
+  let url = `https://www.rightmove.co.uk/property-for-sale/find.html?searchType=SALE&${locationParam}&radius=${params.radius || 10}&sortType=6&includeSSTC=false`;
   
   if (params.minPrice) url += `&minPrice=${params.minPrice}`;
   if (params.maxPrice) url += `&maxPrice=${params.maxPrice}`;
