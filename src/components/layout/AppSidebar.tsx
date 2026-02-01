@@ -8,7 +8,8 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
-  Building2
+  Building2,
+  Home
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -20,6 +21,7 @@ const navItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Search Properties", url: "/search", icon: Search },
   { title: "My Pipeline", url: "/pipeline", icon: GitBranch },
+  { title: "Accommodation", url: "/accommodation", icon: Home },
   { title: "Saved Searches", url: "/saved-searches", icon: Bookmark },
   { title: "Calculators", url: "/calculators", icon: Calculator },
   { title: "Settings", url: "/settings", icon: Settings },

@@ -17,6 +17,7 @@ import ViewingNotesResults from "./pages/ViewingNotesResults";
 import Compare from "./pages/Compare";
 import MyComparisons from "./pages/MyComparisons";
 import ScenarioBuilder from "./pages/ScenarioBuilder";
+import AccommodationRequests from "./pages/AccommodationRequests";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,6 +46,7 @@ const App = () => (
           <Route path="/calculators/:id" element={<Calculators />} />
           <Route path="/deal-pack" element={<DealPackGenerator />} />
           <Route path="/deal-pack/:propertyId" element={<DealPackGenerator />} />
+          <Route path="/accommodation" element={<AccommodationRequests />} />
           <Route path="/settings" element={<Settings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
