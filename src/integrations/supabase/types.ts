@@ -3865,36 +3865,63 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          budget_range: string | null
           company_name: string | null
+          completed_onboarding: boolean | null
           created_at: string | null
+          display_name: string | null
           email_preferences: Json | null
           email_verified: boolean | null
           full_name: string | null
           id: string
+          location: string | null
+          onboarding_completed_at: string | null
+          primary_strategy: string | null
+          secondary_strategies: string[] | null
           stripe_customer_id: string | null
           subscription_tier: string | null
+          target_locations: string[] | null
+          user_motivation: string | null
         }
         Insert: {
           avatar_url?: string | null
+          budget_range?: string | null
           company_name?: string | null
+          completed_onboarding?: boolean | null
           created_at?: string | null
+          display_name?: string | null
           email_preferences?: Json | null
           email_verified?: boolean | null
           full_name?: string | null
           id: string
+          location?: string | null
+          onboarding_completed_at?: string | null
+          primary_strategy?: string | null
+          secondary_strategies?: string[] | null
           stripe_customer_id?: string | null
           subscription_tier?: string | null
+          target_locations?: string[] | null
+          user_motivation?: string | null
         }
         Update: {
           avatar_url?: string | null
+          budget_range?: string | null
           company_name?: string | null
+          completed_onboarding?: boolean | null
           created_at?: string | null
+          display_name?: string | null
           email_preferences?: Json | null
           email_verified?: boolean | null
           full_name?: string | null
           id?: string
+          location?: string | null
+          onboarding_completed_at?: string | null
+          primary_strategy?: string | null
+          secondary_strategies?: string[] | null
           stripe_customer_id?: string | null
           subscription_tier?: string | null
+          target_locations?: string[] | null
+          user_motivation?: string | null
         }
         Relationships: []
       }
