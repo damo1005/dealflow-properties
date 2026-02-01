@@ -925,6 +925,53 @@ export type Database = {
         }
         Relationships: []
       }
+      compliance_items: {
+        Row: {
+          certificate_number: string | null
+          certificate_url: string | null
+          compliance_type: string
+          created_at: string | null
+          expiry_date: string
+          id: string
+          issued_date: string | null
+          portfolio_property_id: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          certificate_number?: string | null
+          certificate_url?: string | null
+          compliance_type: string
+          created_at?: string | null
+          expiry_date: string
+          id?: string
+          issued_date?: string | null
+          portfolio_property_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          certificate_number?: string | null
+          certificate_url?: string | null
+          compliance_type?: string
+          created_at?: string | null
+          expiry_date?: string
+          id?: string
+          issued_date?: string | null
+          portfolio_property_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "compliance_items_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       deal_pack_comments: {
         Row: {
           comment_text: string
@@ -1443,6 +1490,71 @@ export type Database = {
         }
         Relationships: []
       }
+      maintenance_jobs: {
+        Row: {
+          actual_cost: number | null
+          category: string | null
+          completed_date: string | null
+          contractor_name: string | null
+          contractor_phone: string | null
+          created_at: string | null
+          description: string | null
+          estimated_cost: number | null
+          id: string
+          portfolio_property_id: string | null
+          priority: string | null
+          reported_date: string
+          scheduled_date: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          actual_cost?: number | null
+          category?: string | null
+          completed_date?: string | null
+          contractor_name?: string | null
+          contractor_phone?: string | null
+          created_at?: string | null
+          description?: string | null
+          estimated_cost?: number | null
+          id?: string
+          portfolio_property_id?: string | null
+          priority?: string | null
+          reported_date: string
+          scheduled_date?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          actual_cost?: number | null
+          category?: string | null
+          completed_date?: string | null
+          contractor_name?: string | null
+          contractor_phone?: string | null
+          created_at?: string | null
+          description?: string | null
+          estimated_cost?: number | null
+          id?: string
+          portfolio_property_id?: string | null
+          priority?: string | null
+          reported_date?: string
+          scheduled_date?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maintenance_jobs_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       market_conditions: {
         Row: {
           avg_mortgage_rate: number | null
@@ -1782,6 +1894,126 @@ export type Database = {
           },
         ]
       }
+      portfolio_properties: {
+        Row: {
+          address: string
+          bedrooms: number | null
+          created_at: string | null
+          current_value: number | null
+          current_yield: number | null
+          id: string
+          images: string[] | null
+          investment_strategy: string | null
+          lease_years: number | null
+          monthly_payment: number | null
+          mortgage_amount: number | null
+          mortgage_lender: string | null
+          mortgage_rate: number | null
+          postcode: string
+          property_status: string | null
+          property_type: string | null
+          purchase_date: string
+          purchase_price: number
+          tenure: string | null
+          total_expenses_ytd: number | null
+          total_income_ytd: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          address: string
+          bedrooms?: number | null
+          created_at?: string | null
+          current_value?: number | null
+          current_yield?: number | null
+          id?: string
+          images?: string[] | null
+          investment_strategy?: string | null
+          lease_years?: number | null
+          monthly_payment?: number | null
+          mortgage_amount?: number | null
+          mortgage_lender?: string | null
+          mortgage_rate?: number | null
+          postcode: string
+          property_status?: string | null
+          property_type?: string | null
+          purchase_date: string
+          purchase_price: number
+          tenure?: string | null
+          total_expenses_ytd?: number | null
+          total_income_ytd?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          address?: string
+          bedrooms?: number | null
+          created_at?: string | null
+          current_value?: number | null
+          current_yield?: number | null
+          id?: string
+          images?: string[] | null
+          investment_strategy?: string | null
+          lease_years?: number | null
+          monthly_payment?: number | null
+          mortgage_amount?: number | null
+          mortgage_lender?: string | null
+          mortgage_rate?: number | null
+          postcode?: string
+          property_status?: string | null
+          property_type?: string | null
+          purchase_date?: string
+          purchase_price?: number
+          tenure?: string | null
+          total_expenses_ytd?: number | null
+          total_income_ytd?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      portfolio_summary: {
+        Row: {
+          id: string
+          last_updated: string | null
+          monthly_cash_flow: number | null
+          monthly_expenses: number | null
+          monthly_income: number | null
+          occupancy_rate: number | null
+          portfolio_yield: number | null
+          total_equity: number | null
+          total_properties: number | null
+          total_value: number | null
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          last_updated?: string | null
+          monthly_cash_flow?: number | null
+          monthly_expenses?: number | null
+          monthly_income?: number | null
+          occupancy_rate?: number | null
+          portfolio_yield?: number | null
+          total_equity?: number | null
+          total_properties?: number | null
+          total_value?: number | null
+          user_id: string
+        }
+        Update: {
+          id?: string
+          last_updated?: string | null
+          monthly_cash_flow?: number | null
+          monthly_expenses?: number | null
+          monthly_income?: number | null
+          occupancy_rate?: number | null
+          portfolio_yield?: number | null
+          total_equity?: number | null
+          total_properties?: number | null
+          total_value?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -1920,6 +2152,53 @@ export type Database = {
         }
         Relationships: []
       }
+      property_expenses: {
+        Row: {
+          amount: number
+          category: string
+          created_at: string | null
+          description: string
+          expense_date: string
+          id: string
+          is_tax_deductible: boolean | null
+          portfolio_property_id: string | null
+          receipt_url: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          category: string
+          created_at?: string | null
+          description: string
+          expense_date: string
+          id?: string
+          is_tax_deductible?: boolean | null
+          portfolio_property_id?: string | null
+          receipt_url?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          category?: string
+          created_at?: string | null
+          description?: string
+          expense_date?: string
+          id?: string
+          is_tax_deductible?: boolean | null
+          portfolio_property_id?: string | null
+          receipt_url?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_expenses_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       referral_clicks: {
         Row: {
           affiliate_id: string | null
@@ -2050,6 +2329,50 @@ export type Database = {
             columns: ["click_id"]
             isOneToOne: false
             referencedRelation: "referral_clicks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rent_payments: {
+        Row: {
+          actual_amount: number | null
+          actual_date: string | null
+          created_at: string | null
+          days_late: number | null
+          expected_amount: number
+          expected_date: string
+          id: string
+          status: string | null
+          tenancy_id: string | null
+        }
+        Insert: {
+          actual_amount?: number | null
+          actual_date?: string | null
+          created_at?: string | null
+          days_late?: number | null
+          expected_amount: number
+          expected_date: string
+          id?: string
+          status?: string | null
+          tenancy_id?: string | null
+        }
+        Update: {
+          actual_amount?: number | null
+          actual_date?: string | null
+          created_at?: string | null
+          days_late?: number | null
+          expected_amount?: number
+          expected_date?: string
+          id?: string
+          status?: string | null
+          tenancy_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rent_payments_tenancy_id_fkey"
+            columns: ["tenancy_id"]
+            isOneToOne: false
+            referencedRelation: "tenancies"
             referencedColumns: ["id"]
           },
         ]
@@ -2696,6 +3019,62 @@ export type Database = {
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "cached_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenancies: {
+        Row: {
+          created_at: string | null
+          deposit_amount: number
+          deposit_scheme: string | null
+          end_date: string | null
+          id: string
+          monthly_rent: number
+          portfolio_property_id: string | null
+          start_date: string
+          status: string | null
+          tenant_email: string | null
+          tenant_name: string
+          tenant_phone: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          deposit_amount: number
+          deposit_scheme?: string | null
+          end_date?: string | null
+          id?: string
+          monthly_rent: number
+          portfolio_property_id?: string | null
+          start_date: string
+          status?: string | null
+          tenant_email?: string | null
+          tenant_name: string
+          tenant_phone?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          deposit_amount?: number
+          deposit_scheme?: string | null
+          end_date?: string | null
+          id?: string
+          monthly_rent?: number
+          portfolio_property_id?: string | null
+          start_date?: string
+          status?: string | null
+          tenant_email?: string | null
+          tenant_name?: string
+          tenant_phone?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenancies_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
             referencedColumns: ["id"]
           },
         ]
