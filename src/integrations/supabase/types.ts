@@ -125,6 +125,138 @@ export type Database = {
         }
         Relationships: []
       }
+      affiliates: {
+        Row: {
+          active_referrals: number | null
+          affiliate_code: string
+          application_date: string | null
+          approved_by: string | null
+          approved_date: string | null
+          audience_description: string | null
+          audience_size: number | null
+          auto_payout: boolean | null
+          bank_details: Json | null
+          click_count: number | null
+          commission_rate: number | null
+          commission_tier: string | null
+          company_name: string | null
+          conversion_rate: number | null
+          created_at: string | null
+          id: string
+          is_vat_registered: boolean | null
+          minimum_payout: number | null
+          notes: string | null
+          paid_out: number | null
+          payment_email: string | null
+          payment_method: string | null
+          payout_frequency: string | null
+          paypal_email: string | null
+          pending_payout: number | null
+          promotion_methods: string[] | null
+          recurring_commission: boolean | null
+          recurring_months: number | null
+          referral_source: string | null
+          social_media: Json | null
+          status: string | null
+          stripe_account_id: string | null
+          tax_country: string | null
+          tax_id: string | null
+          terms_accepted: boolean | null
+          terms_accepted_date: string | null
+          total_earnings: number | null
+          total_referrals: number | null
+          updated_at: string | null
+          user_id: string
+          website_url: string | null
+        }
+        Insert: {
+          active_referrals?: number | null
+          affiliate_code: string
+          application_date?: string | null
+          approved_by?: string | null
+          approved_date?: string | null
+          audience_description?: string | null
+          audience_size?: number | null
+          auto_payout?: boolean | null
+          bank_details?: Json | null
+          click_count?: number | null
+          commission_rate?: number | null
+          commission_tier?: string | null
+          company_name?: string | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          id?: string
+          is_vat_registered?: boolean | null
+          minimum_payout?: number | null
+          notes?: string | null
+          paid_out?: number | null
+          payment_email?: string | null
+          payment_method?: string | null
+          payout_frequency?: string | null
+          paypal_email?: string | null
+          pending_payout?: number | null
+          promotion_methods?: string[] | null
+          recurring_commission?: boolean | null
+          recurring_months?: number | null
+          referral_source?: string | null
+          social_media?: Json | null
+          status?: string | null
+          stripe_account_id?: string | null
+          tax_country?: string | null
+          tax_id?: string | null
+          terms_accepted?: boolean | null
+          terms_accepted_date?: string | null
+          total_earnings?: number | null
+          total_referrals?: number | null
+          updated_at?: string | null
+          user_id: string
+          website_url?: string | null
+        }
+        Update: {
+          active_referrals?: number | null
+          affiliate_code?: string
+          application_date?: string | null
+          approved_by?: string | null
+          approved_date?: string | null
+          audience_description?: string | null
+          audience_size?: number | null
+          auto_payout?: boolean | null
+          bank_details?: Json | null
+          click_count?: number | null
+          commission_rate?: number | null
+          commission_tier?: string | null
+          company_name?: string | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          id?: string
+          is_vat_registered?: boolean | null
+          minimum_payout?: number | null
+          notes?: string | null
+          paid_out?: number | null
+          payment_email?: string | null
+          payment_method?: string | null
+          payout_frequency?: string | null
+          paypal_email?: string | null
+          pending_payout?: number | null
+          promotion_methods?: string[] | null
+          recurring_commission?: boolean | null
+          recurring_months?: number | null
+          referral_source?: string | null
+          social_media?: Json | null
+          status?: string | null
+          stripe_account_id?: string | null
+          tax_country?: string | null
+          tax_id?: string | null
+          terms_accepted?: boolean | null
+          terms_accepted_date?: string | null
+          total_earnings?: number | null
+          total_referrals?: number | null
+          updated_at?: string | null
+          user_id?: string
+          website_url?: string | null
+        }
+        Relationships: []
+      }
       api_usage: {
         Row: {
           cost_credits: number | null
@@ -303,6 +435,127 @@ export type Database = {
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commission_tiers: {
+        Row: {
+          created_at: string | null
+          enterprise_rate: number | null
+          id: string
+          is_active: boolean | null
+          min_referrals: number | null
+          monthly_bonus_amount: number | null
+          monthly_bonus_threshold: number | null
+          name: string
+          perks: Json | null
+          pro_rate: number | null
+          recurring_months: number | null
+          signup_commission: number | null
+          starter_rate: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          enterprise_rate?: number | null
+          id?: string
+          is_active?: boolean | null
+          min_referrals?: number | null
+          monthly_bonus_amount?: number | null
+          monthly_bonus_threshold?: number | null
+          name: string
+          perks?: Json | null
+          pro_rate?: number | null
+          recurring_months?: number | null
+          signup_commission?: number | null
+          starter_rate?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          enterprise_rate?: number | null
+          id?: string
+          is_active?: boolean | null
+          min_referrals?: number | null
+          monthly_bonus_amount?: number | null
+          monthly_bonus_threshold?: number | null
+          name?: string
+          perks?: Json | null
+          pro_rate?: number | null
+          recurring_months?: number | null
+          signup_commission?: number | null
+          starter_rate?: number | null
+        }
+        Relationships: []
+      }
+      commissions: {
+        Row: {
+          affiliate_id: string | null
+          amount: number
+          commission_amount: number
+          commission_rate: number
+          created_at: string | null
+          customer_amount: number | null
+          description: string | null
+          id: string
+          paid_at: string | null
+          payout_id: string | null
+          referral_id: string | null
+          status: string | null
+          stripe_payment_id: string | null
+          type: string
+        }
+        Insert: {
+          affiliate_id?: string | null
+          amount: number
+          commission_amount: number
+          commission_rate: number
+          created_at?: string | null
+          customer_amount?: number | null
+          description?: string | null
+          id?: string
+          paid_at?: string | null
+          payout_id?: string | null
+          referral_id?: string | null
+          status?: string | null
+          stripe_payment_id?: string | null
+          type: string
+        }
+        Update: {
+          affiliate_id?: string | null
+          amount?: number
+          commission_amount?: number
+          commission_rate?: number
+          created_at?: string | null
+          customer_amount?: number | null
+          description?: string | null
+          id?: string
+          paid_at?: string | null
+          payout_id?: string | null
+          referral_id?: string | null
+          status?: string | null
+          stripe_payment_id?: string | null
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commissions_affiliate_id_fkey"
+            columns: ["affiliate_id"]
+            isOneToOne: false
+            referencedRelation: "affiliates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commissions_payout_id_fkey"
+            columns: ["payout_id"]
+            isOneToOne: false
+            referencedRelation: "payouts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commissions_referral_id_fkey"
+            columns: ["referral_id"]
+            isOneToOne: false
+            referencedRelation: "referrals"
             referencedColumns: ["id"]
           },
         ]
@@ -561,6 +814,135 @@ export type Database = {
           },
         ]
       }
+      deal_scouts: {
+        Row: {
+          alert_frequency: string | null
+          alert_methods: Json | null
+          alert_score_threshold: number | null
+          avg_score: number | null
+          bedrooms_max: number | null
+          bedrooms_min: number | null
+          bmv_min: number | null
+          cash_flow_min: number | null
+          created_at: string | null
+          exclude_auction: boolean | null
+          exclude_leasehold: boolean | null
+          exclude_new_build: boolean | null
+          exclude_shared_ownership: boolean | null
+          id: string
+          investment_strategy: string | null
+          is_active: boolean | null
+          last_scan_at: string | null
+          location_areas: string[] | null
+          location_center_lat: number | null
+          location_center_lng: number | null
+          location_radius_miles: number | null
+          max_chain_length: number | null
+          ml_preferences: Json | null
+          name: string
+          next_scan_at: string | null
+          price_max: number | null
+          price_min: number | null
+          prioritize_below_market: boolean | null
+          prioritize_capital_growth: boolean | null
+          prioritize_cash_flow: boolean | null
+          prioritize_yield: boolean | null
+          properties_found: number | null
+          properties_saved: number | null
+          properties_viewed: number | null
+          property_types: string[] | null
+          require_garden: boolean | null
+          require_parking: boolean | null
+          updated_at: string | null
+          user_id: string
+          yield_min: number | null
+        }
+        Insert: {
+          alert_frequency?: string | null
+          alert_methods?: Json | null
+          alert_score_threshold?: number | null
+          avg_score?: number | null
+          bedrooms_max?: number | null
+          bedrooms_min?: number | null
+          bmv_min?: number | null
+          cash_flow_min?: number | null
+          created_at?: string | null
+          exclude_auction?: boolean | null
+          exclude_leasehold?: boolean | null
+          exclude_new_build?: boolean | null
+          exclude_shared_ownership?: boolean | null
+          id?: string
+          investment_strategy?: string | null
+          is_active?: boolean | null
+          last_scan_at?: string | null
+          location_areas?: string[] | null
+          location_center_lat?: number | null
+          location_center_lng?: number | null
+          location_radius_miles?: number | null
+          max_chain_length?: number | null
+          ml_preferences?: Json | null
+          name: string
+          next_scan_at?: string | null
+          price_max?: number | null
+          price_min?: number | null
+          prioritize_below_market?: boolean | null
+          prioritize_capital_growth?: boolean | null
+          prioritize_cash_flow?: boolean | null
+          prioritize_yield?: boolean | null
+          properties_found?: number | null
+          properties_saved?: number | null
+          properties_viewed?: number | null
+          property_types?: string[] | null
+          require_garden?: boolean | null
+          require_parking?: boolean | null
+          updated_at?: string | null
+          user_id: string
+          yield_min?: number | null
+        }
+        Update: {
+          alert_frequency?: string | null
+          alert_methods?: Json | null
+          alert_score_threshold?: number | null
+          avg_score?: number | null
+          bedrooms_max?: number | null
+          bedrooms_min?: number | null
+          bmv_min?: number | null
+          cash_flow_min?: number | null
+          created_at?: string | null
+          exclude_auction?: boolean | null
+          exclude_leasehold?: boolean | null
+          exclude_new_build?: boolean | null
+          exclude_shared_ownership?: boolean | null
+          id?: string
+          investment_strategy?: string | null
+          is_active?: boolean | null
+          last_scan_at?: string | null
+          location_areas?: string[] | null
+          location_center_lat?: number | null
+          location_center_lng?: number | null
+          location_radius_miles?: number | null
+          max_chain_length?: number | null
+          ml_preferences?: Json | null
+          name?: string
+          next_scan_at?: string | null
+          price_max?: number | null
+          price_min?: number | null
+          prioritize_below_market?: boolean | null
+          prioritize_capital_growth?: boolean | null
+          prioritize_cash_flow?: boolean | null
+          prioritize_yield?: boolean | null
+          properties_found?: number | null
+          properties_saved?: number | null
+          properties_viewed?: number | null
+          property_types?: string[] | null
+          require_garden?: boolean | null
+          require_parking?: boolean | null
+          updated_at?: string | null
+          user_id?: string
+          yield_min?: number | null
+        }
+        Relationships: []
+      }
       email_logs: {
         Row: {
           clicked_at: string | null
@@ -674,6 +1056,81 @@ export type Database = {
         }
         Relationships: []
       }
+      market_intelligence: {
+        Row: {
+          area: string
+          avg_days_to_sell: number | null
+          avg_price: number | null
+          avg_rent: number | null
+          avg_sale_vs_asking: number | null
+          avg_void_period_days: number | null
+          avg_yield: number | null
+          cash_flow_potential: string | null
+          data_date: string | null
+          growth_potential: string | null
+          id: string
+          investment_score: number | null
+          median_price: number | null
+          median_rent: number | null
+          new_listings_30d: number | null
+          price_per_sqft: number | null
+          price_trend_12mo: number | null
+          price_trend_3mo: number | null
+          properties_for_sale: number | null
+          properties_sold_30d: number | null
+          rental_demand: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          area: string
+          avg_days_to_sell?: number | null
+          avg_price?: number | null
+          avg_rent?: number | null
+          avg_sale_vs_asking?: number | null
+          avg_void_period_days?: number | null
+          avg_yield?: number | null
+          cash_flow_potential?: string | null
+          data_date?: string | null
+          growth_potential?: string | null
+          id?: string
+          investment_score?: number | null
+          median_price?: number | null
+          median_rent?: number | null
+          new_listings_30d?: number | null
+          price_per_sqft?: number | null
+          price_trend_12mo?: number | null
+          price_trend_3mo?: number | null
+          properties_for_sale?: number | null
+          properties_sold_30d?: number | null
+          rental_demand?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          area?: string
+          avg_days_to_sell?: number | null
+          avg_price?: number | null
+          avg_rent?: number | null
+          avg_sale_vs_asking?: number | null
+          avg_void_period_days?: number | null
+          avg_yield?: number | null
+          cash_flow_potential?: string | null
+          data_date?: string | null
+          growth_potential?: string | null
+          id?: string
+          investment_score?: number | null
+          median_price?: number | null
+          median_rent?: number | null
+          new_listings_30d?: number | null
+          price_per_sqft?: number | null
+          price_trend_12mo?: number | null
+          price_trend_3mo?: number | null
+          properties_for_sale?: number | null
+          properties_sold_30d?: number | null
+          rental_demand?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           clicked: boolean | null
@@ -726,6 +1183,131 @@ export type Database = {
             columns: ["saved_search_id"]
             isOneToOne: false
             referencedRelation: "saved_searches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      off_market_properties: {
+        Row: {
+          address: string | null
+          available_from: string | null
+          bedrooms: number | null
+          created_at: string | null
+          description: string | null
+          documents: Json | null
+          expires_at: string | null
+          id: string
+          images: Json | null
+          is_active: boolean | null
+          postcode: string | null
+          price: number | null
+          property_type: string | null
+          published_at: string | null
+          reason_off_market: string | null
+          source_contact: Json | null
+          source_name: string | null
+          source_type: string | null
+        }
+        Insert: {
+          address?: string | null
+          available_from?: string | null
+          bedrooms?: number | null
+          created_at?: string | null
+          description?: string | null
+          documents?: Json | null
+          expires_at?: string | null
+          id?: string
+          images?: Json | null
+          is_active?: boolean | null
+          postcode?: string | null
+          price?: number | null
+          property_type?: string | null
+          published_at?: string | null
+          reason_off_market?: string | null
+          source_contact?: Json | null
+          source_name?: string | null
+          source_type?: string | null
+        }
+        Update: {
+          address?: string | null
+          available_from?: string | null
+          bedrooms?: number | null
+          created_at?: string | null
+          description?: string | null
+          documents?: Json | null
+          expires_at?: string | null
+          id?: string
+          images?: Json | null
+          is_active?: boolean | null
+          postcode?: string | null
+          price?: number | null
+          property_type?: string | null
+          published_at?: string | null
+          reason_off_market?: string | null
+          source_contact?: Json | null
+          source_name?: string | null
+          source_type?: string | null
+        }
+        Relationships: []
+      }
+      payouts: {
+        Row: {
+          affiliate_id: string | null
+          amount: number
+          bank_reference: string | null
+          completed_at: string | null
+          currency: string | null
+          failure_reason: string | null
+          id: string
+          invoice_url: string | null
+          notes: string | null
+          payment_method: string | null
+          paypal_transaction_id: string | null
+          processed_at: string | null
+          requested_at: string | null
+          status: string | null
+          stripe_payout_id: string | null
+        }
+        Insert: {
+          affiliate_id?: string | null
+          amount: number
+          bank_reference?: string | null
+          completed_at?: string | null
+          currency?: string | null
+          failure_reason?: string | null
+          id?: string
+          invoice_url?: string | null
+          notes?: string | null
+          payment_method?: string | null
+          paypal_transaction_id?: string | null
+          processed_at?: string | null
+          requested_at?: string | null
+          status?: string | null
+          stripe_payout_id?: string | null
+        }
+        Update: {
+          affiliate_id?: string | null
+          amount?: number
+          bank_reference?: string | null
+          completed_at?: string | null
+          currency?: string | null
+          failure_reason?: string | null
+          id?: string
+          invoice_url?: string | null
+          notes?: string | null
+          payment_method?: string | null
+          paypal_transaction_id?: string | null
+          processed_at?: string | null
+          requested_at?: string | null
+          status?: string | null
+          stripe_payout_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payouts_affiliate_id_fkey"
+            columns: ["affiliate_id"]
+            isOneToOne: false
+            referencedRelation: "affiliates"
             referencedColumns: ["id"]
           },
         ]
@@ -810,6 +1392,60 @@ export type Database = {
         }
         Relationships: []
       }
+      promo_materials: {
+        Row: {
+          click_count: number | null
+          conversion_count: number | null
+          copy_text: string | null
+          created_at: string | null
+          description: string | null
+          height: number | null
+          html_code: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          name: string
+          thumbnail_url: string | null
+          type: string
+          usage_count: number | null
+          width: number | null
+        }
+        Insert: {
+          click_count?: number | null
+          conversion_count?: number | null
+          copy_text?: string | null
+          created_at?: string | null
+          description?: string | null
+          height?: number | null
+          html_code?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          name: string
+          thumbnail_url?: string | null
+          type: string
+          usage_count?: number | null
+          width?: number | null
+        }
+        Update: {
+          click_count?: number | null
+          conversion_count?: number | null
+          copy_text?: string | null
+          created_at?: string | null
+          description?: string | null
+          height?: number | null
+          html_code?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          name?: string
+          thumbnail_url?: string | null
+          type?: string
+          usage_count?: number | null
+          width?: number | null
+        }
+        Relationships: []
+      }
       properties: {
         Row: {
           address: string | null
@@ -863,6 +1499,140 @@ export type Database = {
           tenure?: string | null
         }
         Relationships: []
+      }
+      referral_clicks: {
+        Row: {
+          affiliate_id: string | null
+          city: string | null
+          click_id: string | null
+          clicked_at: string | null
+          converted: boolean | null
+          converted_at: string | null
+          converted_user_id: string | null
+          cookie_expires_at: string | null
+          country: string | null
+          id: string
+          ip_address: unknown
+          landing_page: string | null
+          referrer_url: string | null
+          user_agent: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+        }
+        Insert: {
+          affiliate_id?: string | null
+          city?: string | null
+          click_id?: string | null
+          clicked_at?: string | null
+          converted?: boolean | null
+          converted_at?: string | null
+          converted_user_id?: string | null
+          cookie_expires_at?: string | null
+          country?: string | null
+          id?: string
+          ip_address?: unknown
+          landing_page?: string | null
+          referrer_url?: string | null
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Update: {
+          affiliate_id?: string | null
+          city?: string | null
+          click_id?: string | null
+          clicked_at?: string | null
+          converted?: boolean | null
+          converted_at?: string | null
+          converted_user_id?: string | null
+          cookie_expires_at?: string | null
+          country?: string | null
+          id?: string
+          ip_address?: unknown
+          landing_page?: string | null
+          referrer_url?: string | null
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_clicks_affiliate_id_fkey"
+            columns: ["affiliate_id"]
+            isOneToOne: false
+            referencedRelation: "affiliates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      referrals: {
+        Row: {
+          affiliate_id: string | null
+          click_id: string | null
+          converted_at: string | null
+          first_payment_date: string | null
+          id: string
+          referred_email: string | null
+          referred_user_id: string | null
+          signup_date: string | null
+          status: string | null
+          subscription_tier: string | null
+          total_commission_earned: number | null
+          total_spent: number | null
+        }
+        Insert: {
+          affiliate_id?: string | null
+          click_id?: string | null
+          converted_at?: string | null
+          first_payment_date?: string | null
+          id?: string
+          referred_email?: string | null
+          referred_user_id?: string | null
+          signup_date?: string | null
+          status?: string | null
+          subscription_tier?: string | null
+          total_commission_earned?: number | null
+          total_spent?: number | null
+        }
+        Update: {
+          affiliate_id?: string | null
+          click_id?: string | null
+          converted_at?: string | null
+          first_payment_date?: string | null
+          id?: string
+          referred_email?: string | null
+          referred_user_id?: string | null
+          signup_date?: string | null
+          status?: string | null
+          subscription_tier?: string | null
+          total_commission_earned?: number | null
+          total_spent?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referrals_affiliate_id_fkey"
+            columns: ["affiliate_id"]
+            isOneToOne: false
+            referencedRelation: "affiliates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "referrals_click_id_fkey"
+            columns: ["click_id"]
+            isOneToOne: false
+            referencedRelation: "referral_clicks"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       rental_estimates_cache: {
         Row: {
@@ -1156,6 +1926,230 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      scout_alerts: {
+        Row: {
+          action_taken: string | null
+          alert_type: string | null
+          clicked: boolean | null
+          clicked_at: string | null
+          delivery_method: string | null
+          discovery_id: string | null
+          id: string
+          opened: boolean | null
+          opened_at: string | null
+          scout_id: string | null
+          sent_at: string | null
+          user_id: string
+        }
+        Insert: {
+          action_taken?: string | null
+          alert_type?: string | null
+          clicked?: boolean | null
+          clicked_at?: string | null
+          delivery_method?: string | null
+          discovery_id?: string | null
+          id?: string
+          opened?: boolean | null
+          opened_at?: string | null
+          scout_id?: string | null
+          sent_at?: string | null
+          user_id: string
+        }
+        Update: {
+          action_taken?: string | null
+          alert_type?: string | null
+          clicked?: boolean | null
+          clicked_at?: string | null
+          delivery_method?: string | null
+          discovery_id?: string | null
+          id?: string
+          opened?: boolean | null
+          opened_at?: string | null
+          scout_id?: string | null
+          sent_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scout_alerts_discovery_id_fkey"
+            columns: ["discovery_id"]
+            isOneToOne: false
+            referencedRelation: "scout_discoveries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scout_alerts_scout_id_fkey"
+            columns: ["scout_id"]
+            isOneToOne: false
+            referencedRelation: "deal_scouts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scout_discoveries: {
+        Row: {
+          alert_sent_at: string | null
+          below_market_value: number | null
+          bmv_percentage: number | null
+          days_on_market: number | null
+          discovered_at: string | null
+          estimated_cash_flow: number | null
+          estimated_market_value: number | null
+          estimated_roi: number | null
+          estimated_yield: number | null
+          id: string
+          is_price_reduced: boolean | null
+          listing_url: string | null
+          opportunity_flags: Json | null
+          overall_score: number
+          price_changes: Json | null
+          property_id: string | null
+          reduction_percentage: number | null
+          risk_flags: Json | null
+          saved_at: string | null
+          score_breakdown: Json
+          score_reasoning: string | null
+          scout_id: string | null
+          source: string | null
+          status: string | null
+          status_updated_at: string | null
+          total_price_reduction: number | null
+          user_feedback: string | null
+          viewed_at: string | null
+          was_alerted: boolean | null
+          was_saved: boolean | null
+          was_viewed: boolean | null
+        }
+        Insert: {
+          alert_sent_at?: string | null
+          below_market_value?: number | null
+          bmv_percentage?: number | null
+          days_on_market?: number | null
+          discovered_at?: string | null
+          estimated_cash_flow?: number | null
+          estimated_market_value?: number | null
+          estimated_roi?: number | null
+          estimated_yield?: number | null
+          id?: string
+          is_price_reduced?: boolean | null
+          listing_url?: string | null
+          opportunity_flags?: Json | null
+          overall_score: number
+          price_changes?: Json | null
+          property_id?: string | null
+          reduction_percentage?: number | null
+          risk_flags?: Json | null
+          saved_at?: string | null
+          score_breakdown: Json
+          score_reasoning?: string | null
+          scout_id?: string | null
+          source?: string | null
+          status?: string | null
+          status_updated_at?: string | null
+          total_price_reduction?: number | null
+          user_feedback?: string | null
+          viewed_at?: string | null
+          was_alerted?: boolean | null
+          was_saved?: boolean | null
+          was_viewed?: boolean | null
+        }
+        Update: {
+          alert_sent_at?: string | null
+          below_market_value?: number | null
+          bmv_percentage?: number | null
+          days_on_market?: number | null
+          discovered_at?: string | null
+          estimated_cash_flow?: number | null
+          estimated_market_value?: number | null
+          estimated_roi?: number | null
+          estimated_yield?: number | null
+          id?: string
+          is_price_reduced?: boolean | null
+          listing_url?: string | null
+          opportunity_flags?: Json | null
+          overall_score?: number
+          price_changes?: Json | null
+          property_id?: string | null
+          reduction_percentage?: number | null
+          risk_flags?: Json | null
+          saved_at?: string | null
+          score_breakdown?: Json
+          score_reasoning?: string | null
+          scout_id?: string | null
+          source?: string | null
+          status?: string | null
+          status_updated_at?: string | null
+          total_price_reduction?: number | null
+          user_feedback?: string | null
+          viewed_at?: string | null
+          was_alerted?: boolean | null
+          was_saved?: boolean | null
+          was_viewed?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scout_discoveries_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "cached_properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scout_discoveries_scout_id_fkey"
+            columns: ["scout_id"]
+            isOneToOne: false
+            referencedRelation: "deal_scouts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scout_ml_training: {
+        Row: {
+          action: string
+          action_timestamp: string | null
+          days_since_shown: number | null
+          id: string
+          property_features: Json
+          property_id: string | null
+          scout_score: number | null
+          user_id: string
+          user_implicit_score: number | null
+          was_shown_in_alert: boolean | null
+        }
+        Insert: {
+          action: string
+          action_timestamp?: string | null
+          days_since_shown?: number | null
+          id?: string
+          property_features: Json
+          property_id?: string | null
+          scout_score?: number | null
+          user_id: string
+          user_implicit_score?: number | null
+          was_shown_in_alert?: boolean | null
+        }
+        Update: {
+          action?: string
+          action_timestamp?: string | null
+          days_since_shown?: number | null
+          id?: string
+          property_features?: Json
+          property_id?: string | null
+          scout_score?: number | null
+          user_id?: string
+          user_implicit_score?: number | null
+          was_shown_in_alert?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scout_ml_training_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "cached_properties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       usage_logs: {
         Row: {
