@@ -25,6 +25,7 @@ import Portfolio from "./pages/Portfolio";
 import Auctions from "./pages/Auctions";
 import Network from "./pages/Network";
 import Copilot from "./pages/Copilot";
+import Mortgages from "./pages/Mortgages";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -62,6 +63,7 @@ const App = () => (
           <Route path="/auctions" element={<Auctions />} />
           <Route path="/network" element={<Network />} />
           <Route path="/copilot" element={<Copilot />} />
+          <Route path="/mortgages" element={<Mortgages />} />
           <Route path="/settings" element={<Settings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

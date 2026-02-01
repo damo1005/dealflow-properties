@@ -631,6 +631,48 @@ export type Database = {
           },
         ]
       }
+      automation_workflows: {
+        Row: {
+          actions: Json
+          created_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          last_run_at: string | null
+          name: string
+          run_count: number | null
+          trigger_config: Json | null
+          trigger_type: string
+          user_id: string
+        }
+        Insert: {
+          actions: Json
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_run_at?: string | null
+          name: string
+          run_count?: number | null
+          trigger_config?: Json | null
+          trigger_type: string
+          user_id: string
+        }
+        Update: {
+          actions?: Json
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_run_at?: string | null
+          name?: string
+          run_count?: number | null
+          trigger_config?: Json | null
+          trigger_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       bid_calculations: {
         Row: {
           created_at: string | null
@@ -1892,6 +1934,116 @@ export type Database = {
           },
         ]
       }
+      integration_syncs: {
+        Row: {
+          completed_at: string | null
+          direction: string | null
+          error_message: string | null
+          id: string
+          records_failed: number | null
+          records_processed: number | null
+          records_successful: number | null
+          started_at: string | null
+          status: string | null
+          sync_type: string | null
+          user_integration_id: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          direction?: string | null
+          error_message?: string | null
+          id?: string
+          records_failed?: number | null
+          records_processed?: number | null
+          records_successful?: number | null
+          started_at?: string | null
+          status?: string | null
+          sync_type?: string | null
+          user_integration_id?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          direction?: string | null
+          error_message?: string | null
+          id?: string
+          records_failed?: number | null
+          records_processed?: number | null
+          records_successful?: number | null
+          started_at?: string | null
+          status?: string | null
+          sync_type?: string | null
+          user_integration_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integration_syncs_user_integration_id_fkey"
+            columns: ["user_integration_id"]
+            isOneToOne: false
+            referencedRelation: "user_integrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      integrations: {
+        Row: {
+          category: string
+          connection_count: number | null
+          created_at: string | null
+          description: string | null
+          id: string
+          integration_type: string | null
+          is_active: boolean | null
+          is_beta: boolean | null
+          is_free: boolean | null
+          logo_url: string | null
+          name: string
+          requires_plan: string | null
+          slug: string
+          supports_export: boolean | null
+          supports_import: boolean | null
+          supports_sync: boolean | null
+          website: string | null
+        }
+        Insert: {
+          category: string
+          connection_count?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          integration_type?: string | null
+          is_active?: boolean | null
+          is_beta?: boolean | null
+          is_free?: boolean | null
+          logo_url?: string | null
+          name: string
+          requires_plan?: string | null
+          slug: string
+          supports_export?: boolean | null
+          supports_import?: boolean | null
+          supports_sync?: boolean | null
+          website?: string | null
+        }
+        Update: {
+          category?: string
+          connection_count?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          integration_type?: string | null
+          is_active?: boolean | null
+          is_beta?: boolean | null
+          is_free?: boolean | null
+          logo_url?: string | null
+          name?: string
+          requires_plan?: string | null
+          slug?: string
+          supports_export?: boolean | null
+          supports_import?: boolean | null
+          supports_sync?: boolean | null
+          website?: string | null
+        }
+        Relationships: []
+      }
       jv_preferences: {
         Row: {
           capital_available: number | null
@@ -2106,6 +2258,180 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      mortgage_comparisons: {
+        Row: {
+          best_rate: number | null
+          created_at: string | null
+          id: string
+          loan_amount: number
+          ltv: number | null
+          mortgage_type: string | null
+          property_id: string | null
+          property_value: number
+          results: Json | null
+          term_years: number | null
+          user_id: string
+        }
+        Insert: {
+          best_rate?: number | null
+          created_at?: string | null
+          id?: string
+          loan_amount: number
+          ltv?: number | null
+          mortgage_type?: string | null
+          property_id?: string | null
+          property_value: number
+          results?: Json | null
+          term_years?: number | null
+          user_id: string
+        }
+        Update: {
+          best_rate?: number | null
+          created_at?: string | null
+          id?: string
+          loan_amount?: number
+          ltv?: number | null
+          mortgage_type?: string | null
+          property_id?: string | null
+          property_value?: number
+          results?: Json | null
+          term_years?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      mortgage_products: {
+        Row: {
+          cashback: number | null
+          early_repayment_charges: Json | null
+          eligibility_criteria: Json | null
+          id: string
+          initial_rate_period: number | null
+          is_active: boolean | null
+          last_updated: string | null
+          lender: string
+          max_loan: number | null
+          max_ltv: number | null
+          min_loan: number | null
+          mortgage_type: string | null
+          product_fee: number | null
+          product_name: string | null
+          rate: number
+          rate_type: string | null
+        }
+        Insert: {
+          cashback?: number | null
+          early_repayment_charges?: Json | null
+          eligibility_criteria?: Json | null
+          id?: string
+          initial_rate_period?: number | null
+          is_active?: boolean | null
+          last_updated?: string | null
+          lender: string
+          max_loan?: number | null
+          max_ltv?: number | null
+          min_loan?: number | null
+          mortgage_type?: string | null
+          product_fee?: number | null
+          product_name?: string | null
+          rate: number
+          rate_type?: string | null
+        }
+        Update: {
+          cashback?: number | null
+          early_repayment_charges?: Json | null
+          eligibility_criteria?: Json | null
+          id?: string
+          initial_rate_period?: number | null
+          is_active?: boolean | null
+          last_updated?: string | null
+          lender?: string
+          max_loan?: number | null
+          max_ltv?: number | null
+          min_loan?: number | null
+          mortgage_type?: string | null
+          product_fee?: number | null
+          product_name?: string | null
+          rate?: number
+          rate_type?: string | null
+        }
+        Relationships: []
+      }
+      mortgage_referrals: {
+        Row: {
+          click_id: string | null
+          commission_amount: number | null
+          commission_paid: boolean | null
+          commission_paid_at: string | null
+          comparison_id: string | null
+          created_at: string | null
+          id: string
+          lender_name: string | null
+          loan_amount: number | null
+          partner: string
+          product_id: string | null
+          rate: number | null
+          referral_code: string | null
+          referral_url: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          click_id?: string | null
+          commission_amount?: number | null
+          commission_paid?: boolean | null
+          commission_paid_at?: string | null
+          comparison_id?: string | null
+          created_at?: string | null
+          id?: string
+          lender_name?: string | null
+          loan_amount?: number | null
+          partner: string
+          product_id?: string | null
+          rate?: number | null
+          referral_code?: string | null
+          referral_url?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          click_id?: string | null
+          commission_amount?: number | null
+          commission_paid?: boolean | null
+          commission_paid_at?: string | null
+          comparison_id?: string | null
+          created_at?: string | null
+          id?: string
+          lender_name?: string | null
+          loan_amount?: number | null
+          partner?: string
+          product_id?: string | null
+          rate?: number | null
+          referral_code?: string | null
+          referral_url?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mortgage_referrals_comparison_id_fkey"
+            columns: ["comparison_id"]
+            isOneToOne: false
+            referencedRelation: "mortgage_comparisons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mortgage_referrals_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "mortgage_products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       network_groups: {
         Row: {
@@ -3750,6 +4076,62 @@ export type Database = {
         }
         Relationships: []
       }
+      user_integrations: {
+        Row: {
+          access_token: string | null
+          api_key: string | null
+          auth_type: string | null
+          config: Json | null
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          integration_id: string | null
+          last_error: string | null
+          last_sync_at: string | null
+          refresh_token: string | null
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          access_token?: string | null
+          api_key?: string | null
+          auth_type?: string | null
+          config?: Json | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          integration_id?: string | null
+          last_error?: string | null
+          last_sync_at?: string | null
+          refresh_token?: string | null
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          access_token?: string | null
+          api_key?: string | null
+          auth_type?: string | null
+          config?: Json | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          integration_id?: string | null
+          last_error?: string | null
+          last_sync_at?: string | null
+          refresh_token?: string | null
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_integrations_integration_id_fkey"
+            columns: ["integration_id"]
+            isOneToOne: false
+            referencedRelation: "integrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_messages: {
         Row: {
           content: string
@@ -4056,6 +4438,44 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      workflow_runs: {
+        Row: {
+          completed_at: string | null
+          error_message: string | null
+          id: string
+          started_at: string | null
+          status: string | null
+          trigger_data: Json | null
+          workflow_id: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          error_message?: string | null
+          id?: string
+          started_at?: string | null
+          status?: string | null
+          trigger_data?: Json | null
+          workflow_id?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          error_message?: string | null
+          id?: string
+          started_at?: string | null
+          status?: string | null
+          trigger_data?: Json | null
+          workflow_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workflow_runs_workflow_id_fkey"
+            columns: ["workflow_id"]
+            isOneToOne: false
+            referencedRelation: "automation_workflows"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
