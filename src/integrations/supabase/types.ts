@@ -4632,6 +4632,135 @@ export type Database = {
           },
         ]
       }
+      jv_deals: {
+        Row: {
+          created_at: string | null
+          deal_name: string | null
+          deal_start_date: string | null
+          deal_type: string | null
+          exit_date: string | null
+          exit_price: number | null
+          id: string
+          net_proceeds: number | null
+          notes: string | null
+          portfolio_property_id: string | null
+          projected_exit_date: string | null
+          status: string | null
+          total_investment: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          deal_name?: string | null
+          deal_start_date?: string | null
+          deal_type?: string | null
+          exit_date?: string | null
+          exit_price?: number | null
+          id?: string
+          net_proceeds?: number | null
+          notes?: string | null
+          portfolio_property_id?: string | null
+          projected_exit_date?: string | null
+          status?: string | null
+          total_investment?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          deal_name?: string | null
+          deal_start_date?: string | null
+          deal_type?: string | null
+          exit_date?: string | null
+          exit_price?: number | null
+          id?: string
+          net_proceeds?: number | null
+          notes?: string | null
+          portfolio_property_id?: string | null
+          projected_exit_date?: string | null
+          status?: string | null
+          total_investment?: number | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jv_deals_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jv_deals_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jv_partners: {
+        Row: {
+          additional_investments: number | null
+          created_at: string | null
+          distributions_received: number | null
+          equity_percentage: number
+          exit_proceeds: number | null
+          id: string
+          initial_investment: number
+          is_self: boolean | null
+          jv_deal_id: string | null
+          partner_email: string | null
+          partner_name: string
+          profit_percentage: number | null
+          team_member_id: string | null
+        }
+        Insert: {
+          additional_investments?: number | null
+          created_at?: string | null
+          distributions_received?: number | null
+          equity_percentage: number
+          exit_proceeds?: number | null
+          id?: string
+          initial_investment: number
+          is_self?: boolean | null
+          jv_deal_id?: string | null
+          partner_email?: string | null
+          partner_name: string
+          profit_percentage?: number | null
+          team_member_id?: string | null
+        }
+        Update: {
+          additional_investments?: number | null
+          created_at?: string | null
+          distributions_received?: number | null
+          equity_percentage?: number
+          exit_proceeds?: number | null
+          id?: string
+          initial_investment?: number
+          is_self?: boolean | null
+          jv_deal_id?: string | null
+          partner_email?: string | null
+          partner_name?: string
+          profit_percentage?: number | null
+          team_member_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jv_partners_jv_deal_id_fkey"
+            columns: ["jv_deal_id"]
+            isOneToOne: false
+            referencedRelation: "jv_deals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "jv_partners_team_member_id_fkey"
+            columns: ["team_member_id"]
+            isOneToOne: false
+            referencedRelation: "team_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       jv_preferences: {
         Row: {
           capital_available: number | null
@@ -4673,6 +4802,50 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      jv_transactions: {
+        Row: {
+          created_at: string | null
+          custom_splits: Json | null
+          description: string | null
+          id: string
+          jv_deal_id: string | null
+          split_type: string | null
+          total_amount: number
+          transaction_date: string
+          transaction_type: string
+        }
+        Insert: {
+          created_at?: string | null
+          custom_splits?: Json | null
+          description?: string | null
+          id?: string
+          jv_deal_id?: string | null
+          split_type?: string | null
+          total_amount: number
+          transaction_date: string
+          transaction_type: string
+        }
+        Update: {
+          created_at?: string | null
+          custom_splits?: Json | null
+          description?: string | null
+          id?: string
+          jv_deal_id?: string | null
+          split_type?: string | null
+          total_amount?: number
+          transaction_date?: string
+          transaction_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jv_transactions_jv_deal_id_fkey"
+            columns: ["jv_deal_id"]
+            isOneToOne: false
+            referencedRelation: "jv_deals"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       land_registry_data: {
         Row: {
@@ -5444,6 +5617,121 @@ export type Database = {
           visibility?: string | null
         }
         Relationships: []
+      }
+      note_comments: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          note_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          note_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          note_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "note_comments_note_id_fkey"
+            columns: ["note_id"]
+            isOneToOne: false
+            referencedRelation: "notes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "note_comments_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notes: {
+        Row: {
+          assigned_to: string | null
+          content: string
+          created_at: string | null
+          due_date: string | null
+          entity_id: string
+          entity_type: string
+          id: string
+          is_pinned: boolean | null
+          is_resolved: boolean | null
+          mentioned_users: string[] | null
+          note_type: string | null
+          team_id: string | null
+          updated_at: string | null
+          user_id: string | null
+          visibility: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          content: string
+          created_at?: string | null
+          due_date?: string | null
+          entity_id: string
+          entity_type: string
+          id?: string
+          is_pinned?: boolean | null
+          is_resolved?: boolean | null
+          mentioned_users?: string[] | null
+          note_type?: string | null
+          team_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          visibility?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          content?: string
+          created_at?: string | null
+          due_date?: string | null
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          is_pinned?: boolean | null
+          is_resolved?: boolean | null
+          mentioned_users?: string[] | null
+          note_type?: string | null
+          team_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          visibility?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notes_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notes_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       notifications: {
         Row: {
@@ -6407,6 +6695,74 @@ export type Database = {
         }
         Relationships: []
       }
+      portfolio_shares: {
+        Row: {
+          created_at: string | null
+          custom_message: string | null
+          expires_at: string | null
+          hide_addresses: boolean | null
+          id: string
+          include_compliance: boolean | null
+          include_financials: boolean | null
+          include_properties: boolean | null
+          include_tenants: boolean | null
+          is_active: boolean | null
+          max_views: number | null
+          name: string
+          password_hash: string | null
+          property_ids: string[] | null
+          share_token: string
+          user_id: string | null
+          view_count: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          custom_message?: string | null
+          expires_at?: string | null
+          hide_addresses?: boolean | null
+          id?: string
+          include_compliance?: boolean | null
+          include_financials?: boolean | null
+          include_properties?: boolean | null
+          include_tenants?: boolean | null
+          is_active?: boolean | null
+          max_views?: number | null
+          name: string
+          password_hash?: string | null
+          property_ids?: string[] | null
+          share_token?: string
+          user_id?: string | null
+          view_count?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          custom_message?: string | null
+          expires_at?: string | null
+          hide_addresses?: boolean | null
+          id?: string
+          include_compliance?: boolean | null
+          include_financials?: boolean | null
+          include_properties?: boolean | null
+          include_tenants?: boolean | null
+          is_active?: boolean | null
+          max_views?: number | null
+          name?: string
+          password_hash?: string | null
+          property_ids?: string[] | null
+          share_token?: string
+          user_id?: string | null
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "portfolio_shares_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       portfolio_summary: {
         Row: {
           id: string
@@ -6738,6 +7094,57 @@ export type Database = {
           tenure?: string | null
         }
         Relationships: []
+      }
+      property_access: {
+        Row: {
+          access_level: string | null
+          can_edit: boolean | null
+          can_view_financials: boolean | null
+          can_view_tenants: boolean | null
+          id: string
+          investment_amount: number | null
+          ownership_percentage: number | null
+          portfolio_property_id: string | null
+          team_member_id: string | null
+        }
+        Insert: {
+          access_level?: string | null
+          can_edit?: boolean | null
+          can_view_financials?: boolean | null
+          can_view_tenants?: boolean | null
+          id?: string
+          investment_amount?: number | null
+          ownership_percentage?: number | null
+          portfolio_property_id?: string | null
+          team_member_id?: string | null
+        }
+        Update: {
+          access_level?: string | null
+          can_edit?: boolean | null
+          can_view_financials?: boolean | null
+          can_view_tenants?: boolean | null
+          id?: string
+          investment_amount?: number | null
+          ownership_percentage?: number | null
+          portfolio_property_id?: string | null
+          team_member_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_access_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_access_team_member_id_fkey"
+            columns: ["team_member_id"]
+            isOneToOne: false
+            referencedRelation: "team_members"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       property_expenses: {
         Row: {
@@ -8052,6 +8459,38 @@ export type Database = {
         }
         Relationships: []
       }
+      share_views: {
+        Row: {
+          id: string
+          ip_address: unknown
+          portfolio_share_id: string | null
+          user_agent: string | null
+          viewed_at: string | null
+        }
+        Insert: {
+          id?: string
+          ip_address?: unknown
+          portfolio_share_id?: string | null
+          user_agent?: string | null
+          viewed_at?: string | null
+        }
+        Update: {
+          id?: string
+          ip_address?: unknown
+          portfolio_share_id?: string | null
+          user_agent?: string | null
+          viewed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "share_views_portfolio_share_id_fkey"
+            columns: ["portfolio_share_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_shares"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       str_bookings: {
         Row: {
           booking_notes: string | null
@@ -8626,6 +9065,207 @@ export type Database = {
         }
         Relationships: []
       }
+      team_activity_log: {
+        Row: {
+          action: string
+          created_at: string | null
+          details: Json | null
+          entity_id: string | null
+          entity_type: string | null
+          id: string
+          team_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          created_at?: string | null
+          details?: Json | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          team_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          created_at?: string | null
+          details?: Json | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          team_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_activity_log_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_activity_log_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_invitations: {
+        Row: {
+          created_at: string | null
+          email: string
+          expires_at: string | null
+          id: string
+          invitation_token: string
+          invited_by: string | null
+          property_ids: string[] | null
+          role: string
+          status: string | null
+          team_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          expires_at?: string | null
+          id?: string
+          invitation_token?: string
+          invited_by?: string | null
+          property_ids?: string[] | null
+          role?: string
+          status?: string | null
+          team_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          expires_at?: string | null
+          id?: string
+          invitation_token?: string
+          invited_by?: string | null
+          property_ids?: string[] | null
+          role?: string
+          status?: string | null
+          team_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_invitations_invited_by_fkey"
+            columns: ["invited_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_invitations_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      team_members: {
+        Row: {
+          accepted_at: string | null
+          custom_permissions: Json | null
+          id: string
+          invited_at: string | null
+          invited_by: string | null
+          role: string
+          status: string | null
+          team_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          accepted_at?: string | null
+          custom_permissions?: Json | null
+          id?: string
+          invited_at?: string | null
+          invited_by?: string | null
+          role?: string
+          status?: string | null
+          team_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          accepted_at?: string | null
+          custom_permissions?: Json | null
+          id?: string
+          invited_at?: string | null
+          invited_by?: string | null
+          role?: string
+          status?: string | null
+          team_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_members_invited_by_fkey"
+            columns: ["invited_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_members_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "team_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      teams: {
+        Row: {
+          created_at: string | null
+          id: string
+          max_members: number | null
+          name: string
+          owner_id: string | null
+          settings: Json | null
+          slug: string | null
+          subscription_tier: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          max_members?: number | null
+          name: string
+          owner_id?: string | null
+          settings?: Json | null
+          slug?: string | null
+          subscription_tier?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          max_members?: number | null
+          name?: string
+          owner_id?: string | null
+          settings?: Json | null
+          slug?: string | null
+          subscription_tier?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "teams_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tenancies: {
         Row: {
           created_at: string | null
@@ -9120,6 +9760,27 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_viewing_stats: {
         Row: {
           badges_earned: Json | null
@@ -9292,10 +9953,23 @@ export type Database = {
     Functions: {
       clean_all_expired_caches: { Args: never; Returns: undefined }
       clean_expired_cache: { Args: never; Returns: undefined }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       reset_daily_alert_counts: { Args: never; Returns: undefined }
     }
     Enums: {
-      [_ in never]: never
+      app_role:
+        | "owner"
+        | "admin"
+        | "editor"
+        | "viewer"
+        | "accountant"
+        | "partner"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -9422,6 +10096,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["owner", "admin", "editor", "viewer", "accountant", "partner"],
+    },
   },
 } as const
