@@ -2241,6 +2241,168 @@ export type Database = {
           },
         ]
       }
+      crime_incidents: {
+        Row: {
+          category: string
+          context: string | null
+          created_at: string | null
+          crime_id: string | null
+          id: string
+          latitude: number | null
+          longitude: number | null
+          month: string
+          outcome_category: string | null
+          outcome_date: string | null
+          outcome_status: string | null
+          police_force: string | null
+          street_name: string | null
+        }
+        Insert: {
+          category: string
+          context?: string | null
+          created_at?: string | null
+          crime_id?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          month: string
+          outcome_category?: string | null
+          outcome_date?: string | null
+          outcome_status?: string | null
+          police_force?: string | null
+          street_name?: string | null
+        }
+        Update: {
+          category?: string
+          context?: string | null
+          created_at?: string | null
+          crime_id?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          month?: string
+          outcome_category?: string | null
+          outcome_date?: string | null
+          outcome_status?: string | null
+          police_force?: string | null
+          street_name?: string | null
+        }
+        Relationships: []
+      }
+      crime_statistics: {
+        Row: {
+          antisocial_behaviour: number | null
+          bicycle_theft: number | null
+          burglary: number | null
+          created_at: string | null
+          crime_trend: string | null
+          crimes_per_1000_people: number | null
+          criminal_damage: number | null
+          data_period_end: string | null
+          data_period_start: string | null
+          drugs: number | null
+          id: string
+          last_updated_at: string | null
+          latitude: number | null
+          longitude: number | null
+          monthly_data: Json | null
+          neighbourhood_id: string | null
+          neighbourhood_name: string | null
+          other_crime: number | null
+          other_theft: number | null
+          police_force: string | null
+          possession_weapons: number | null
+          postcode: string
+          property_address: string
+          public_order: number | null
+          robbery: number | null
+          safety_rating: string | null
+          safety_score: number | null
+          shoplifting: number | null
+          theft_from_person: number | null
+          total_crimes: number | null
+          trend_percentage: number | null
+          vehicle_crime: number | null
+          violence_sexual_offences: number | null
+          vs_force_average: string | null
+          vs_national_average: string | null
+        }
+        Insert: {
+          antisocial_behaviour?: number | null
+          bicycle_theft?: number | null
+          burglary?: number | null
+          created_at?: string | null
+          crime_trend?: string | null
+          crimes_per_1000_people?: number | null
+          criminal_damage?: number | null
+          data_period_end?: string | null
+          data_period_start?: string | null
+          drugs?: number | null
+          id?: string
+          last_updated_at?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          monthly_data?: Json | null
+          neighbourhood_id?: string | null
+          neighbourhood_name?: string | null
+          other_crime?: number | null
+          other_theft?: number | null
+          police_force?: string | null
+          possession_weapons?: number | null
+          postcode: string
+          property_address: string
+          public_order?: number | null
+          robbery?: number | null
+          safety_rating?: string | null
+          safety_score?: number | null
+          shoplifting?: number | null
+          theft_from_person?: number | null
+          total_crimes?: number | null
+          trend_percentage?: number | null
+          vehicle_crime?: number | null
+          violence_sexual_offences?: number | null
+          vs_force_average?: string | null
+          vs_national_average?: string | null
+        }
+        Update: {
+          antisocial_behaviour?: number | null
+          bicycle_theft?: number | null
+          burglary?: number | null
+          created_at?: string | null
+          crime_trend?: string | null
+          crimes_per_1000_people?: number | null
+          criminal_damage?: number | null
+          data_period_end?: string | null
+          data_period_start?: string | null
+          drugs?: number | null
+          id?: string
+          last_updated_at?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          monthly_data?: Json | null
+          neighbourhood_id?: string | null
+          neighbourhood_name?: string | null
+          other_crime?: number | null
+          other_theft?: number | null
+          police_force?: string | null
+          possession_weapons?: number | null
+          postcode?: string
+          property_address?: string
+          public_order?: number | null
+          robbery?: number | null
+          safety_rating?: string | null
+          safety_score?: number | null
+          shoplifting?: number | null
+          theft_from_person?: number | null
+          total_crimes?: number | null
+          trend_percentage?: number | null
+          vehicle_crime?: number | null
+          violence_sexual_offences?: number | null
+          vs_force_average?: string | null
+          vs_national_average?: string | null
+        }
+        Relationships: []
+      }
       deal_pack_comments: {
         Row: {
           comment_text: string
@@ -3200,6 +3362,159 @@ export type Database = {
           id?: string
           unique_users?: number | null
           usage_count?: number | null
+        }
+        Relationships: []
+      }
+      flood_risk_data: {
+        Row: {
+          api_response: Json | null
+          created_at: string | null
+          current_alerts: Json | null
+          current_warnings: Json | null
+          defense_standard: string | null
+          easting: number | null
+          flood_defenses_present: boolean | null
+          id: string
+          in_flood_zone_2: boolean | null
+          in_flood_zone_3: boolean | null
+          insurance_implications: string | null
+          last_checked_at: string | null
+          last_flood_event_date: string | null
+          last_warning_check_at: string | null
+          latitude: number | null
+          longitude: number | null
+          northing: number | null
+          overall_flood_risk: string | null
+          postcode: string
+          property_address: string
+          recommendations: Json | null
+          recorded_flood_events: Json | null
+          reservoir_risk: boolean | null
+          reservoir_risk_details: string | null
+          rivers_and_sea_annual_chance: number | null
+          rivers_and_sea_risk: string | null
+          surface_water_annual_chance: number | null
+          surface_water_risk: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          api_response?: Json | null
+          created_at?: string | null
+          current_alerts?: Json | null
+          current_warnings?: Json | null
+          defense_standard?: string | null
+          easting?: number | null
+          flood_defenses_present?: boolean | null
+          id?: string
+          in_flood_zone_2?: boolean | null
+          in_flood_zone_3?: boolean | null
+          insurance_implications?: string | null
+          last_checked_at?: string | null
+          last_flood_event_date?: string | null
+          last_warning_check_at?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          northing?: number | null
+          overall_flood_risk?: string | null
+          postcode: string
+          property_address: string
+          recommendations?: Json | null
+          recorded_flood_events?: Json | null
+          reservoir_risk?: boolean | null
+          reservoir_risk_details?: string | null
+          rivers_and_sea_annual_chance?: number | null
+          rivers_and_sea_risk?: string | null
+          surface_water_annual_chance?: number | null
+          surface_water_risk?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          api_response?: Json | null
+          created_at?: string | null
+          current_alerts?: Json | null
+          current_warnings?: Json | null
+          defense_standard?: string | null
+          easting?: number | null
+          flood_defenses_present?: boolean | null
+          id?: string
+          in_flood_zone_2?: boolean | null
+          in_flood_zone_3?: boolean | null
+          insurance_implications?: string | null
+          last_checked_at?: string | null
+          last_flood_event_date?: string | null
+          last_warning_check_at?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          northing?: number | null
+          overall_flood_risk?: string | null
+          postcode?: string
+          property_address?: string
+          recommendations?: Json | null
+          recorded_flood_events?: Json | null
+          reservoir_risk?: boolean | null
+          reservoir_risk_details?: string | null
+          rivers_and_sea_annual_chance?: number | null
+          rivers_and_sea_risk?: string | null
+          surface_water_annual_chance?: number | null
+          surface_water_risk?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      flood_warnings: {
+        Row: {
+          area_description: string | null
+          area_name: string
+          county: string | null
+          created_at: string | null
+          easting: number | null
+          id: string
+          is_active: boolean | null
+          message: string | null
+          northing: number | null
+          severity: string | null
+          severity_level: number | null
+          time_changed: string | null
+          time_raised: string | null
+          time_removed: string | null
+          updated_at: string | null
+          warning_id: string | null
+        }
+        Insert: {
+          area_description?: string | null
+          area_name: string
+          county?: string | null
+          created_at?: string | null
+          easting?: number | null
+          id?: string
+          is_active?: boolean | null
+          message?: string | null
+          northing?: number | null
+          severity?: string | null
+          severity_level?: number | null
+          time_changed?: string | null
+          time_raised?: string | null
+          time_removed?: string | null
+          updated_at?: string | null
+          warning_id?: string | null
+        }
+        Update: {
+          area_description?: string | null
+          area_name?: string
+          county?: string | null
+          created_at?: string | null
+          easting?: number | null
+          id?: string
+          is_active?: boolean | null
+          message?: string | null
+          northing?: number | null
+          severity?: string | null
+          severity_level?: number | null
+          time_changed?: string | null
+          time_raised?: string | null
+          time_removed?: string | null
+          updated_at?: string | null
+          warning_id?: string | null
         }
         Relationships: []
       }

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FileText, Zap, Key, ExternalLink, Check, X, AlertCircle, Building } from "lucide-react";
+import { FileText, Zap, Key, ExternalLink, Check, X, AlertCircle, Building, Droplets, Shield } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +18,8 @@ import { cn } from "@/lib/utils";
 import { LandRegistryTab } from "./LandRegistryTab";
 import { EPCTab } from "./EPCTab";
 import { PlanningTab } from "./PlanningTab";
+import { FloodRiskTab } from "./FloodRiskTab";
+import { CrimeTab } from "./CrimeTab";
 
 interface PropertyTabsProps {
   property: PropertyDetail;
@@ -76,22 +78,30 @@ export function PropertyTabs({ property }: PropertyTabsProps) {
     <Card className="shadow-card">
       <Tabs defaultValue="land-registry" className="w-full">
         <CardHeader className="pb-0">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="land-registry" className="gap-2">
+          <TabsList className="grid w-full grid-cols-6">
+            <TabsTrigger value="land-registry" className="gap-1 text-xs px-2">
               <Building className="h-4 w-4" />
-              <span className="hidden sm:inline">Land Registry</span>
+              <span className="hidden lg:inline">Registry</span>
             </TabsTrigger>
-            <TabsTrigger value="planning" className="gap-2">
-              <FileText className="h-4 w-4" />
-              <span className="hidden sm:inline">Planning</span>
-            </TabsTrigger>
-            <TabsTrigger value="ownership" className="gap-2">
-              <Key className="h-4 w-4" />
-              <span className="hidden sm:inline">Ownership</span>
-            </TabsTrigger>
-            <TabsTrigger value="epc" className="gap-2">
+            <TabsTrigger value="epc" className="gap-1 text-xs px-2">
               <Zap className="h-4 w-4" />
-              <span className="hidden sm:inline">Energy</span>
+              <span className="hidden lg:inline">EPC</span>
+            </TabsTrigger>
+            <TabsTrigger value="planning" className="gap-1 text-xs px-2">
+              <FileText className="h-4 w-4" />
+              <span className="hidden lg:inline">Planning</span>
+            </TabsTrigger>
+            <TabsTrigger value="flood" className="gap-1 text-xs px-2">
+              <Droplets className="h-4 w-4" />
+              <span className="hidden lg:inline">Flood</span>
+            </TabsTrigger>
+            <TabsTrigger value="crime" className="gap-1 text-xs px-2">
+              <Shield className="h-4 w-4" />
+              <span className="hidden lg:inline">Crime</span>
+            </TabsTrigger>
+            <TabsTrigger value="ownership" className="gap-1 text-xs px-2">
+              <Key className="h-4 w-4" />
+              <span className="hidden lg:inline">Title</span>
             </TabsTrigger>
           </TabsList>
         </CardHeader>
@@ -169,6 +179,22 @@ export function PropertyTabs({ property }: PropertyTabsProps) {
           {/* EPC Tab */}
           <TabsContent value="epc" className="mt-0">
             <EPCTab 
+              propertyAddress={property.address} 
+              postcode={property.postcode || property.address.split(',').pop()?.trim() || ''} 
+            />
+          </TabsContent>
+
+          {/* Flood Risk Tab */}
+          <TabsContent value="flood" className="mt-0">
+            <FloodRiskTab 
+              propertyAddress={property.address} 
+              postcode={property.postcode || property.address.split(',').pop()?.trim() || ''} 
+            />
+          </TabsContent>
+
+          {/* Crime Tab */}
+          <TabsContent value="crime" className="mt-0">
+            <CrimeTab 
               propertyAddress={property.address} 
               postcode={property.postcode || property.address.split(',').pop()?.trim() || ''} 
             />
