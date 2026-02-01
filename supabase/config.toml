@@ -29,3 +29,6 @@ verify_jwt = false
 
 [functions.generate-deal-pack-pdf]
 verify_jwt = false
+
+[functions.chat-copilot]
+verify_jwt = false
