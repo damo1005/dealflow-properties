@@ -219,7 +219,7 @@ export function NetworkProfile() {
                 <Label>Experience Level</Label>
                 <Select
                   value={editData.investor_type}
-                  onValueChange={(v) => setEditData({ ...editData, investor_type: v })}
+                  onValueChange={(v) => setEditData({ ...editData, investor_type: v as 'beginner' | 'intermediate' | 'experienced' | 'professional' })}
                 >
                   <SelectTrigger>
                     <SelectValue />
