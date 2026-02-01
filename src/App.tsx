@@ -65,7 +65,9 @@ import DepositProtection from "./pages/DepositProtection";
 import ESignatures from "./pages/ESignatures";
 import InsuranceClaims from "./pages/InsuranceClaims";
 import NotFound from "./pages/NotFound";
-
+import Events from "./pages/Events";
+import Rewards from "./pages/Rewards";
+import { AIChatWidget } from "./components/copilot/AIChatWidget";
 // Admin pages
 import {
   AdminDashboard,
@@ -460,6 +462,8 @@ const App = () => (
             <Route path="/compliance/deposits" element={<ProtectedRoute><DepositProtection /></ProtectedRoute>} />
             <Route path="/documents/signatures" element={<ProtectedRoute><ESignatures /></ProtectedRoute>} />
             <Route path="/insurance/claims" element={<ProtectedRoute><InsuranceClaims /></ProtectedRoute>} />
+            <Route path="/community/events" element={<ProtectedRoute><Events /></ProtectedRoute>} />
+            <Route path="/rewards" element={<ProtectedRoute><Rewards /></ProtectedRoute>} />
 
             {/* Admin routes */}
             <Route path="/admin" element={<AdminDashboard />} />
@@ -472,6 +476,7 @@ const App = () => (
             {/* Catch-all */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <AIChatWidget />
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>
