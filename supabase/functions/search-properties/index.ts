@@ -37,8 +37,17 @@ serve(async (req) => {
       console.log('Using OUTCODE fallback');
     }
 
-    // Build the search URL - use exact format that works
-    let searchUrl = `https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=${locationId || `OUTCODE%5E${params.location.toUpperCase()}`}&radius=${params.radius || 10}.0&sortType=6&propertyTypes=&includeSSTC=false&mustHave=&dontShow=&furnishTypes=&keywords=`;
+    const locationInput = String(params.location).trim();
+    const outcode = extractOutcode(locationInput);
+
+    // Build the search URL - use exact format that works.
+    // IMPORTANT: Only use OUTCODE^ fallback when the user actually entered a postcode/outcode.
+    // Using OUTCODE^HARPENDEN (town name) causes Apify validation to fail.
+    const locationIdentifier = locationId || (outcode ? `OUTCODE%5E${outcode}` : null);
+
+    let searchUrl = locationIdentifier
+      ? `https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=${locationIdentifier}&radius=${params.radius || 10}.0&sortType=6&propertyTypes=&includeSSTC=false&mustHave=&dontShow=&furnishTypes=&keywords=`
+      : `https://www.rightmove.co.uk/property-for-sale/search.html?searchLocation=${encodeURIComponent(locationInput)}&radius=${params.radius || 10}.0&sortType=6&propertyTypes=&includeSSTC=false&mustHave=&dontShow=&furnishTypes=&keywords=`;
     
     if (params.minPrice) searchUrl += `&minPrice=${params.minPrice}`;
     if (params.maxPrice && params.maxPrice < 10000000) searchUrl += `&maxPrice=${params.maxPrice}`;
@@ -122,24 +131,61 @@ async function getRightmoveLocationId(location: string): Promise<string | null> 
         headers: {
           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
           "Accept": "application/json",
+          "Accept-Language": "en-GB,en;q=0.9",
         },
       }
     );
 
-    if (!response.ok) return null;
+    if (response.ok) {
+      const data = await response.json();
+      const loc = data.typeAheadLocations?.[0];
 
-    const data = await response.json();
-    const loc = data.typeAheadLocations?.[0];
-    
-    if (loc?.locationIdentifier) {
-      return encodeURIComponent(loc.locationIdentifier);
+      if (loc?.locationIdentifier) {
+        // Return URL-encoded identifier (Rightmove uses "REGION^...", "OUTCODE^...", etc.)
+        return encodeURIComponent(loc.locationIdentifier);
+      }
+    } else {
+      console.log('TypeAhead status:', response.status);
     }
-    
+
+    // Fallback: try Rightmove search.html and extract locationIdentifier if present
+    // (useful when typeAhead is rate-limited/blocked).
+    const fallbackUrl = `https://www.rightmove.co.uk/property-for-sale/search.html?searchLocation=${encodeURIComponent(location)}&useLocationIdentifier=true&locationIdentifierSearch=true`;
+    const fallbackRes = await fetch(fallbackUrl, {
+      redirect: 'follow',
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-GB,en;q=0.9",
+      },
+    });
+
+    // Some flows redirect to a URL containing locationIdentifier
+    const redirectedMatch = fallbackRes.url?.match(/locationIdentifier=([^&]+)/);
+    if (redirectedMatch?.[1]) {
+      return redirectedMatch[1];
+    }
+
+    // Or embed it in the HTML response
+    const html = await fallbackRes.text();
+    const htmlMatch = html.match(/locationIdentifier\"\s*:\s*\"([^\"]+)\"/i) ||
+      html.match(/locationIdentifier=([^&\"']+)/i);
+    if (htmlMatch?.[1]) {
+      return encodeURIComponent(decodeURIComponent(htmlMatch[1]));
+    }
+
     return null;
   } catch (error) {
     console.error('Location lookup error:', error);
     return null;
   }
+}
+
+function extractOutcode(input: string): string | null {
+  const trimmed = input.trim().toUpperCase();
+  // UK postcode outcode detection (e.g., "SW1A", "AL5", "B1")
+  const outcode = trimmed.split(' ')[0];
+  return /^[A-Z]{1,2}\d{1,2}[A-Z]?$/.test(outcode) ? outcode : null;
 }
 
 async function fetchFromApify(searchUrl: string, searchLocation: string): Promise<any[]> {
@@ -149,11 +195,13 @@ async function fetchFromApify(searchUrl: string, searchLocation: string): Promis
 
   console.log('Starting Apify run...');
   
-  // Use the EXACT input format that works
+  // IMPORTANT: Apify "List URLs" inputs typically use the requestListSources format
+  // (array of objects with a `url` field). Passing a string array can fail validation.
+  // Also align input keys with the actor's documented schema.
   const input = {
-    listUrls: [searchUrl],
-    maxItems: 25,
-    includeFullPropertyDetails: false,
+    listUrls: [{ url: searchUrl }],
+    maxProperties: 25,
+    fullPropertyDetails: false,
     includePriceHistory: false,
     includeNearestSchools: false,
   };
@@ -184,23 +232,25 @@ async function fetchFromApify(searchUrl: string, searchLocation: string): Promis
     throw new Error('No run ID returned');
   }
 
-  // Poll for completion
+  // Poll for completion.
+  // NOTE: This backend function has a practical time limit, so keep polling bounded.
   let status = 'RUNNING';
   let attempts = 0;
-  
-  while ((status === 'RUNNING' || status === 'READY') && attempts < 60) {
-    await new Promise(r => setTimeout(r, 2000));
-    
+
+  // 14 * 2s = 28s max wait
+  const maxAttempts = 14;
+
+  while ((status === 'RUNNING' || status === 'READY') && attempts < maxAttempts) {
+    await new Promise((r) => setTimeout(r, 2000));
+
     const statusRes = await fetch(
       `https://api.apify.com/v2/actor-runs/${runId}?token=${APIFY_TOKEN}`
     );
     const statusData = await statusRes.json();
     status = statusData.data?.status;
     attempts++;
-    
-    if (attempts % 5 === 0) {
-      console.log(`Status: ${status} (${attempts * 2}s)`);
-    }
+
+    console.log(`Status: ${status} (${attempts * 2}s)`);
   }
 
   console.log('Final status:', status);
