@@ -76,8 +76,11 @@ async function fetchRightmove(url: string): Promise<PropertyData> {
     throw new Error("Could not extract Rightmove property ID from URL");
   }
 
+  // Clean URL - remove tracking params and fragments
+  const cleanUrl = url.split('?')[0].split('#')[0];
+
   // Fetch the page
-  const response = await fetch(url, {
+  const response = await fetch(cleanUrl, {
     headers: {
       "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
       "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
@@ -91,16 +94,30 @@ async function fetchRightmove(url: string): Promise<PropertyData> {
 
   const html = await response.text();
 
-  // Extract from PAGE_MODEL (Rightmove's internal data)
-  const pageModelMatch = html.match(/window\.PAGE_MODEL\s*=\s*({[\s\S]*?});?\s*<\/script>/);
+  // Try multiple methods to extract PAGE_MODEL
   let pageModel: any = null;
   
+  // Method 1: Standard PAGE_MODEL
+  const pageModelMatch = html.match(/window\.PAGE_MODEL\s*=\s*(\{[\s\S]*?\});?\s*(?:<\/script>|window\.)/);
   if (pageModelMatch) {
     try {
       pageModel = JSON.parse(pageModelMatch[1]);
-      console.log("Found PAGE_MODEL data");
-    } catch (e) {
-      console.log("Could not parse PAGE_MODEL");
+      console.log("Found PAGE_MODEL data via method 1");
+    } catch {
+      console.log("Could not parse PAGE_MODEL method 1");
+    }
+  }
+
+  // Method 2: Try finding propertyData directly in script tags
+  if (!pageModel) {
+    const propertyDataMatch = html.match(/"propertyData"\s*:\s*(\{[^}]+(?:\{[^}]*\}[^}]*)*\})/);
+    if (propertyDataMatch) {
+      try {
+        pageModel = { propertyData: JSON.parse(propertyDataMatch[1]) };
+        console.log("Found propertyData via method 2");
+      } catch {
+        console.log("Could not parse propertyData method 2");
+      }
     }
   }
 
@@ -109,14 +126,58 @@ async function fetchRightmove(url: string): Promise<PropertyData> {
   
   const address = propertyData.address?.displayAddress ||
                   extractPattern(html, /<h1[^>]*itemprop="streetAddress"[^>]*>([^<]+)<\/h1>/) ||
-                  extractPattern(html, /<address[^>]*>([^<]+)<\/address>/) ||
-                  extractPattern(html, /<h1[^>]*>([^<]+)<\/h1>/);
+                  extractPattern(html, /<h1[^>]*class="[^"]*"[^>]*>([^<]+)<\/h1>/) ||
+                  extractPattern(html, /<address[^>]*>([^<]+)<\/address>/);
 
-  const priceAmount = propertyData.prices?.primaryPrice ||
-                      extractPattern(html, /<span[^>]*class="[^"]*propertyHeaderPrice[^"]*"[^>]*>([^<]+)<\/span>/) ||
-                      extractPattern(html, /£[\d,]+/);
+  // Multiple price extraction attempts
+  let price = 0;
+  let priceText = "";
   
-  const price = priceAmount ? parseInt(String(priceAmount).replace(/[£,\s]/g, "")) : 0;
+  // Try PAGE_MODEL price
+  if (propertyData.prices?.primaryPrice) {
+    priceText = String(propertyData.prices.primaryPrice);
+    price = parseInt(priceText.replace(/[£,\s]/g, ""));
+  }
+  
+  // Try various HTML patterns for price
+  if (!price) {
+    // Pattern 1: Main price display
+    const pricePatterns = [
+      /<span[^>]*class="[^"]*propertyHeaderPrice[^"]*"[^>]*>([^<]+)<\/span>/i,
+      /<p[^>]*class="[^"]*price[^"]*"[^>]*>([^<]+)<\/p>/i,
+      /<div[^>]*class="[^"]*price[^"]*"[^>]*>([^<]+)<\/div>/i,
+      /<span[^>]*data-testid="[^"]*price[^"]*"[^>]*>([^<]+)<\/span>/i,
+      /(?:Asking\s*)?(?:Price|Guide)[:\s]*£([\d,]+)/i,
+      /£([\d,]+(?:\.\d{2})?)\s*(?:pcm|pw|per|\/)/i,
+    ];
+    
+    for (const pattern of pricePatterns) {
+      const match = html.match(pattern);
+      if (match) {
+        priceText = match[1].trim();
+        const numMatch = priceText.match(/[\d,]+/);
+        if (numMatch) {
+          price = parseInt(numMatch[0].replace(/,/g, ""));
+          if (price > 0) break;
+        }
+      }
+    }
+  }
+
+  // Last resort: find any £ amount that looks like a property price (£50k-£10m range)
+  if (!price) {
+    const allPrices = html.matchAll(/£([\d,]+)/g);
+    for (const match of allPrices) {
+      const val = parseInt(match[1].replace(/,/g, ""));
+      // Property prices are typically between £50k and £10m
+      if (val >= 50000 && val <= 10000000) {
+        price = val;
+        priceText = `£${val.toLocaleString()}`;
+        console.log("Found price via last resort:", price);
+        break;
+      }
+    }
+  }
 
   const bedrooms = propertyData.bedrooms ||
                    parseInt(extractPattern(html, /(\d+)\s*(?:bed|bedroom)/i) || "0");

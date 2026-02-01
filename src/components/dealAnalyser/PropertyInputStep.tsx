@@ -97,6 +97,9 @@ export function PropertyInputStep() {
 
       const propertyData = data.data as FetchedPropertyData;
       setFetchedData(propertyData);
+      
+      console.log("Fetched property data:", propertyData);
+      console.log("Price extracted:", propertyData.price);
 
       // Auto-populate form fields
       setProperty({
