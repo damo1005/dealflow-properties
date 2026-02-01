@@ -2296,6 +2296,59 @@ export type Database = {
         }
         Relationships: []
       }
+      listing_generations: {
+        Row: {
+          applied_to_listing: boolean | null
+          checkin_instructions: string | null
+          created_at: string | null
+          descriptions: Json
+          house_rules: string | null
+          id: string
+          input_data: Json | null
+          selected_description_index: number | null
+          selected_title_index: number | null
+          str_property_id: string
+          titles: Json
+          user_id: string
+        }
+        Insert: {
+          applied_to_listing?: boolean | null
+          checkin_instructions?: string | null
+          created_at?: string | null
+          descriptions: Json
+          house_rules?: string | null
+          id?: string
+          input_data?: Json | null
+          selected_description_index?: number | null
+          selected_title_index?: number | null
+          str_property_id: string
+          titles: Json
+          user_id: string
+        }
+        Update: {
+          applied_to_listing?: boolean | null
+          checkin_instructions?: string | null
+          created_at?: string | null
+          descriptions?: Json
+          house_rules?: string | null
+          id?: string
+          input_data?: Json | null
+          selected_description_index?: number | null
+          selected_title_index?: number | null
+          str_property_id?: string
+          titles?: Json
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "listing_generations_str_property_id_fkey"
+            columns: ["str_property_id"]
+            isOneToOne: false
+            referencedRelation: "str_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       maintenance_jobs: {
         Row: {
           actual_cost: number | null
@@ -4393,6 +4446,440 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      str_bookings: {
+        Row: {
+          booking_notes: string | null
+          checkin_date: string
+          checkout_date: string
+          cleaning_fee: number | null
+          created_at: string | null
+          external_booking_id: string | null
+          extra_fees: number | null
+          guest_count: number | null
+          guest_email: string | null
+          guest_name: string | null
+          guest_phone: string | null
+          ical_uid: string | null
+          id: string
+          last_synced_at: string | null
+          nightly_rate: number | null
+          nights: number | null
+          platform: string | null
+          platform_fee: number | null
+          special_requests: string | null
+          status: string | null
+          str_property_id: string
+          synced_from_ical: boolean | null
+          total_nights_cost: number | null
+          total_payout: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          booking_notes?: string | null
+          checkin_date: string
+          checkout_date: string
+          cleaning_fee?: number | null
+          created_at?: string | null
+          external_booking_id?: string | null
+          extra_fees?: number | null
+          guest_count?: number | null
+          guest_email?: string | null
+          guest_name?: string | null
+          guest_phone?: string | null
+          ical_uid?: string | null
+          id?: string
+          last_synced_at?: string | null
+          nightly_rate?: number | null
+          nights?: number | null
+          platform?: string | null
+          platform_fee?: number | null
+          special_requests?: string | null
+          status?: string | null
+          str_property_id: string
+          synced_from_ical?: boolean | null
+          total_nights_cost?: number | null
+          total_payout?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          booking_notes?: string | null
+          checkin_date?: string
+          checkout_date?: string
+          cleaning_fee?: number | null
+          created_at?: string | null
+          external_booking_id?: string | null
+          extra_fees?: number | null
+          guest_count?: number | null
+          guest_email?: string | null
+          guest_name?: string | null
+          guest_phone?: string | null
+          ical_uid?: string | null
+          id?: string
+          last_synced_at?: string | null
+          nightly_rate?: number | null
+          nights?: number | null
+          platform?: string | null
+          platform_fee?: number | null
+          special_requests?: string | null
+          status?: string | null
+          str_property_id?: string
+          synced_from_ical?: boolean | null
+          total_nights_cost?: number | null
+          total_payout?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "str_bookings_str_property_id_fkey"
+            columns: ["str_property_id"]
+            isOneToOne: false
+            referencedRelation: "str_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      str_calendar_blocks: {
+        Row: {
+          created_at: string | null
+          end_date: string
+          id: string
+          notes: string | null
+          reason: string | null
+          start_date: string
+          str_property_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          end_date: string
+          id?: string
+          notes?: string | null
+          reason?: string | null
+          start_date: string
+          str_property_id: string
+        }
+        Update: {
+          created_at?: string | null
+          end_date?: string
+          id?: string
+          notes?: string | null
+          reason?: string | null
+          start_date?: string
+          str_property_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "str_calendar_blocks_str_property_id_fkey"
+            columns: ["str_property_id"]
+            isOneToOne: false
+            referencedRelation: "str_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      str_expenses: {
+        Row: {
+          amount: number
+          category: string | null
+          created_at: string | null
+          description: string | null
+          expense_date: string
+          id: string
+          is_recurring: boolean | null
+          is_tax_deductible: boolean | null
+          receipt_url: string | null
+          recurrence_frequency: string | null
+          str_property_id: string
+          user_id: string
+          vendor: string | null
+        }
+        Insert: {
+          amount: number
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          expense_date: string
+          id?: string
+          is_recurring?: boolean | null
+          is_tax_deductible?: boolean | null
+          receipt_url?: string | null
+          recurrence_frequency?: string | null
+          str_property_id: string
+          user_id: string
+          vendor?: string | null
+        }
+        Update: {
+          amount?: number
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          expense_date?: string
+          id?: string
+          is_recurring?: boolean | null
+          is_tax_deductible?: boolean | null
+          receipt_url?: string | null
+          recurrence_frequency?: string | null
+          str_property_id?: string
+          user_id?: string
+          vendor?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "str_expenses_str_property_id_fkey"
+            columns: ["str_property_id"]
+            isOneToOne: false
+            referencedRelation: "str_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      str_message_templates: {
+        Row: {
+          body: string
+          created_at: string | null
+          id: string
+          is_default: boolean | null
+          language: string | null
+          send_timing: string | null
+          subject: string | null
+          template_name: string
+          template_type: string | null
+          updated_at: string | null
+          user_id: string
+          variables: string[] | null
+        }
+        Insert: {
+          body: string
+          created_at?: string | null
+          id?: string
+          is_default?: boolean | null
+          language?: string | null
+          send_timing?: string | null
+          subject?: string | null
+          template_name: string
+          template_type?: string | null
+          updated_at?: string | null
+          user_id: string
+          variables?: string[] | null
+        }
+        Update: {
+          body?: string
+          created_at?: string | null
+          id?: string
+          is_default?: boolean | null
+          language?: string | null
+          send_timing?: string | null
+          subject?: string | null
+          template_name?: string
+          template_type?: string | null
+          updated_at?: string | null
+          user_id?: string
+          variables?: string[] | null
+        }
+        Relationships: []
+      }
+      str_photo_checklists: {
+        Row: {
+          completed_count: number | null
+          created_at: string | null
+          id: string
+          photo_requirements: Json
+          room_name: string
+          str_property_id: string
+          total_required: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          completed_count?: number | null
+          created_at?: string | null
+          id?: string
+          photo_requirements: Json
+          room_name: string
+          str_property_id: string
+          total_required?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          completed_count?: number | null
+          created_at?: string | null
+          id?: string
+          photo_requirements?: Json
+          room_name?: string
+          str_property_id?: string
+          total_required?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "str_photo_checklists_str_property_id_fkey"
+            columns: ["str_property_id"]
+            isOneToOne: false
+            referencedRelation: "str_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      str_properties: {
+        Row: {
+          address: string | null
+          airbnb_ical_url: string | null
+          airbnb_url: string | null
+          amenities: string[] | null
+          amenities_score: number | null
+          base_price_per_night: number | null
+          bathrooms: number | null
+          bedrooms: number | null
+          booking_com_ical_url: string | null
+          booking_com_url: string | null
+          checkin_instructions: string | null
+          checkout_instructions: string | null
+          cleaning_fee: number | null
+          created_at: string | null
+          description: string | null
+          description_score: number | null
+          distance_to_beach_km: number | null
+          distance_to_city_center_km: number | null
+          extra_guest_fee: number | null
+          house_rules: string | null
+          id: string
+          is_active: boolean | null
+          is_listed: boolean | null
+          last_minute_discount_pct: number | null
+          last_optimized_at: string | null
+          listing_score: number | null
+          monthly_discount_pct: number | null
+          nearby_attractions: string[] | null
+          peak_season_rate: number | null
+          photo_checklist_completed: boolean | null
+          photo_count: number | null
+          photo_urls: string[] | null
+          photos_score: number | null
+          postcode: string | null
+          property_name: string
+          property_type: string | null
+          security_deposit: number | null
+          sleeps: number | null
+          square_feet: number | null
+          summer_rate: number | null
+          target_guests: string[] | null
+          title: string | null
+          title_score: number | null
+          unique_features: string | null
+          updated_at: string | null
+          user_id: string
+          vrbo_ical_url: string | null
+          vrbo_url: string | null
+          weekend_premium_pct: number | null
+          weekly_discount_pct: number | null
+          winter_rate: number | null
+        }
+        Insert: {
+          address?: string | null
+          airbnb_ical_url?: string | null
+          airbnb_url?: string | null
+          amenities?: string[] | null
+          amenities_score?: number | null
+          base_price_per_night?: number | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          booking_com_ical_url?: string | null
+          booking_com_url?: string | null
+          checkin_instructions?: string | null
+          checkout_instructions?: string | null
+          cleaning_fee?: number | null
+          created_at?: string | null
+          description?: string | null
+          description_score?: number | null
+          distance_to_beach_km?: number | null
+          distance_to_city_center_km?: number | null
+          extra_guest_fee?: number | null
+          house_rules?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_listed?: boolean | null
+          last_minute_discount_pct?: number | null
+          last_optimized_at?: string | null
+          listing_score?: number | null
+          monthly_discount_pct?: number | null
+          nearby_attractions?: string[] | null
+          peak_season_rate?: number | null
+          photo_checklist_completed?: boolean | null
+          photo_count?: number | null
+          photo_urls?: string[] | null
+          photos_score?: number | null
+          postcode?: string | null
+          property_name: string
+          property_type?: string | null
+          security_deposit?: number | null
+          sleeps?: number | null
+          square_feet?: number | null
+          summer_rate?: number | null
+          target_guests?: string[] | null
+          title?: string | null
+          title_score?: number | null
+          unique_features?: string | null
+          updated_at?: string | null
+          user_id: string
+          vrbo_ical_url?: string | null
+          vrbo_url?: string | null
+          weekend_premium_pct?: number | null
+          weekly_discount_pct?: number | null
+          winter_rate?: number | null
+        }
+        Update: {
+          address?: string | null
+          airbnb_ical_url?: string | null
+          airbnb_url?: string | null
+          amenities?: string[] | null
+          amenities_score?: number | null
+          base_price_per_night?: number | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          booking_com_ical_url?: string | null
+          booking_com_url?: string | null
+          checkin_instructions?: string | null
+          checkout_instructions?: string | null
+          cleaning_fee?: number | null
+          created_at?: string | null
+          description?: string | null
+          description_score?: number | null
+          distance_to_beach_km?: number | null
+          distance_to_city_center_km?: number | null
+          extra_guest_fee?: number | null
+          house_rules?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_listed?: boolean | null
+          last_minute_discount_pct?: number | null
+          last_optimized_at?: string | null
+          listing_score?: number | null
+          monthly_discount_pct?: number | null
+          nearby_attractions?: string[] | null
+          peak_season_rate?: number | null
+          photo_checklist_completed?: boolean | null
+          photo_count?: number | null
+          photo_urls?: string[] | null
+          photos_score?: number | null
+          postcode?: string | null
+          property_name?: string
+          property_type?: string | null
+          security_deposit?: number | null
+          sleeps?: number | null
+          square_feet?: number | null
+          summer_rate?: number | null
+          target_guests?: string[] | null
+          title?: string | null
+          title_score?: number | null
+          unique_features?: string | null
+          updated_at?: string | null
+          user_id?: string
+          vrbo_ical_url?: string | null
+          vrbo_url?: string | null
+          weekend_premium_pct?: number | null
+          weekly_discount_pct?: number | null
+          winter_rate?: number | null
+        }
+        Relationships: []
       }
       tenancies: {
         Row: {
