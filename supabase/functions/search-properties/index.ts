@@ -25,40 +25,24 @@ serve(async (req) => {
       throw new Error("Location is required");
     }
 
-    console.log('=== SEARCH START ===');
-    console.log('Location:', params.location);
+    console.log('Searching:', params.location);
 
-    // Step 1: Resolve location to Rightmove identifier
+    // Get Rightmove location ID first
     const locationId = await getRightmoveLocationId(params.location);
-    console.log('Resolved location ID:', locationId);
-    
-    if (!locationId) {
-      // Try with OUTCODE format as fallback
-      console.log('Using OUTCODE fallback');
-    }
+    console.log('Location ID:', locationId);
 
-    const locationInput = String(params.location).trim();
-    const outcode = extractOutcode(locationInput);
-
-    // Build the search URL - use exact format that works.
-    // IMPORTANT: Only use OUTCODE^ fallback when the user actually entered a postcode/outcode.
-    // Using OUTCODE^HARPENDEN (town name) causes Apify validation to fail.
-    const locationIdentifier = locationId || (outcode ? `OUTCODE%5E${outcode}` : null);
-
-    let searchUrl = locationIdentifier
-      ? `https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=${locationIdentifier}&radius=${params.radius || 10}.0&sortType=6&propertyTypes=&includeSSTC=false&mustHave=&dontShow=&furnishTypes=&keywords=`
-      : `https://www.rightmove.co.uk/property-for-sale/search.html?searchLocation=${encodeURIComponent(locationInput)}&radius=${params.radius || 10}.0&sortType=6&propertyTypes=&includeSSTC=false&mustHave=&dontShow=&furnishTypes=&keywords=`;
+    // Build search URL
+    const locParam = locationId || `OUTCODE%5E${params.location.toUpperCase().replace(/\s+/g, '')}`;
+    let searchUrl = `https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=${locParam}&radius=${params.radius || 10}.0&sortType=6&includeSSTC=false`;
     
     if (params.minPrice) searchUrl += `&minPrice=${params.minPrice}`;
-    if (params.maxPrice && params.maxPrice < 10000000) searchUrl += `&maxPrice=${params.maxPrice}`;
+    if (params.maxPrice && params.maxPrice < 5000000) searchUrl += `&maxPrice=${params.maxPrice}`;
     if (params.minBeds) searchUrl += `&minBedrooms=${params.minBeds}`;
-    if (params.maxBeds) searchUrl += `&maxBedrooms=${params.maxBeds}`;
     
-    console.log('Search URL:', searchUrl);
+    console.log('URL:', searchUrl);
 
-    // Check cache first
-    const cacheKey = btoa(searchUrl).substring(0, 100);
-    
+    // Check cache
+    const cacheKey = btoa(searchUrl).substring(0, 80);
     const { data: cached } = await supabase
       .from('property_search_cache')
       .select('*')
@@ -66,287 +50,140 @@ serve(async (req) => {
       .gt('expires_at', new Date().toISOString())
       .single();
 
-    if (cached && cached.result_count > 0) {
-      console.log('Returning cached results');
+    if (cached) {
       const { data: listings } = await supabase
         .from('property_listings')
         .select('*')
-        .or(`outcode.ilike.%${params.location}%,postcode.ilike.%${params.location}%,address.ilike.%${params.location}%`)
+        .ilike('address', `%${params.location}%`)
         .eq('status', 'active')
-        .order('created_at', { ascending: false })
         .limit(50);
-
+      
       return new Response(
-        JSON.stringify({ success: true, data: listings || [], fromCache: true }),
+        JSON.stringify({ success: true, data: listings || [], fromCache: true, count: listings?.length || 0 }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Fetch from Apify
-    const listings = await fetchFromApify(searchUrl, params.location);
-    console.log('Got listings:', listings.length);
+    // Call Apify synchronously - this waits for completion
+    const results = await callApifySync(searchUrl);
+    console.log('Apify returned:', results.length, 'items');
 
-    // Save to database
-    if (listings.length > 0) {
-      for (const listing of listings) {
-        const { error } = await supabase
-          .from('property_listings')
-          .upsert(listing, { onConflict: 'external_id,source' });
-        if (error) console.log('Upsert error:', error.message);
-      }
-
-      // Update cache
+    // Transform and save
+    const listings = [];
+    for (const item of results) {
+      const listing = transformListing(item, params.location);
+      listings.push(listing);
+      
       await supabase
-        .from('property_search_cache')
-        .upsert({
-          search_key: cacheKey,
-          search_params: params,
-          result_count: listings.length,
-          last_searched: new Date().toISOString(),
-          expires_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
-        }, { onConflict: 'search_key' });
+        .from('property_listings')
+        .upsert(listing, { onConflict: 'external_id,source' });
     }
 
-    console.log('=== SEARCH COMPLETE ===');
-    
+    // Cache
+    await supabase.from('property_search_cache').upsert({
+      search_key: cacheKey,
+      search_params: params,
+      result_count: listings.length,
+      expires_at: new Date(Date.now() + 3600000).toISOString(),
+    }, { onConflict: 'search_key' });
+
     return new Response(
       JSON.stringify({ success: true, data: listings, fromCache: false, count: listings.length }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
 
   } catch (error: any) {
-    console.error("Search error:", error);
+    console.error("Error:", error.message);
     return new Response(
-      JSON.stringify({ success: false, error: error.message }),
-      { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({ success: false, error: error.message, data: [], count: 0 }),
+      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 });
 
 async function getRightmoveLocationId(location: string): Promise<string | null> {
   try {
-    const response = await fetch(
+    const res = await fetch(
       `https://www.rightmove.co.uk/typeAhead/uknocheck/${encodeURIComponent(location)}`,
-      {
-        headers: {
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-          "Accept": "application/json",
-          "Accept-Language": "en-GB,en;q=0.9",
-        },
-      }
+      { headers: { "User-Agent": "Mozilla/5.0 Chrome/120.0.0.0" } }
     );
-
-    if (response.ok) {
-      const data = await response.json();
-      const loc = data.typeAheadLocations?.[0];
-
-      if (loc?.locationIdentifier) {
-        // Return URL-encoded identifier (Rightmove uses "REGION^...", "OUTCODE^...", etc.)
-        return encodeURIComponent(loc.locationIdentifier);
-      }
-    } else {
-      console.log('TypeAhead status:', response.status);
-    }
-
-    // Fallback: try Rightmove search.html and extract locationIdentifier if present
-    // (useful when typeAhead is rate-limited/blocked).
-    const fallbackUrl = `https://www.rightmove.co.uk/property-for-sale/search.html?searchLocation=${encodeURIComponent(location)}&useLocationIdentifier=true&locationIdentifierSearch=true`;
-    const fallbackRes = await fetch(fallbackUrl, {
-      redirect: 'follow',
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-        "Accept-Language": "en-GB,en;q=0.9",
-      },
-    });
-
-    // Some flows redirect to a URL containing locationIdentifier
-    const redirectedMatch = fallbackRes.url?.match(/locationIdentifier=([^&]+)/);
-    if (redirectedMatch?.[1]) {
-      return redirectedMatch[1];
-    }
-
-    // Or embed it in the HTML response
-    const html = await fallbackRes.text();
-    const htmlMatch = html.match(/locationIdentifier\"\s*:\s*\"([^\"]+)\"/i) ||
-      html.match(/locationIdentifier=([^&\"']+)/i);
-    if (htmlMatch?.[1]) {
-      return encodeURIComponent(decodeURIComponent(htmlMatch[1]));
-    }
-
-    return null;
-  } catch (error) {
-    console.error('Location lookup error:', error);
+    if (!res.ok) return null;
+    const data = await res.json();
+    return data.typeAheadLocations?.[0]?.locationIdentifier 
+      ? encodeURIComponent(data.typeAheadLocations[0].locationIdentifier)
+      : null;
+  } catch {
     return null;
   }
 }
 
-function extractOutcode(input: string): string | null {
-  const trimmed = input.trim().toUpperCase();
-  // UK postcode outcode detection (e.g., "SW1A", "AL5", "B1")
-  const outcode = trimmed.split(' ')[0];
-  return /^[A-Z]{1,2}\d{1,2}[A-Z]?$/.test(outcode) ? outcode : null;
-}
+async function callApifySync(searchUrl: string): Promise<any[]> {
+  if (!APIFY_TOKEN) throw new Error('APIFY_API_TOKEN not set');
 
-async function fetchFromApify(searchUrl: string, searchLocation: string): Promise<any[]> {
-  if (!APIFY_TOKEN) {
-    throw new Error('APIFY_API_TOKEN not configured');
-  }
-
-  console.log('Starting Apify run...');
-  
-  // Use startUrls format which is more commonly supported
-  const input = {
-    startUrls: [{ url: searchUrl }],
-    maxItems: 25,
-    proxy: {
-      useApifyProxy: true,
-    },
-  };
-  
-  console.log('Apify input:', JSON.stringify(input));
-
-  // Start the run
-  const startResponse = await fetch(
-    `https://api.apify.com/v2/acts/dhrumil~rightmove-scraper/runs?token=${APIFY_TOKEN}`,
+  // Use run-sync endpoint - waits up to 300s and returns results directly
+  const response = await fetch(
+    `https://api.apify.com/v2/acts/dhrumil~rightmove-scraper/run-sync-get-dataset-items?token=${APIFY_TOKEN}&timeout=60`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(input),
+      body: JSON.stringify({
+        listUrls: [searchUrl],
+        maxItems: 20,
+        includeFullPropertyDetails: false,
+        includePriceHistory: false,
+        includeNearestSchools: false,
+      }),
     }
   );
 
-  if (!startResponse.ok) {
-    const errorText = await startResponse.text();
-    console.error('Apify start error:', errorText);
-    throw new Error('Failed to start Apify: ' + errorText);
+  if (!response.ok) {
+    const text = await response.text();
+    console.error('Apify error:', text);
+    throw new Error('Apify request failed');
   }
 
-  const startData = await startResponse.json();
-  const runId = startData.data?.id;
-  console.log('Run ID:', runId);
-
-  if (!runId) {
-    throw new Error('No run ID returned');
-  }
-
-  // Poll for completion with longer timeout
-  // Edge functions have ~60s limit, so we can poll longer
-  let status = 'RUNNING';
-  let attempts = 0;
-  const maxAttempts = 25; // 25 * 2s = 50s max wait
-
-  while ((status === 'RUNNING' || status === 'READY') && attempts < maxAttempts) {
-    await new Promise((r) => setTimeout(r, 2000));
-
-    const statusRes = await fetch(
-      `https://api.apify.com/v2/actor-runs/${runId}?token=${APIFY_TOKEN}`
-    );
-    const statusData = await statusRes.json();
-    status = statusData.data?.status;
-    attempts++;
-
-    if (attempts % 5 === 0) {
-      console.log(`Status: ${status} (${attempts * 2}s)`);
-    }
-  }
-
-  console.log('Final status:', status);
-
-  // If still running, return empty but don't throw - let cached results show
-  if (status === 'RUNNING' || status === 'READY') {
-    console.log('Apify run still in progress, returning empty for now');
-    return [];
-  }
-
-  if (status !== 'SUCCEEDED') {
-    console.error(`Run ended with status: ${status}`);
-    return []; // Return empty instead of throwing
-  }
-
-  // Get results
-  const resultsRes = await fetch(
-    `https://api.apify.com/v2/actor-runs/${runId}/dataset/items?token=${APIFY_TOKEN}`
-  );
-  
-  if (!resultsRes.ok) {
-    console.error('Failed to get results');
-    return [];
-  }
-  
-  const results = await resultsRes.json();
-  console.log('Raw results count:', results.length);
-  
-  if (results.length > 0) {
-    console.log('Sample result keys:', Object.keys(results[0]));
-  }
-
-  return results.map((item: any) => transformResult(item, searchLocation));
+  return await response.json();
 }
 
-function transformResult(item: any, searchLocation: string): any {
-  // Based on actual Apify output structure:
-  // addedOn, agent, agentPhone, bathrooms, bedrooms, coordinates, 
-  // description, displayAddress, displayStatus, firstVisibleDate, id, images, etc.
+function transformListing(item: any, location: string): any {
+  const address = item.displayAddress || item.address || '';
+  const postcode = extractPostcode(address);
+  const price = typeof item.price === 'number' ? item.price : 
+                item.price?.amount || 
+                parseInt(String(item.displayPrice || '').replace(/\D/g, '')) || 0;
   
-  const address = item.displayAddress || item.address || 'Address not available';
-  const postcode = item.postcode || extractPostcode(address);
-  
-  // Handle price - could be number or object
-  let price = 0;
-  if (typeof item.price === 'number') {
-    price = item.price;
-  } else if (item.price?.amount) {
-    price = item.price.amount;
-  } else if (item.displayPrice) {
-    price = parseInt(String(item.displayPrice).replace(/[^0-9]/g, '')) || 0;
-  }
-  
-  const monthlyRent = price ? Math.round(price * 0.0045) : null;
-  const grossYield = monthlyRent && price ? Math.round((monthlyRent * 12 / price) * 1000) / 10 : null;
-
-  // Get images array
-  let images: string[] = [];
-  if (Array.isArray(item.images)) {
-    images = item.images.map((img: any) => {
-      if (typeof img === 'string') return img;
-      return img.url || img.srcUrl || img.original || '';
-    }).filter(Boolean);
-  }
+  const rent = price ? Math.round(price * 0.0045) : null;
+  const yld = rent ? Math.round((rent * 12 / price) * 100) / 10 : null;
 
   return {
-    external_id: String(item.id || `rm-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`),
+    external_id: String(item.id || Date.now()),
     source: 'rightmove',
     listing_url: item.url || `https://www.rightmove.co.uk/properties/${item.id}`,
-    address: address,
-    postcode: postcode,
-    outcode: postcode?.split(' ')[0] || searchLocation.toUpperCase(),
-    latitude: item.coordinates?.latitude || item.location?.latitude,
-    longitude: item.coordinates?.longitude || item.location?.longitude,
+    address,
+    postcode,
+    outcode: postcode?.split(' ')[0] || location.toUpperCase(),
+    latitude: item.coordinates?.latitude,
+    longitude: item.coordinates?.longitude,
     bedrooms: item.bedrooms,
     bathrooms: item.bathrooms,
-    property_type: item.propertyType || item.propertySubType || 'Property',
+    property_type: item.propertyType || 'Property',
     tenure: item.tenure,
-    price: price,
+    price,
     original_price: item.price?.previousPrice,
-    is_reduced: item.displayStatus?.toLowerCase().includes('reduced') || !!item.price?.previousPrice,
-    reduction_percent: item.price?.previousPrice ? Math.round((1 - price / item.price.previousPrice) * 100) : null,
-    first_listed: item.firstVisibleDate || item.addedOn,
+    is_reduced: !!item.price?.previousPrice,
     agent_name: item.agent,
     agent_phone: item.agentPhone,
-    thumbnail_url: images[0] || null,
-    images: images.slice(0, 10),
-    summary: item.description?.substring(0, 500),
+    thumbnail_url: item.images?.[0]?.url || item.images?.[0] || null,
+    images: (item.images || []).map((i: any) => i?.url || i).filter(Boolean).slice(0, 5),
+    summary: item.description?.substring(0, 300),
     features: item.keyFeatures || [],
-    estimated_rent: monthlyRent,
-    gross_yield: grossYield,
-    status: item.displayStatus?.toLowerCase().includes('sold') ? 'sold_stc' : 
-            item.displayStatus?.toLowerCase().includes('offer') ? 'under_offer' : 'active',
+    estimated_rent: rent,
+    gross_yield: yld,
+    status: 'active',
   };
 }
 
-function extractPostcode(address: string): string | null {
-  if (!address) return null;
-  const match = address.match(/([A-Z]{1,2}\d{1,2}[A-Z]?\s*\d[A-Z]{2})/i);
-  return match ? match[1].toUpperCase() : null;
+function extractPostcode(addr: string): string | null {
+  const m = addr?.match(/([A-Z]{1,2}\d{1,2}[A-Z]?\s*\d[A-Z]{2})/i);
+  return m ? m[1].toUpperCase() : null;
 }
