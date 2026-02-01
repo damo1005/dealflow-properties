@@ -7,15 +7,16 @@ import { useAppStore } from "@/stores/appStore";
 interface AppLayoutProps {
   children: ReactNode;
   title?: string;
+  actions?: ReactNode;
 }
 
-export function AppLayout({ children, title }: AppLayoutProps) {
+export function AppLayout({ children, title, actions }: AppLayoutProps) {
   const { sidebarCollapsed } = useAppStore();
 
   return (
     <div className="min-h-screen bg-background">
       <AppSidebar />
-      <TopBar title={title} />
+      <TopBar title={title} actions={actions} />
       <main
         className={cn(
           "pt-16 min-h-screen transition-all duration-300",
