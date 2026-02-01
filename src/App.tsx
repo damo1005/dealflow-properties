@@ -67,6 +67,9 @@ import InsuranceClaims from "./pages/InsuranceClaims";
 import NotFound from "./pages/NotFound";
 import Events from "./pages/Events";
 import Rewards from "./pages/Rewards";
+import BankTransactions from "./pages/BankTransactions";
+import MileageTracker from "./pages/MileageTracker";
+import RegionalCalculators from "./pages/RegionalCalculators";
 import { AIChatWidget } from "./components/copilot/AIChatWidget";
 // Admin pages
 import {
@@ -464,6 +467,9 @@ const App = () => (
             <Route path="/insurance/claims" element={<ProtectedRoute><InsuranceClaims /></ProtectedRoute>} />
             <Route path="/community/events" element={<ProtectedRoute><Events /></ProtectedRoute>} />
             <Route path="/rewards" element={<ProtectedRoute><Rewards /></ProtectedRoute>} />
+            <Route path="/portfolio/bank-transactions" element={<ProtectedRoute><BankTransactions /></ProtectedRoute>} />
+            <Route path="/tools/mileage" element={<ProtectedRoute><MileageTracker /></ProtectedRoute>} />
+            <Route path="/calculators/regional" element={<ProtectedRoute><RegionalCalculators /></ProtectedRoute>} />
 
             {/* Admin routes */}
             <Route path="/admin" element={<AdminDashboard />} />
