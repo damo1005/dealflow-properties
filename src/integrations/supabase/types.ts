@@ -409,6 +409,45 @@ export type Database = {
           },
         ]
       }
+      goal_seek_results: {
+        Row: {
+          adjust_variable: string
+          alternative_solutions: Json | null
+          calculated_value: number | null
+          created_at: string | null
+          id: string
+          is_achievable: boolean | null
+          property_id: string | null
+          target_metric: string
+          target_value: number
+          user_id: string
+        }
+        Insert: {
+          adjust_variable: string
+          alternative_solutions?: Json | null
+          calculated_value?: number | null
+          created_at?: string | null
+          id?: string
+          is_achievable?: boolean | null
+          property_id?: string | null
+          target_metric: string
+          target_value: number
+          user_id: string
+        }
+        Update: {
+          adjust_variable?: string
+          alternative_solutions?: Json | null
+          calculated_value?: number | null
+          created_at?: string | null
+          id?: string
+          is_achievable?: boolean | null
+          property_id?: string | null
+          target_metric?: string
+          target_value?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       market_conditions: {
         Row: {
           avg_mortgage_rate: number | null
@@ -666,6 +705,53 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      scenario_shares: {
+        Row: {
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          last_viewed_at: string | null
+          password_hash: string | null
+          permissions: string | null
+          scenario_id: string
+          share_token: string
+          shared_by: string
+          view_count: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          last_viewed_at?: string | null
+          password_hash?: string | null
+          permissions?: string | null
+          scenario_id: string
+          share_token: string
+          shared_by: string
+          view_count?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          last_viewed_at?: string | null
+          password_hash?: string | null
+          permissions?: string | null
+          scenario_id?: string
+          share_token?: string
+          shared_by?: string
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scenario_shares_scenario_id_fkey"
+            columns: ["scenario_id"]
+            isOneToOne: false
+            referencedRelation: "scenarios"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       scenarios: {
         Row: {

@@ -9,6 +9,10 @@ import {
   TrendingUp,
   ChevronDown,
   Download,
+  Dices,
+  Target,
+  MoreVertical,
+  Sparkles,
 } from "lucide-react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
@@ -25,6 +29,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
@@ -42,6 +47,8 @@ import { ViabilityMeter } from "@/components/scenarios/ViabilityMeter";
 import { CashFlowProjectionChart } from "@/components/scenarios/CashFlowProjectionChart";
 import { BreakEvenChart } from "@/components/scenarios/BreakEvenChart";
 import { SaveScenarioDialog } from "@/components/scenarios/SaveScenarioDialog";
+import { MonteCarloDialog } from "@/components/scenarios/MonteCarloDialog";
+import { GoalSeekerDialog } from "@/components/scenarios/GoalSeekerDialog";
 import { sliderConfigs, applyPresetToInputs, formatCurrency } from "@/lib/scenarioConfig";
 import type { PresetScenario } from "@/types/scenario";
 import { cn } from "@/lib/utils";
@@ -53,6 +60,8 @@ export default function ScenarioBuilder() {
   const { toast } = useToast();
   
   const [showSaveDialog, setShowSaveDialog] = useState(false);
+  const [showMonteCarloDialog, setShowMonteCarloDialog] = useState(false);
+  const [showGoalSeekerDialog, setShowGoalSeekerDialog] = useState(false);
   const [activeChart, setActiveChart] = useState<"sensitivity" | "cashflow" | "breakeven" | "waterfall" | "comparison">("sensitivity");
   const [openCategories, setOpenCategories] = useState<Record<string, boolean>>({
     purchase: true,
@@ -195,6 +204,30 @@ export default function ScenarioBuilder() {
           </div>
 
           <div className="flex items-center gap-2">
+            {/* Tools Menu */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  Tools
+                  <ChevronDown className="h-3 w-3 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setShowMonteCarloDialog(true)}>
+                  <Dices className="h-4 w-4 mr-2" />
+                  Monte Carlo Simulation
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setShowGoalSeekerDialog(true)}>
+                  <Target className="h-4 w-4 mr-2" />
+                  Goal Seeker
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>Export as PDF</DropdownMenuItem>
+                <DropdownMenuItem>Export as CSV</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <Button variant="outline" size="sm" onClick={resetToBase} disabled={!hasChanges}>
               <RotateCcw className="h-4 w-4 mr-2" />
               Reset
@@ -208,18 +241,6 @@ export default function ScenarioBuilder() {
               <Save className="h-4 w-4 mr-2" />
               Save
             </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm">
-                  <Download className="h-4 w-4 mr-2" />
-                  Export
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem>Export as PDF</DropdownMenuItem>
-                <DropdownMenuItem>Export as CSV</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
             <Button size="sm" onClick={handleApplyToCalculator}>
               <Calculator className="h-4 w-4 mr-2" />
               Apply
@@ -488,6 +509,29 @@ export default function ScenarioBuilder() {
           open={showSaveDialog}
           onClose={() => setShowSaveDialog(false)}
           onSave={handleSaveVariation}
+        />
+
+        {/* Monte Carlo Dialog */}
+        <MonteCarloDialog
+          open={showMonteCarloDialog}
+          onClose={() => setShowMonteCarloDialog(false)}
+          baseInputs={currentInputs}
+        />
+
+        {/* Goal Seeker Dialog */}
+        <GoalSeekerDialog
+          open={showGoalSeekerDialog}
+          onClose={() => setShowGoalSeekerDialog(false)}
+          baseInputs={currentInputs}
+          onApplyResult={(changes) => {
+            Object.entries(changes).forEach(([key, value]) => {
+              updateInput(key as keyof BTLInputs, value as number);
+            });
+            toast({
+              title: "Goal values applied",
+              description: "Sliders have been updated to meet your target.",
+            });
+          }}
         />
       </div>
     </AppLayout>
