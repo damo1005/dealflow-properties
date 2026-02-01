@@ -1610,13 +1610,16 @@ export type Database = {
           created_at: string
           days_on_market: number | null
           description: string | null
+          epc_rating: string | null
           estimated_yield: number | null
           expires_at: string
           external_id: string
           features: string[] | null
+          floor_area_sqft: number | null
           id: string
           images: string[] | null
           latitude: number | null
+          listing_url: string | null
           longitude: number | null
           original_price: number | null
           postcode: string | null
@@ -1626,6 +1629,7 @@ export type Database = {
           raw_data: Json | null
           region: string | null
           roi_potential: number | null
+          tenure: string | null
         }
         Insert: {
           address: string
@@ -1636,13 +1640,16 @@ export type Database = {
           created_at?: string
           days_on_market?: number | null
           description?: string | null
+          epc_rating?: string | null
           estimated_yield?: number | null
           expires_at?: string
           external_id: string
           features?: string[] | null
+          floor_area_sqft?: number | null
           id?: string
           images?: string[] | null
           latitude?: number | null
+          listing_url?: string | null
           longitude?: number | null
           original_price?: number | null
           postcode?: string | null
@@ -1652,6 +1659,7 @@ export type Database = {
           raw_data?: Json | null
           region?: string | null
           roi_potential?: number | null
+          tenure?: string | null
         }
         Update: {
           address?: string
@@ -1662,13 +1670,16 @@ export type Database = {
           created_at?: string
           days_on_market?: number | null
           description?: string | null
+          epc_rating?: string | null
           estimated_yield?: number | null
           expires_at?: string
           external_id?: string
           features?: string[] | null
+          floor_area_sqft?: number | null
           id?: string
           images?: string[] | null
           latitude?: number | null
+          listing_url?: string | null
           longitude?: number | null
           original_price?: number | null
           postcode?: string | null
@@ -1678,6 +1689,7 @@ export type Database = {
           raw_data?: Json | null
           region?: string | null
           roi_potential?: number | null
+          tenure?: string | null
         }
         Relationships: []
       }
@@ -3999,6 +4011,7 @@ export type Database = {
           property_types: string[] | null
           require_garden: boolean | null
           require_parking: boolean | null
+          scan_frequency: string | null
           updated_at: string | null
           user_id: string
           yield_min: number | null
@@ -4041,6 +4054,7 @@ export type Database = {
           property_types?: string[] | null
           require_garden?: boolean | null
           require_parking?: boolean | null
+          scan_frequency?: string | null
           updated_at?: string | null
           user_id: string
           yield_min?: number | null
@@ -4083,6 +4097,7 @@ export type Database = {
           property_types?: string[] | null
           require_garden?: boolean | null
           require_parking?: boolean | null
+          scan_frequency?: string | null
           updated_at?: string | null
           user_id?: string
           yield_min?: number | null

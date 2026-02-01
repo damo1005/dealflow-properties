@@ -104,6 +104,7 @@ export function CreateScoutWizard({ open, onOpenChange }: CreateScoutWizardProps
         prioritize_cash_flow: wizardData.priority_cash_flow > 60,
         prioritize_capital_growth: wizardData.priority_capital_growth > 60,
         prioritize_below_market: wizardData.priority_bmv > 60,
+        scan_frequency: (wizardData as any).scan_frequency || 'daily',
       };
 
       const { data, error } = await supabase
@@ -243,6 +244,8 @@ export function CreateScoutWizard({ open, onOpenChange }: CreateScoutWizardProps
               name={wizardData.name}
               onNameChange={(v) => updateWizardData({ name: v })}
               wizardData={wizardData}
+              scanFrequency={(wizardData as any).scan_frequency || 'daily'}
+              onScanFrequencyChange={(v) => updateWizardData({ scan_frequency: v } as any)}
             />
           )}
         </div>
@@ -702,6 +705,8 @@ function Step5Alerts({
   name,
   onNameChange,
   wizardData,
+  scanFrequency,
+  onScanFrequencyChange,
 }: {
   frequency: string;
   onFrequencyChange: (value: string) => void;
@@ -710,12 +715,21 @@ function Step5Alerts({
   name: string;
   onNameChange: (value: string) => void;
   wizardData: any;
+  scanFrequency: string;
+  onScanFrequencyChange: (value: string) => void;
 }) {
+  const SCAN_FREQUENCIES = [
+    { value: 'every_6_hours', label: 'Every 6 Hours', description: 'Most aggressive - catch deals first' },
+    { value: 'every_12_hours', label: 'Every 12 Hours', description: 'Twice daily scans' },
+    { value: 'daily', label: 'Daily', description: 'Once per day, recommended' },
+    { value: 'manual', label: 'Manual Only', description: 'Only scan when you click' },
+  ];
+
   return (
     <div className="space-y-6">
       <h3 className="text-lg font-medium flex items-center gap-2">
         <Bell className="h-5 w-5" />
-        Alerts & Review
+        Alerts & Scheduling
       </h3>
 
       <div className="space-y-2">
@@ -725,6 +739,27 @@ function Step5Alerts({
           onChange={(e) => onNameChange(e.target.value)}
           placeholder={`${wizardData.location_areas[0] || 'New'} ${wizardData.investment_strategy.toUpperCase()} Scout`}
         />
+      </div>
+
+      <div className="space-y-2">
+        <Label>Scan Frequency</Label>
+        <p className="text-xs text-muted-foreground mb-2">
+          How often should this scout search for new properties?
+        </p>
+        <div className="grid grid-cols-2 gap-2">
+          {SCAN_FREQUENCIES.map((freq) => (
+            <Card
+              key={freq.value}
+              className={`p-3 cursor-pointer transition-all ${
+                scanFrequency === freq.value ? 'border-primary bg-primary/5' : ''
+              }`}
+              onClick={() => onScanFrequencyChange(freq.value)}
+            >
+              <div className="font-medium text-sm">{freq.label}</div>
+              <div className="text-xs text-muted-foreground">{freq.description}</div>
+            </Card>
+          ))}
+        </div>
       </div>
 
       <div className="space-y-2">

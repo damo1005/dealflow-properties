@@ -153,6 +153,7 @@ interface ScoutWizardData {
   min_score: number;
   alert_frequency: string;
   alert_methods: string[];
+  scan_frequency: string;
 }
 
 interface DealScoutStore {
@@ -207,6 +208,7 @@ const initialWizardData: ScoutWizardData = {
   min_score: 70,
   alert_frequency: 'instant',
   alert_methods: ['email', 'push'],
+  scan_frequency: 'daily',
 };
 
 export const useDealScoutStore = create<DealScoutStore>((set) => ({

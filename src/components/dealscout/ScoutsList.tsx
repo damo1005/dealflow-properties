@@ -28,16 +28,20 @@ import {
   Edit,
   Zap,
   TrendingUp,
+  RefreshCw,
+  Clock,
 } from "lucide-react";
 import { useDealScoutStore, DealScout } from "@/stores/dealScoutStore";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { formatCurrency } from "@/types/dealScout";
+import { formatDistanceToNow } from "date-fns";
 
 export function ScoutsList() {
   const { scouts, setScouts, updateScout, deleteScout, setWizardOpen, setIsLoading, isLoading } = useDealScoutStore();
   const { toast } = useToast();
   const [openScouts, setOpenScouts] = useState<Set<string>>(new Set());
+  const [scanningScoutId, setScanningScoutId] = useState<string | null>(null);
 
   useEffect(() => {
     loadScouts();
@@ -109,6 +113,35 @@ export function ScoutsList() {
     }
   };
 
+  const handleScanScout = async (scout: DealScout) => {
+    setScanningScoutId(scout.id);
+    try {
+      const { data, error } = await supabase.functions.invoke('scan-deal-scouts', {
+        body: { scoutId: scout.id },
+      });
+
+      if (error) throw error;
+
+      const result = data.results?.[0];
+      toast({
+        title: "Scan Complete! 🎯",
+        description: `Found ${result?.propertiesFound || 0} properties, ${result?.newDiscoveries || 0} new discoveries.`,
+      });
+
+      // Reload scouts to get updated stats
+      loadScouts();
+    } catch (error) {
+      console.error('Scan error:', error);
+      toast({
+        title: "Scan Failed",
+        description: "Failed to scan for properties. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setScanningScoutId(null);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="space-y-4">
@@ -141,6 +174,8 @@ export function ScoutsList() {
           onToggle={() => toggleScout(scout.id)}
           onToggleActive={() => handleToggleActive(scout)}
           onDelete={() => handleDeleteScout(scout)}
+          onScan={() => handleScanScout(scout)}
+          isScanning={scanningScoutId === scout.id}
         />
       ))}
     </div>
@@ -153,11 +188,23 @@ interface ScoutCardProps {
   onToggle: () => void;
   onToggleActive: () => void;
   onDelete: () => void;
+  onScan: () => void;
+  isScanning: boolean;
 }
 
-function ScoutCard({ scout, isOpen, onToggle, onToggleActive, onDelete }: ScoutCardProps) {
+function ScoutCard({ scout, isOpen, onToggle, onToggleActive, onDelete, onScan, isScanning }: ScoutCardProps) {
   const newDealsCount = 0; // Would come from discoveries
   
+  const getScanFrequencyLabel = (freq: string) => {
+    switch (freq) {
+      case 'every_6_hours': return 'Every 6 hours';
+      case 'every_12_hours': return 'Every 12 hours';
+      case 'daily': return 'Daily';
+      case 'manual': return 'Manual only';
+      default: return 'Daily';
+    }
+  };
+
   return (
     <Card className={!scout.is_active ? 'opacity-60' : ''}>
       <Collapsible open={isOpen} onOpenChange={onToggle}>
@@ -177,9 +224,16 @@ function ScoutCard({ scout, isOpen, onToggle, onToggleActive, onDelete }: ScoutC
                   )}
                 </CardTitle>
                 <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
-                  <span>Created {new Date(scout.created_at).toLocaleDateString()}</span>
-                  <span>•</span>
-                  <span>{scout.properties_found} deals found</span>
+                  <span>{scout.properties_found || 0} deals found</span>
+                  {scout.last_scan_at && (
+                    <>
+                      <span>•</span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="h-3 w-3" />
+                        Scanned {formatDistanceToNow(new Date(scout.last_scan_at), { addSuffix: true })}
+                      </span>
+                    </>
+                  )}
                   {scout.avg_score && (
                     <>
                       <span>•</span>
@@ -190,6 +244,19 @@ function ScoutCard({ scout, isOpen, onToggle, onToggleActive, onDelete }: ScoutC
               </div>
             </div>
             <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onScan();
+                }}
+                disabled={isScanning || !scout.is_active}
+                className="gap-1"
+              >
+                <RefreshCw className={`h-3 w-3 ${isScanning ? 'animate-spin' : ''}`} />
+                {isScanning ? 'Scanning...' : 'Scan'}
+              </Button>
               <Switch
                 checked={scout.is_active}
                 onCheckedChange={onToggleActive}
@@ -298,15 +365,15 @@ function ScoutCard({ scout, isOpen, onToggle, onToggleActive, onDelete }: ScoutC
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-muted/50 rounded-lg p-3">
-                    <div className="text-2xl font-bold">{scout.properties_found}</div>
+                    <div className="text-2xl font-bold">{scout.properties_found || 0}</div>
                     <div className="text-xs text-muted-foreground">Deals Found</div>
                   </div>
                   <div className="bg-muted/50 rounded-lg p-3">
-                    <div className="text-2xl font-bold">{scout.properties_viewed}</div>
+                    <div className="text-2xl font-bold">{scout.properties_viewed || 0}</div>
                     <div className="text-xs text-muted-foreground">Viewed</div>
                   </div>
                   <div className="bg-muted/50 rounded-lg p-3">
-                    <div className="text-2xl font-bold">{scout.properties_saved}</div>
+                    <div className="text-2xl font-bold">{scout.properties_saved || 0}</div>
                     <div className="text-xs text-muted-foreground">Saved</div>
                   </div>
                   <div className="bg-muted/50 rounded-lg p-3">
@@ -317,9 +384,7 @@ function ScoutCard({ scout, isOpen, onToggle, onToggleActive, onDelete }: ScoutC
                 
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Bell className="h-4 w-4" />
-                  <span className="capitalize">{scout.alert_frequency} alerts</span>
-                  <span>•</span>
-                  <span>Score ≥{scout.alert_score_threshold}</span>
+                  <span>{getScanFrequencyLabel((scout as any).scan_frequency)} • Score ≥{scout.alert_score_threshold}</span>
                 </div>
                 
                 {scout.last_scan_at && (
