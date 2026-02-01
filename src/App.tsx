@@ -20,6 +20,7 @@ import MyComparisons from "./pages/MyComparisons";
 import ScenarioBuilder from "./pages/ScenarioBuilder";
 import AccommodationRequests from "./pages/AccommodationRequests";
 import DealScout from "./pages/DealScout";
+import Alerts from "./pages/Alerts";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -52,6 +53,7 @@ const App = () => (
           <Route path="/deal-packs" element={<DealPacks />} />
           <Route path="/accommodation" element={<AccommodationRequests />} />
           <Route path="/deal-scout" element={<DealScout />} />
+          <Route path="/alerts" element={<Alerts />} />
           <Route path="/settings" element={<Settings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
