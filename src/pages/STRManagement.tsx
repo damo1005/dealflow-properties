@@ -396,9 +396,17 @@ export default function STRManagement() {
                 propertyId={selectedProperty.id}
                 onAddConnection={async (conn) => {
                   try {
+                    const insertData = {
+                      str_property_id: conn.str_property_id,
+                      platform_name: conn.platform_name,
+                      listing_url: conn.listing_url,
+                      ical_url: conn.ical_url,
+                      sync_frequency: conn.sync_frequency || 'hourly',
+                      is_active: true,
+                    };
                     const { data, error } = await supabase
                       .from("platform_connections")
-                      .insert([conn])
+                      .insert([insertData])
                       .select()
                       .single();
                     if (error) throw error;
