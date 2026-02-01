@@ -269,6 +269,44 @@ export type Database = {
         }
         Relationships: []
       }
+      calculations: {
+        Row: {
+          calculator_type: string | null
+          created_at: string | null
+          id: string
+          inputs: Json | null
+          property_id: string | null
+          results: Json | null
+          user_id: string
+        }
+        Insert: {
+          calculator_type?: string | null
+          created_at?: string | null
+          id?: string
+          inputs?: Json | null
+          property_id?: string | null
+          results?: Json | null
+          user_id: string
+        }
+        Update: {
+          calculator_type?: string | null
+          created_at?: string | null
+          id?: string
+          inputs?: Json | null
+          property_id?: string | null
+          results?: Json | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calculations_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       comparables_cache: {
         Row: {
           cached_at: string
@@ -478,6 +516,50 @@ export type Database = {
           user_ranking?: Json | null
         }
         Relationships: []
+      }
+      deal_packs: {
+        Row: {
+          content: Json | null
+          created_at: string | null
+          id: string
+          pdf_url: string | null
+          property_id: string | null
+          share_link: string | null
+          template_name: string | null
+          user_id: string
+          views: number | null
+        }
+        Insert: {
+          content?: Json | null
+          created_at?: string | null
+          id?: string
+          pdf_url?: string | null
+          property_id?: string | null
+          share_link?: string | null
+          template_name?: string | null
+          user_id: string
+          views?: number | null
+        }
+        Update: {
+          content?: Json | null
+          created_at?: string | null
+          id?: string
+          pdf_url?: string | null
+          property_id?: string | null
+          share_link?: string | null
+          template_name?: string | null
+          user_id?: string
+          views?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deal_packs_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       email_logs: {
         Row: {
@@ -697,6 +779,90 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          company_name: string | null
+          created_at: string | null
+          full_name: string | null
+          id: string
+          stripe_customer_id: string | null
+          subscription_tier: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          company_name?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id: string
+          stripe_customer_id?: string | null
+          subscription_tier?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          company_name?: string | null
+          created_at?: string | null
+          full_name?: string | null
+          id?: string
+          stripe_customer_id?: string | null
+          subscription_tier?: string | null
+        }
+        Relationships: []
+      }
+      properties: {
+        Row: {
+          address: string | null
+          bathrooms: number | null
+          bedrooms: number | null
+          created_at: string | null
+          data: Json | null
+          description: string | null
+          external_id: string | null
+          id: string
+          images: Json | null
+          last_updated: string | null
+          listing_url: string | null
+          postcode: string | null
+          price: number | null
+          property_type: string | null
+          tenure: string | null
+        }
+        Insert: {
+          address?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          created_at?: string | null
+          data?: Json | null
+          description?: string | null
+          external_id?: string | null
+          id?: string
+          images?: Json | null
+          last_updated?: string | null
+          listing_url?: string | null
+          postcode?: string | null
+          price?: number | null
+          property_type?: string | null
+          tenure?: string | null
+        }
+        Update: {
+          address?: string | null
+          bathrooms?: number | null
+          bedrooms?: number | null
+          created_at?: string | null
+          data?: Json | null
+          description?: string | null
+          external_id?: string | null
+          id?: string
+          images?: Json | null
+          last_updated?: string | null
+          listing_url?: string | null
+          postcode?: string | null
+          price?: number | null
+          property_type?: string | null
+          tenure?: string | null
+        }
+        Relationships: []
       }
       rental_estimates_cache: {
         Row: {
@@ -987,6 +1153,30 @@ export type Database = {
           scenario_type?: string
           scenario_variations?: Json
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      usage_logs: {
+        Row: {
+          action_type: string | null
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          user_id: string
+        }
+        Insert: {
+          action_type?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          user_id: string
+        }
+        Update: {
+          action_type?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
           user_id?: string
         }
         Relationships: []
