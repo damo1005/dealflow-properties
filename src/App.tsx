@@ -12,6 +12,7 @@ import SavedSearches from "./pages/SavedSearches";
 import Calculators from "./pages/Calculators";
 import Settings from "./pages/Settings";
 import DealPackGenerator from "./pages/DealPackGenerator";
+import DealPacks from "./pages/DealPacks";
 import ViewingNotesRecording from "./pages/ViewingNotesRecording";
 import ViewingNotesResults from "./pages/ViewingNotesResults";
 import Compare from "./pages/Compare";
@@ -46,7 +47,9 @@ const App = () => (
           <Route path="/calculators" element={<Calculators />} />
           <Route path="/calculators/:id" element={<Calculators />} />
           <Route path="/deal-pack" element={<DealPackGenerator />} />
+          <Route path="/deal-pack/new" element={<DealPackGenerator />} />
           <Route path="/deal-pack/:propertyId" element={<DealPackGenerator />} />
+          <Route path="/deal-packs" element={<DealPacks />} />
           <Route path="/accommodation" element={<AccommodationRequests />} />
           <Route path="/deal-scout" element={<DealScout />} />
           <Route path="/settings" element={<Settings />} />
