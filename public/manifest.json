@@ -1,0 +1,20 @@
+{
+  "name": "PropertyTracker Pro",
+  "short_name": "PropTracker",
+  "description": "UK Property Investment Portfolio Management Platform",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e40af",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["finance", "business", "productivity"],
+  "lang": "en-GB",
+  "prefer_related_applications": false
+}

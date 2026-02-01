@@ -50,6 +50,9 @@ import TeamSettings from "./pages/TeamSettings";
 import JVDeals from "./pages/JVDeals";
 import AccountantPortal from "./pages/AccountantPortal";
 import PortfolioSharing from "./pages/PortfolioSharing";
+import MortgageTracker from "./pages/MortgageTracker";
+import YieldMap from "./pages/YieldMap";
+import ApiSettings from "./pages/ApiSettings";
 import NotFound from "./pages/NotFound";
 
 // Admin pages
@@ -374,6 +377,62 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Settings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings/team"
+              element={
+                <ProtectedRoute>
+                  <TeamSettings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings/sharing"
+              element={
+                <ProtectedRoute>
+                  <PortfolioSharing />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings/api"
+              element={
+                <ProtectedRoute>
+                  <ApiSettings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/portfolio/jv-deals"
+              element={
+                <ProtectedRoute>
+                  <JVDeals />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/portfolio/mortgages"
+              element={
+                <ProtectedRoute>
+                  <MortgageTracker />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/tools/yield-map"
+              element={
+                <ProtectedRoute>
+                  <YieldMap />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/accountant"
+              element={
+                <ProtectedRoute>
+                  <AccountantPortal />
                 </ProtectedRoute>
               }
             />

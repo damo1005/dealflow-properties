@@ -498,6 +498,48 @@ export type Database = {
           },
         ]
       }
+      api_keys: {
+        Row: {
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          key_hash: string
+          key_prefix: string
+          last_used_at: string | null
+          name: string
+          permissions: string[] | null
+          rate_limit: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          key_hash: string
+          key_prefix: string
+          last_used_at?: string | null
+          name: string
+          permissions?: string[] | null
+          rate_limit?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          key_hash?: string
+          key_prefix?: string
+          last_used_at?: string | null
+          name?: string
+          permissions?: string[] | null
+          rate_limit?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       api_usage: {
         Row: {
           cost_credits: number | null
@@ -558,6 +600,51 @@ export type Database = {
           expires_at?: string
           id?: string
           postcode?: string
+        }
+        Relationships: []
+      }
+      area_yield_data: {
+        Row: {
+          avg_gross_yield: number | null
+          avg_property_price: number | null
+          avg_rent_pcm: number | null
+          created_at: string | null
+          data_date: string | null
+          id: string
+          latitude: number | null
+          longitude: number | null
+          postcode_district: string
+          price_change_1y: number | null
+          sample_size: number | null
+          yield_change_1y: number | null
+        }
+        Insert: {
+          avg_gross_yield?: number | null
+          avg_property_price?: number | null
+          avg_rent_pcm?: number | null
+          created_at?: string | null
+          data_date?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          postcode_district: string
+          price_change_1y?: number | null
+          sample_size?: number | null
+          yield_change_1y?: number | null
+        }
+        Update: {
+          avg_gross_yield?: number | null
+          avg_property_price?: number | null
+          avg_rent_pcm?: number | null
+          created_at?: string | null
+          data_date?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          postcode_district?: string
+          price_change_1y?: number | null
+          sample_size?: number | null
+          yield_change_1y?: number | null
         }
         Relationships: []
       }
@@ -5381,6 +5468,47 @@ export type Database = {
         }
         Relationships: []
       }
+      mortgage_payments: {
+        Row: {
+          amount: number
+          created_at: string | null
+          id: string
+          interest: number | null
+          is_overpayment: boolean | null
+          mortgage_id: string
+          payment_date: string
+          principal: number | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          id?: string
+          interest?: number | null
+          is_overpayment?: boolean | null
+          mortgage_id: string
+          payment_date: string
+          principal?: number | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          id?: string
+          interest?: number | null
+          is_overpayment?: boolean | null
+          mortgage_id?: string
+          payment_date?: string
+          principal?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mortgage_payments_mortgage_id_fkey"
+            columns: ["mortgage_id"]
+            isOneToOne: false
+            referencedRelation: "mortgages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mortgage_products: {
         Row: {
           cashback: number | null
@@ -5509,6 +5637,92 @@ export type Database = {
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "mortgage_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mortgages: {
+        Row: {
+          account_number: string | null
+          created_at: string | null
+          current_balance: number
+          current_rate: number
+          deal_end_date: string | null
+          deal_start_date: string | null
+          erc_end_date: string | null
+          erc_percent: number | null
+          id: string
+          is_portable: boolean | null
+          lender_name: string
+          monthly_payment: number | null
+          mortgage_type: string | null
+          original_amount: number
+          overpayment_allowance: number | null
+          portfolio_property_id: string | null
+          rate_type: string | null
+          repayment_type: string | null
+          status: string | null
+          svr_rate: number | null
+          term_years: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          account_number?: string | null
+          created_at?: string | null
+          current_balance: number
+          current_rate: number
+          deal_end_date?: string | null
+          deal_start_date?: string | null
+          erc_end_date?: string | null
+          erc_percent?: number | null
+          id?: string
+          is_portable?: boolean | null
+          lender_name: string
+          monthly_payment?: number | null
+          mortgage_type?: string | null
+          original_amount: number
+          overpayment_allowance?: number | null
+          portfolio_property_id?: string | null
+          rate_type?: string | null
+          repayment_type?: string | null
+          status?: string | null
+          svr_rate?: number | null
+          term_years?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          account_number?: string | null
+          created_at?: string | null
+          current_balance?: number
+          current_rate?: number
+          deal_end_date?: string | null
+          deal_start_date?: string | null
+          erc_end_date?: string | null
+          erc_percent?: number | null
+          id?: string
+          is_portable?: boolean | null
+          lender_name?: string
+          monthly_payment?: number | null
+          mortgage_type?: string | null
+          original_amount?: number
+          overpayment_allowance?: number | null
+          portfolio_property_id?: string | null
+          rate_type?: string | null
+          repayment_type?: string | null
+          status?: string | null
+          svr_rate?: number | null
+          term_years?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mortgages_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
             referencedColumns: ["id"]
           },
         ]
@@ -7193,6 +7407,131 @@ export type Database = {
           },
         ]
       }
+      property_inspections: {
+        Row: {
+          created_at: string | null
+          id: string
+          inspection_date: string
+          inspection_type: string
+          inspector_name: string | null
+          overall_notes: string | null
+          overall_rating: number | null
+          portfolio_property_id: string
+          report_url: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          inspection_date: string
+          inspection_type: string
+          inspector_name?: string | null
+          overall_notes?: string | null
+          overall_rating?: number | null
+          portfolio_property_id: string
+          report_url?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          inspection_date?: string
+          inspection_type?: string
+          inspector_name?: string | null
+          overall_notes?: string | null
+          overall_rating?: number | null
+          portfolio_property_id?: string
+          report_url?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_inspections_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_issues: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          due_date: string | null
+          id: string
+          inspection_id: string | null
+          photo_urls: string[] | null
+          portfolio_property_id: string
+          priority: string | null
+          reported_by: string | null
+          resolution_cost: number | null
+          resolved_at: string | null
+          room_name: string | null
+          status: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          inspection_id?: string | null
+          photo_urls?: string[] | null
+          portfolio_property_id: string
+          priority?: string | null
+          reported_by?: string | null
+          resolution_cost?: number | null
+          resolved_at?: string | null
+          room_name?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          inspection_id?: string | null
+          photo_urls?: string[] | null
+          portfolio_property_id?: string
+          priority?: string | null
+          reported_by?: string | null
+          resolution_cost?: number | null
+          resolved_at?: string | null
+          room_name?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_issues_inspection_id_fkey"
+            columns: ["inspection_id"]
+            isOneToOne: false
+            referencedRelation: "property_inspections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_issues_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       property_performance: {
         Row: {
           created_at: string | null
@@ -7830,6 +8169,53 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      room_conditions: {
+        Row: {
+          ceiling_rating: number | null
+          fixtures_rating: number | null
+          flooring_rating: number | null
+          id: string
+          inspection_id: string
+          notes: string | null
+          overall_rating: number | null
+          photo_urls: string[] | null
+          room_name: string
+          walls_rating: number | null
+        }
+        Insert: {
+          ceiling_rating?: number | null
+          fixtures_rating?: number | null
+          flooring_rating?: number | null
+          id?: string
+          inspection_id: string
+          notes?: string | null
+          overall_rating?: number | null
+          photo_urls?: string[] | null
+          room_name: string
+          walls_rating?: number | null
+        }
+        Update: {
+          ceiling_rating?: number | null
+          fixtures_rating?: number | null
+          flooring_rating?: number | null
+          id?: string
+          inspection_id?: string
+          notes?: string | null
+          overall_rating?: number | null
+          photo_urls?: string[] | null
+          room_name?: string
+          walls_rating?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "room_conditions_inspection_id_fkey"
+            columns: ["inspection_id"]
+            isOneToOne: false
+            referencedRelation: "property_inspections"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       saved_hotspots: {
         Row: {
@@ -9904,6 +10290,89 @@ export type Database = {
           template_used?: string | null
           transcript?: string | null
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      webhook_deliveries: {
+        Row: {
+          attempts: number | null
+          created_at: string | null
+          event_type: string
+          id: string
+          payload: Json
+          status: string | null
+          status_code: number | null
+          webhook_id: string
+        }
+        Insert: {
+          attempts?: number | null
+          created_at?: string | null
+          event_type: string
+          id?: string
+          payload: Json
+          status?: string | null
+          status_code?: number | null
+          webhook_id: string
+        }
+        Update: {
+          attempts?: number | null
+          created_at?: string | null
+          event_type?: string
+          id?: string
+          payload?: Json
+          status?: string | null
+          status_code?: number | null
+          webhook_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "webhook_deliveries_webhook_id_fkey"
+            columns: ["webhook_id"]
+            isOneToOne: false
+            referencedRelation: "webhooks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      webhooks: {
+        Row: {
+          created_at: string | null
+          events: string[]
+          failed_deliveries: number | null
+          id: string
+          is_active: boolean | null
+          last_triggered_at: string | null
+          name: string
+          secret: string
+          total_deliveries: number | null
+          url: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          events: string[]
+          failed_deliveries?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_triggered_at?: string | null
+          name: string
+          secret: string
+          total_deliveries?: number | null
+          url: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          events?: string[]
+          failed_deliveries?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_triggered_at?: string | null
+          name?: string
+          secret?: string
+          total_deliveries?: number | null
+          url?: string
           user_id?: string
         }
         Relationships: []
