@@ -2722,6 +2722,90 @@ export type Database = {
         }
         Relationships: []
       }
+      construction_projects: {
+        Row: {
+          address: string
+          approved_date: string | null
+          ccs_site_id: string | null
+          ccs_star_rating: number | null
+          created_at: string | null
+          data_source: string | null
+          description: string | null
+          estimated_value: number | null
+          expected_completion: string | null
+          has_national_award: boolean | null
+          id: string
+          is_ccs_registered: boolean | null
+          is_ultra_site: boolean | null
+          last_synced: string | null
+          latitude: number | null
+          longitude: number | null
+          planning_reference: string | null
+          postcode: string
+          project_name: string | null
+          project_type: string | null
+          source_url: string | null
+          start_date: string | null
+          status: string | null
+          submitted_date: string | null
+          units_count: number | null
+        }
+        Insert: {
+          address: string
+          approved_date?: string | null
+          ccs_site_id?: string | null
+          ccs_star_rating?: number | null
+          created_at?: string | null
+          data_source?: string | null
+          description?: string | null
+          estimated_value?: number | null
+          expected_completion?: string | null
+          has_national_award?: boolean | null
+          id?: string
+          is_ccs_registered?: boolean | null
+          is_ultra_site?: boolean | null
+          last_synced?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          planning_reference?: string | null
+          postcode: string
+          project_name?: string | null
+          project_type?: string | null
+          source_url?: string | null
+          start_date?: string | null
+          status?: string | null
+          submitted_date?: string | null
+          units_count?: number | null
+        }
+        Update: {
+          address?: string
+          approved_date?: string | null
+          ccs_site_id?: string | null
+          ccs_star_rating?: number | null
+          created_at?: string | null
+          data_source?: string | null
+          description?: string | null
+          estimated_value?: number | null
+          expected_completion?: string | null
+          has_national_award?: boolean | null
+          id?: string
+          is_ccs_registered?: boolean | null
+          is_ultra_site?: boolean | null
+          last_synced?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          planning_reference?: string | null
+          postcode?: string
+          project_name?: string | null
+          project_type?: string | null
+          source_url?: string | null
+          start_date?: string | null
+          status?: string | null
+          submitted_date?: string | null
+          units_count?: number | null
+        }
+        Relationships: []
+      }
       contractor_categories: {
         Row: {
           category_name: string
@@ -8207,6 +8291,62 @@ export type Database = {
           },
         ]
       }
+      my_contractors: {
+        Row: {
+          company_id: string | null
+          created_at: string | null
+          id: string
+          last_contact_date: string | null
+          manual_company_name: string | null
+          manual_contact_name: string | null
+          manual_email: string | null
+          manual_phone: string | null
+          manual_trades: string[] | null
+          notes: string | null
+          rating: number | null
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          company_id?: string | null
+          created_at?: string | null
+          id?: string
+          last_contact_date?: string | null
+          manual_company_name?: string | null
+          manual_contact_name?: string | null
+          manual_email?: string | null
+          manual_phone?: string | null
+          manual_trades?: string[] | null
+          notes?: string | null
+          rating?: number | null
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          company_id?: string | null
+          created_at?: string | null
+          id?: string
+          last_contact_date?: string | null
+          manual_company_name?: string | null
+          manual_contact_name?: string | null
+          manual_email?: string | null
+          manual_phone?: string | null
+          manual_trades?: string[] | null
+          notes?: string | null
+          rating?: number | null
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "my_contractors_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "project_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       network_groups: {
         Row: {
           cover_image_url: string | null
@@ -9818,6 +9958,92 @@ export type Database = {
           user_motivation?: string | null
         }
         Relationships: []
+      }
+      project_companies: {
+        Row: {
+          ccs_company_id: string | null
+          ccs_rating: number | null
+          checkatrade_rating: number | null
+          checkatrade_reviews: number | null
+          checkatrade_url: string | null
+          company_name: string
+          company_number: string | null
+          company_status: string | null
+          created_at: string | null
+          head_office_email: string | null
+          head_office_phone: string | null
+          id: string
+          incorporation_date: string | null
+          is_ccs_partner: boolean | null
+          is_ccs_registered: boolean | null
+          project_id: string | null
+          registered_address: string | null
+          role: string
+          sic_codes: string[] | null
+          site_contact_name: string | null
+          site_email: string | null
+          site_phone: string | null
+          website: string | null
+        }
+        Insert: {
+          ccs_company_id?: string | null
+          ccs_rating?: number | null
+          checkatrade_rating?: number | null
+          checkatrade_reviews?: number | null
+          checkatrade_url?: string | null
+          company_name: string
+          company_number?: string | null
+          company_status?: string | null
+          created_at?: string | null
+          head_office_email?: string | null
+          head_office_phone?: string | null
+          id?: string
+          incorporation_date?: string | null
+          is_ccs_partner?: boolean | null
+          is_ccs_registered?: boolean | null
+          project_id?: string | null
+          registered_address?: string | null
+          role: string
+          sic_codes?: string[] | null
+          site_contact_name?: string | null
+          site_email?: string | null
+          site_phone?: string | null
+          website?: string | null
+        }
+        Update: {
+          ccs_company_id?: string | null
+          ccs_rating?: number | null
+          checkatrade_rating?: number | null
+          checkatrade_reviews?: number | null
+          checkatrade_url?: string | null
+          company_name?: string
+          company_number?: string | null
+          company_status?: string | null
+          created_at?: string | null
+          head_office_email?: string | null
+          head_office_phone?: string | null
+          id?: string
+          incorporation_date?: string | null
+          is_ccs_partner?: boolean | null
+          is_ccs_registered?: boolean | null
+          project_id?: string | null
+          registered_address?: string | null
+          role?: string
+          sic_codes?: string[] | null
+          site_contact_name?: string | null
+          site_email?: string | null
+          site_phone?: string | null
+          website?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_companies_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "construction_projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       promo_materials: {
         Row: {
@@ -14173,6 +14399,41 @@ export type Database = {
             columns: ["portfolio_property_id"]
             isOneToOne: false
             referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tracked_projects: {
+        Row: {
+          alert_on_updates: boolean | null
+          created_at: string | null
+          id: string
+          notes: string | null
+          project_id: string
+          user_id: string
+        }
+        Insert: {
+          alert_on_updates?: boolean | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          project_id: string
+          user_id: string
+        }
+        Update: {
+          alert_on_updates?: boolean | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          project_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tracked_projects_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "construction_projects"
             referencedColumns: ["id"]
           },
         ]

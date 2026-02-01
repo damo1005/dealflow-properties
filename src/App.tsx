@@ -80,6 +80,7 @@ import Companies from "./pages/Companies";
 import RentalListings from "./pages/RentalListings";
 import SmartHome from "./pages/SmartHome";
 import CarbonFootprint from "./pages/CarbonFootprint";
+import ConstructionRadar from "./pages/ConstructionRadar";
 import { AIChatWidget } from "./components/copilot/AIChatWidget";
 // Admin pages
 import {
@@ -494,6 +495,7 @@ const App = () => (
             <Route path="/lettings/listings" element={<ProtectedRoute><RentalListings /></ProtectedRoute>} />
             <Route path="/portfolio/smart-home" element={<ProtectedRoute><SmartHome /></ProtectedRoute>} />
             <Route path="/tools/carbon" element={<ProtectedRoute><CarbonFootprint /></ProtectedRoute>} />
+            <Route path="/construction-radar" element={<ProtectedRoute><ConstructionRadar /></ProtectedRoute>} />
 
             {/* Admin routes */}
             <Route path="/admin" element={<AdminDashboard />} />
