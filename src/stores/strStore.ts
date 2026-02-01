@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { STRProperty, STRBooking, STRExpense, MessageTemplate, STRStats } from '@/types/str';
+import type { STRProperty, STRBooking, STRExpense, MessageTemplate, STRStats, PlatformConnection, ChannelBlock, PlatformPerformance } from '@/types/str';
 
 interface STRState {
   // Properties
@@ -22,8 +22,14 @@ interface STRState {
   // Stats
   stats: STRStats | null;
   
+  // Platform connections
+  platformConnections: PlatformConnection[];
+  isLoadingPlatforms: boolean;
+  channelBlocks: ChannelBlock[];
+  platformPerformance: PlatformPerformance[];
+  
   // UI State
-  activeTab: 'overview' | 'calendar' | 'financials' | 'optimize' | 'templates';
+  activeTab: 'overview' | 'calendar' | 'financials' | 'optimize' | 'templates' | 'platforms';
   wizardStep: number;
   wizardData: Partial<STRProperty>;
   
@@ -43,7 +49,16 @@ interface STRState {
   
   setStats: (stats: STRStats) => void;
   
-  setActiveTab: (tab: 'overview' | 'calendar' | 'financials' | 'optimize' | 'templates') => void;
+  // Platform actions
+  setPlatformConnections: (connections: PlatformConnection[]) => void;
+  setIsLoadingPlatforms: (loading: boolean) => void;
+  setChannelBlocks: (blocks: ChannelBlock[]) => void;
+  setPlatformPerformance: (performance: PlatformPerformance[]) => void;
+  addPlatformConnection: (connection: PlatformConnection) => void;
+  updatePlatformConnection: (id: string, data: Partial<PlatformConnection>) => void;
+  removePlatformConnection: (id: string) => void;
+  
+  setActiveTab: (tab: 'overview' | 'calendar' | 'financials' | 'optimize' | 'templates' | 'platforms') => void;
   setWizardStep: (step: number) => void;
   updateWizardData: (data: Partial<STRProperty>) => void;
   resetWizard: () => void;
@@ -78,6 +93,11 @@ export const useSTRStore = create<STRState>((set) => ({
   
   stats: null,
   
+  platformConnections: [],
+  isLoadingPlatforms: false,
+  channelBlocks: [],
+  platformPerformance: [],
+  
   activeTab: 'overview',
   wizardStep: 1,
   wizardData: {},
@@ -97,6 +117,23 @@ export const useSTRStore = create<STRState>((set) => ({
   setIsLoadingTemplates: (loading) => set({ isLoadingTemplates: loading }),
   
   setStats: (stats) => set({ stats }),
+  
+  // Platform actions
+  setPlatformConnections: (connections) => set({ platformConnections: connections }),
+  setIsLoadingPlatforms: (loading) => set({ isLoadingPlatforms: loading }),
+  setChannelBlocks: (blocks) => set({ channelBlocks: blocks }),
+  setPlatformPerformance: (performance) => set({ platformPerformance: performance }),
+  addPlatformConnection: (connection) => set((state) => ({
+    platformConnections: [...state.platformConnections, connection]
+  })),
+  updatePlatformConnection: (id, data) => set((state) => ({
+    platformConnections: state.platformConnections.map((p) =>
+      p.id === id ? { ...p, ...data } : p
+    )
+  })),
+  removePlatformConnection: (id) => set((state) => ({
+    platformConnections: state.platformConnections.filter((p) => p.id !== id)
+  })),
   
   setActiveTab: (tab) => set({ activeTab: tab }),
   setWizardStep: (step) => set({ wizardStep: step }),

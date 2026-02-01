@@ -8,9 +8,9 @@ import {
   Home, 
   Calendar, 
   DollarSign, 
-  Settings,
   Sparkles,
-  ArrowLeft
+  ArrowLeft,
+  Globe
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -21,7 +21,10 @@ import { AddPropertyWizard } from "@/components/str/AddPropertyWizard";
 import { STRCalendar } from "@/components/str/STRCalendar";
 import { STRFinancials } from "@/components/str/STRFinancials";
 import { ListingGenerator } from "@/components/str/ListingGenerator";
-import type { STRProperty, STRBooking, STRExpense, CalendarBlock } from "@/types/str";
+import { PlatformConnections } from "@/components/str/PlatformConnections";
+import { UnifiedCalendar } from "@/components/str/UnifiedCalendar";
+import { PlatformComparison } from "@/components/str/PlatformComparison";
+import type { STRProperty, STRBooking, STRExpense, CalendarBlock, PlatformConnection } from "@/types/str";
 
 export default function STRManagement() {
   const navigate = useNavigate();
@@ -35,12 +38,18 @@ export default function STRManagement() {
     expenses,
     isLoadingProperties,
     activeTab,
+    platformConnections,
+    isLoadingPlatforms,
     setProperties,
     setSelectedProperty,
     setBookings,
     setExpenses,
     setIsLoadingProperties,
     setActiveTab,
+    setPlatformConnections,
+    setIsLoadingPlatforms,
+    addPlatformConnection,
+    removePlatformConnection,
   } = useSTRStore();
 
   const [showWizard, setShowWizard] = useState(false);
@@ -55,11 +64,28 @@ export default function STRManagement() {
   }, [user]);
 
   // Select property if id is in URL
+  const fetchPlatformConnections = async (propertyId: string) => {
+    setIsLoadingPlatforms(true);
+    try {
+      const { data, error } = await supabase
+        .from("platform_connections")
+        .select("*")
+        .eq("str_property_id", propertyId);
+      if (error) throw error;
+      setPlatformConnections(data as PlatformConnection[]);
+    } catch (error) {
+      console.error("Error fetching platforms:", error);
+    } finally {
+      setIsLoadingPlatforms(false);
+    }
+  };
+
   useEffect(() => {
     if (id && properties.length > 0) {
       const property = properties.find((p) => p.id === id);
       if (property) {
         setSelectedProperty(property);
+        fetchPlatformConnections(property.id);
         fetchPropertyData(property.id);
       }
     }
@@ -305,6 +331,10 @@ export default function STRManagement() {
                 <Sparkles className="h-4 w-4" />
                 Optimize
               </TabsTrigger>
+              <TabsTrigger value="platforms" className="gap-2">
+                <Globe className="h-4 w-4" />
+                Platforms
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="overview" className="space-y-6">
@@ -358,6 +388,66 @@ export default function STRManagement() {
                 property={selectedProperty}
                 onSave={handleUpdateProperty}
               />
+            </TabsContent>
+
+            <TabsContent value="platforms" className="space-y-6">
+              <PlatformConnections
+                connections={platformConnections}
+                propertyId={selectedProperty.id}
+                onAddConnection={async (conn) => {
+                  try {
+                    const { data, error } = await supabase
+                      .from("platform_connections")
+                      .insert([conn])
+                      .select()
+                      .single();
+                    if (error) throw error;
+                    addPlatformConnection(data as PlatformConnection);
+                  } catch {
+                    toast.error("Failed to connect platform");
+                  }
+                }}
+                onUpdateConnection={() => {}}
+                onRemoveConnection={async (id) => {
+                  try {
+                    await supabase.from("platform_connections").delete().eq("id", id);
+                    removePlatformConnection(id);
+                    toast.success("Platform disconnected");
+                  } catch {
+                    toast.error("Failed to disconnect");
+                  }
+                }}
+                onSyncConnection={async (id) => {
+                  const conn = platformConnections.find(c => c.id === id);
+                  if (!conn?.ical_url) return;
+                  try {
+                    await supabase.functions.invoke("sync-ical", {
+                      body: { property_id: selectedProperty.id, ical_url: conn.ical_url }
+                    });
+                    toast.success("Synced successfully");
+                    fetchPropertyData(selectedProperty.id);
+                  } catch {
+                    toast.error("Sync failed");
+                  }
+                }}
+                isLoading={isLoadingPlatforms}
+              />
+              
+              {platformConnections.length > 0 && (
+                <>
+                  <UnifiedCalendar
+                    bookings={bookings}
+                    connections={platformConnections}
+                    onSyncAll={handleSyncICal}
+                    isSyncing={isSyncing}
+                  />
+                  
+                  <PlatformComparison
+                    bookings={bookings}
+                    connections={platformConnections}
+                  />
+                </>
+              )}
             </TabsContent>
           </Tabs>
         </div>
