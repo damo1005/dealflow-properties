@@ -520,6 +520,41 @@ export type Database = {
           },
         ]
       }
+      ai_actions_log: {
+        Row: {
+          action_details: Json | null
+          action_type: string | null
+          conversation_id: string | null
+          created_at: string | null
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          action_details?: Json | null
+          action_type?: string | null
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          action_details?: Json | null
+          action_type?: string | null
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_actions_log_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "chat_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       alert_engagement: {
         Row: {
           alert_id: string | null
@@ -605,6 +640,75 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      api_integrations: {
+        Row: {
+          auth_url: string | null
+          avg_rating: number | null
+          category: string | null
+          created_at: string | null
+          description: string | null
+          developer_name: string | null
+          developer_url: string | null
+          docs_url: string | null
+          icon_url: string | null
+          id: string
+          install_count: number | null
+          is_free: boolean | null
+          long_description: string | null
+          monthly_price: number | null
+          name: string
+          review_count: number | null
+          screenshots: string[] | null
+          slug: string
+          status: string | null
+          webhook_url: string | null
+        }
+        Insert: {
+          auth_url?: string | null
+          avg_rating?: number | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          developer_name?: string | null
+          developer_url?: string | null
+          docs_url?: string | null
+          icon_url?: string | null
+          id?: string
+          install_count?: number | null
+          is_free?: boolean | null
+          long_description?: string | null
+          monthly_price?: number | null
+          name: string
+          review_count?: number | null
+          screenshots?: string[] | null
+          slug: string
+          status?: string | null
+          webhook_url?: string | null
+        }
+        Update: {
+          auth_url?: string | null
+          avg_rating?: number | null
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          developer_name?: string | null
+          developer_url?: string | null
+          docs_url?: string | null
+          icon_url?: string | null
+          id?: string
+          install_count?: number | null
+          is_free?: boolean | null
+          long_description?: string | null
+          monthly_price?: number | null
+          name?: string
+          review_count?: number | null
+          screenshots?: string[] | null
+          slug?: string
+          status?: string | null
+          webhook_url?: string | null
+        }
+        Relationships: []
       }
       api_keys: {
         Row: {
@@ -1397,6 +1501,68 @@ export type Database = {
             columns: ["str_property_id"]
             isOneToOne: false
             referencedRelation: "str_properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_conversations: {
+        Row: {
+          context: Json | null
+          created_at: string | null
+          id: string
+          title: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          context?: Json | null
+          created_at?: string | null
+          id?: string
+          title?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          context?: Json | null
+          created_at?: string | null
+          id?: string
+          title?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      chat_messages: {
+        Row: {
+          content: string
+          conversation_id: string | null
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          role: string
+        }
+        Insert: {
+          content: string
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          role: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          role?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "chat_conversations"
             referencedColumns: ["id"]
           },
         ]
@@ -2820,6 +2986,33 @@ export type Database = {
         }
         Relationships: []
       }
+      currency_settings: {
+        Row: {
+          auto_convert: boolean | null
+          created_at: string | null
+          display_currency: string | null
+          home_currency: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          auto_convert?: boolean | null
+          created_at?: string | null
+          display_currency?: string | null
+          home_currency?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          auto_convert?: boolean | null
+          created_at?: string | null
+          display_currency?: string | null
+          home_currency?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       dashboard_widgets: {
         Row: {
           created_at: string | null
@@ -4224,6 +4417,112 @@ export type Database = {
           },
         ]
       }
+      event_connections: {
+        Row: {
+          connected_user_id: string
+          created_at: string | null
+          event_id: string | null
+          id: string
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          connected_user_id: string
+          created_at?: string | null
+          event_id?: string | null
+          id?: string
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          connected_user_id?: string
+          created_at?: string | null
+          event_id?: string | null
+          id?: string
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_connections_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "networking_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_registrations: {
+        Row: {
+          amount_paid: number | null
+          checked_in_at: string | null
+          created_at: string | null
+          event_id: string | null
+          id: string
+          status: string | null
+          ticket_type: string | null
+          user_id: string
+        }
+        Insert: {
+          amount_paid?: number | null
+          checked_in_at?: string | null
+          created_at?: string | null
+          event_id?: string | null
+          id?: string
+          status?: string | null
+          ticket_type?: string | null
+          user_id: string
+        }
+        Update: {
+          amount_paid?: number | null
+          checked_in_at?: string | null
+          created_at?: string | null
+          event_id?: string | null
+          id?: string
+          status?: string | null
+          ticket_type?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_registrations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "networking_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exchange_rates: {
+        Row: {
+          base_currency: string | null
+          created_at: string | null
+          id: string
+          rate: number
+          rate_date: string
+          source: string | null
+          target_currency: string
+        }
+        Insert: {
+          base_currency?: string | null
+          created_at?: string | null
+          id?: string
+          rate: number
+          rate_date: string
+          source?: string | null
+          target_currency: string
+        }
+        Update: {
+          base_currency?: string | null
+          created_at?: string | null
+          id?: string
+          rate?: number
+          rate_date?: string
+          source?: string | null
+          target_currency?: string
+        }
+        Relationships: []
+      }
       feature_usage: {
         Row: {
           date: string
@@ -4400,6 +4699,53 @@ export type Database = {
           warning_id?: string | null
         }
         Relationships: []
+      }
+      foreign_income: {
+        Row: {
+          conversion_date: string | null
+          created_at: string | null
+          description: string | null
+          exchange_rate: number | null
+          gbp_amount: number | null
+          id: string
+          original_amount: number
+          original_currency: string
+          portfolio_property_id: string | null
+          user_id: string
+        }
+        Insert: {
+          conversion_date?: string | null
+          created_at?: string | null
+          description?: string | null
+          exchange_rate?: number | null
+          gbp_amount?: number | null
+          id?: string
+          original_amount: number
+          original_currency: string
+          portfolio_property_id?: string | null
+          user_id: string
+        }
+        Update: {
+          conversion_date?: string | null
+          created_at?: string | null
+          description?: string | null
+          exchange_rate?: number | null
+          gbp_amount?: number | null
+          id?: string
+          original_amount?: number
+          original_currency?: string
+          portfolio_property_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "foreign_income_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       generated_documents: {
         Row: {
@@ -5172,6 +5518,41 @@ export type Database = {
           website_url?: string | null
         }
         Relationships: []
+      }
+      integration_reviews: {
+        Row: {
+          created_at: string | null
+          id: string
+          integration_id: string | null
+          rating: number | null
+          review_text: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          integration_id?: string | null
+          rating?: number | null
+          review_text?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          integration_id?: string | null
+          rating?: number | null
+          review_text?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integration_reviews_integration_id_fkey"
+            columns: ["integration_id"]
+            isOneToOne: false
+            referencedRelation: "api_integrations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       integration_syncs: {
         Row: {
@@ -6847,6 +7228,84 @@ export type Database = {
           user_id?: string
           view_count?: number | null
           visibility?: string | null
+        }
+        Relationships: []
+      }
+      networking_events: {
+        Row: {
+          city: string | null
+          created_at: string | null
+          current_attendees: number | null
+          description: string | null
+          end_datetime: string | null
+          event_type: string | null
+          id: string
+          image_url: string | null
+          is_free: boolean | null
+          is_virtual: boolean | null
+          max_attendees: number | null
+          member_price: number | null
+          organiser_id: string | null
+          organiser_name: string | null
+          postcode: string | null
+          start_datetime: string
+          status: string | null
+          ticket_price: number | null
+          timezone: string | null
+          title: string
+          venue_address: string | null
+          venue_name: string | null
+          virtual_link: string | null
+        }
+        Insert: {
+          city?: string | null
+          created_at?: string | null
+          current_attendees?: number | null
+          description?: string | null
+          end_datetime?: string | null
+          event_type?: string | null
+          id?: string
+          image_url?: string | null
+          is_free?: boolean | null
+          is_virtual?: boolean | null
+          max_attendees?: number | null
+          member_price?: number | null
+          organiser_id?: string | null
+          organiser_name?: string | null
+          postcode?: string | null
+          start_datetime: string
+          status?: string | null
+          ticket_price?: number | null
+          timezone?: string | null
+          title: string
+          venue_address?: string | null
+          venue_name?: string | null
+          virtual_link?: string | null
+        }
+        Update: {
+          city?: string | null
+          created_at?: string | null
+          current_attendees?: number | null
+          description?: string | null
+          end_datetime?: string | null
+          event_type?: string | null
+          id?: string
+          image_url?: string | null
+          is_free?: boolean | null
+          is_virtual?: boolean | null
+          max_attendees?: number | null
+          member_price?: number | null
+          organiser_id?: string | null
+          organiser_name?: string | null
+          postcode?: string | null
+          start_datetime?: string
+          status?: string | null
+          ticket_price?: number | null
+          timezone?: string | null
+          title?: string
+          venue_address?: string | null
+          venue_name?: string | null
+          virtual_link?: string | null
         }
         Relationships: []
       }
@@ -9515,6 +9974,188 @@ export type Database = {
           transaction_date?: string | null
           transaction_id?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      reward_accounts: {
+        Row: {
+          created_at: string | null
+          id: string
+          last_login_date: string | null
+          login_streak_days: number | null
+          points_balance: number | null
+          points_earned_total: number | null
+          points_redeemed_total: number | null
+          tier: string | null
+          tier_points: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          last_login_date?: string | null
+          login_streak_days?: number | null
+          points_balance?: number | null
+          points_earned_total?: number | null
+          points_redeemed_total?: number | null
+          tier?: string | null
+          tier_points?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          last_login_date?: string | null
+          login_streak_days?: number | null
+          points_balance?: number | null
+          points_earned_total?: number | null
+          points_redeemed_total?: number | null
+          tier?: string | null
+          tier_points?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      reward_offers: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          description: string | null
+          discount_amount: number | null
+          discount_percent: number | null
+          id: string
+          is_active: boolean | null
+          min_tier: string | null
+          partner_logo_url: string | null
+          partner_name: string | null
+          points_cost: number
+          stock_limit: number | null
+          stock_remaining: number | null
+          title: string
+          valid_from: string | null
+          valid_until: string | null
+          value_description: string | null
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          discount_amount?: number | null
+          discount_percent?: number | null
+          id?: string
+          is_active?: boolean | null
+          min_tier?: string | null
+          partner_logo_url?: string | null
+          partner_name?: string | null
+          points_cost: number
+          stock_limit?: number | null
+          stock_remaining?: number | null
+          title: string
+          valid_from?: string | null
+          valid_until?: string | null
+          value_description?: string | null
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          description?: string | null
+          discount_amount?: number | null
+          discount_percent?: number | null
+          id?: string
+          is_active?: boolean | null
+          min_tier?: string | null
+          partner_logo_url?: string | null
+          partner_name?: string | null
+          points_cost?: number
+          stock_limit?: number | null
+          stock_remaining?: number | null
+          title?: string
+          valid_from?: string | null
+          valid_until?: string | null
+          value_description?: string | null
+        }
+        Relationships: []
+      }
+      reward_redemptions: {
+        Row: {
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          offer_id: string | null
+          points_spent: number | null
+          redemption_code: string | null
+          status: string | null
+          used_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          offer_id?: string | null
+          points_spent?: number | null
+          redemption_code?: string | null
+          status?: string | null
+          used_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          offer_id?: string | null
+          points_spent?: number | null
+          redemption_code?: string | null
+          status?: string | null
+          used_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reward_redemptions_offer_id_fkey"
+            columns: ["offer_id"]
+            isOneToOne: false
+            referencedRelation: "reward_offers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reward_transactions: {
+        Row: {
+          balance_after: number | null
+          created_at: string | null
+          description: string | null
+          expires_at: string | null
+          id: string
+          points: number
+          source: string | null
+          source_details: Json | null
+          transaction_type: string | null
+          user_id: string
+        }
+        Insert: {
+          balance_after?: number | null
+          created_at?: string | null
+          description?: string | null
+          expires_at?: string | null
+          id?: string
+          points: number
+          source?: string | null
+          source_details?: Json | null
+          transaction_type?: string | null
+          user_id: string
+        }
+        Update: {
+          balance_after?: number | null
+          created_at?: string | null
+          description?: string | null
+          expires_at?: string | null
+          id?: string
+          points?: number
+          source?: string | null
+          source_details?: Json | null
+          transaction_type?: string | null
+          user_id?: string
         }
         Relationships: []
       }
