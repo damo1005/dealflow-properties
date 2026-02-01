@@ -756,6 +756,54 @@ export type Database = {
         }
         Relationships: []
       }
+      auction_alerts: {
+        Row: {
+          auction_houses: string[] | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          max_guide_price: number | null
+          min_yield: number | null
+          notify_auction_reminder: boolean | null
+          notify_new_lots: boolean | null
+          notify_price_changes: boolean | null
+          postcodes: string[] | null
+          property_types: string[] | null
+          reminder_days_before: number | null
+          user_id: string
+        }
+        Insert: {
+          auction_houses?: string[] | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_guide_price?: number | null
+          min_yield?: number | null
+          notify_auction_reminder?: boolean | null
+          notify_new_lots?: boolean | null
+          notify_price_changes?: boolean | null
+          postcodes?: string[] | null
+          property_types?: string[] | null
+          reminder_days_before?: number | null
+          user_id: string
+        }
+        Update: {
+          auction_houses?: string[] | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_guide_price?: number | null
+          min_yield?: number | null
+          notify_auction_reminder?: boolean | null
+          notify_new_lots?: boolean | null
+          notify_price_changes?: boolean | null
+          postcodes?: string[] | null
+          property_types?: string[] | null
+          reminder_days_before?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       auction_houses: {
         Row: {
           buyer_premium_pct: number | null
@@ -3495,6 +3543,51 @@ export type Database = {
           },
         ]
       }
+      document_templates: {
+        Row: {
+          category: string
+          created_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          is_premium: boolean | null
+          jurisdiction: string | null
+          last_updated: string | null
+          name: string
+          placeholders: Json | null
+          template_content: string
+          version: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_premium?: boolean | null
+          jurisdiction?: string | null
+          last_updated?: string | null
+          name: string
+          placeholders?: Json | null
+          template_content: string
+          version?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_premium?: boolean | null
+          jurisdiction?: string | null
+          last_updated?: string | null
+          name?: string
+          placeholders?: Json | null
+          template_content?: string
+          version?: string | null
+        }
+        Relationships: []
+      }
       documents: {
         Row: {
           category: string | null
@@ -4008,6 +4101,79 @@ export type Database = {
         }
         Relationships: []
       }
+      generated_documents: {
+        Row: {
+          created_at: string | null
+          document_name: string
+          filled_content: string
+          filled_values: Json | null
+          id: string
+          pdf_url: string | null
+          portfolio_property_id: string | null
+          sent_for_signing_at: string | null
+          signed_at: string | null
+          signed_document_url: string | null
+          status: string | null
+          template_id: string | null
+          tenancy_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          document_name: string
+          filled_content: string
+          filled_values?: Json | null
+          id?: string
+          pdf_url?: string | null
+          portfolio_property_id?: string | null
+          sent_for_signing_at?: string | null
+          signed_at?: string | null
+          signed_document_url?: string | null
+          status?: string | null
+          template_id?: string | null
+          tenancy_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          document_name?: string
+          filled_content?: string
+          filled_values?: Json | null
+          id?: string
+          pdf_url?: string | null
+          portfolio_property_id?: string | null
+          sent_for_signing_at?: string | null
+          signed_at?: string | null
+          signed_document_url?: string | null
+          status?: string | null
+          template_id?: string | null
+          tenancy_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "generated_documents_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "generated_documents_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "document_templates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "generated_documents_tenancy_id_fkey"
+            columns: ["tenancy_id"]
+            isOneToOne: false
+            referencedRelation: "tenancies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       generated_reports: {
         Row: {
           created_at: string | null
@@ -4172,6 +4338,89 @@ export type Database = {
             columns: ["group_id"]
             isOneToOne: false
             referencedRelation: "network_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      insurance_policies: {
+        Row: {
+          annual_premium: number | null
+          auto_renew: boolean | null
+          buildings_cover: number | null
+          contents_cover: number | null
+          created_at: string | null
+          end_date: string | null
+          excess_amount: number | null
+          id: string
+          legal_expenses_cover: number | null
+          liability_cover: number | null
+          monthly_premium: number | null
+          payment_frequency: string | null
+          policy_document_url: string | null
+          policy_number: string | null
+          policy_type: string
+          portfolio_property_id: string | null
+          provider: string
+          rent_guarantee_months: number | null
+          start_date: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          annual_premium?: number | null
+          auto_renew?: boolean | null
+          buildings_cover?: number | null
+          contents_cover?: number | null
+          created_at?: string | null
+          end_date?: string | null
+          excess_amount?: number | null
+          id?: string
+          legal_expenses_cover?: number | null
+          liability_cover?: number | null
+          monthly_premium?: number | null
+          payment_frequency?: string | null
+          policy_document_url?: string | null
+          policy_number?: string | null
+          policy_type: string
+          portfolio_property_id?: string | null
+          provider: string
+          rent_guarantee_months?: number | null
+          start_date?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          annual_premium?: number | null
+          auto_renew?: boolean | null
+          buildings_cover?: number | null
+          contents_cover?: number | null
+          created_at?: string | null
+          end_date?: string | null
+          excess_amount?: number | null
+          id?: string
+          legal_expenses_cover?: number | null
+          liability_cover?: number | null
+          monthly_premium?: number | null
+          payment_frequency?: string | null
+          policy_document_url?: string | null
+          policy_number?: string | null
+          policy_type?: string
+          portfolio_property_id?: string | null
+          provider?: string
+          rent_guarantee_months?: number | null
+          start_date?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "insurance_policies_portfolio_property_id_fkey"
+            columns: ["portfolio_property_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_properties"
             referencedColumns: ["id"]
           },
         ]
