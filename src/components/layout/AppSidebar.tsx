@@ -20,7 +20,12 @@ import {
   TrendingUp,
   BedDouble,
   FileText,
-  Target
+  Target,
+  Map,
+  CreditCard,
+  Handshake,
+  Key,
+  UserCheck
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -32,8 +37,11 @@ const navItems = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Search Properties", url: "/search", icon: Search },
   { title: "Market Intel", url: "/market-intel", icon: TrendingUp },
+  { title: "Yield Map", url: "/tools/yield-map", icon: Map },
   { title: "My Pipeline", url: "/pipeline", icon: GitBranch },
   { title: "Portfolio", url: "/portfolio", icon: Briefcase },
+  { title: "Mortgage Tracker", url: "/portfolio/mortgages", icon: CreditCard },
+  { title: "JV Deals", url: "/portfolio/jv-deals", icon: Handshake },
   { title: "STR Management", url: "/str", icon: BedDouble },
   { title: "Calculators", url: "/calculators", icon: Calculator },
   { title: "Deal Analyser", url: "/tools/deal-analyser", icon: Target },
@@ -47,6 +55,8 @@ const navItems = [
   { title: "Integrations", url: "/integrations", icon: Plug },
   { title: "Accommodation", url: "/accommodation", icon: Home },
   { title: "Saved Searches", url: "/saved-searches", icon: Bookmark },
+  { title: "Team", url: "/settings/team", icon: UserCheck },
+  { title: "API & Webhooks", url: "/settings/api", icon: Key },
   { title: "Settings", url: "/settings", icon: Settings },
 ];
 
