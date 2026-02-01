@@ -2597,6 +2597,300 @@ export type Database = {
           },
         ]
       }
+      insurance_providers: {
+        Row: {
+          affiliate_link: string | null
+          affiliate_network: string | null
+          avg_buildings_premium: number | null
+          avg_combined_premium: number | null
+          avg_contents_premium: number | null
+          commission_amount: number | null
+          commission_type: string | null
+          cookie_duration_days: number | null
+          created_at: string | null
+          defaqto_rating: number | null
+          display_order: number | null
+          excess_options: string[] | null
+          id: string
+          is_active: boolean | null
+          key_features: string[] | null
+          logo_url: string | null
+          offers_buildings: boolean | null
+          offers_contents: boolean | null
+          offers_emergency_assistance: boolean | null
+          offers_legal_expenses: boolean | null
+          offers_liability: boolean | null
+          offers_rent_guarantee: boolean | null
+          provider_name: string
+          trustpilot_rating: number | null
+          updated_at: string | null
+          website_url: string | null
+        }
+        Insert: {
+          affiliate_link?: string | null
+          affiliate_network?: string | null
+          avg_buildings_premium?: number | null
+          avg_combined_premium?: number | null
+          avg_contents_premium?: number | null
+          commission_amount?: number | null
+          commission_type?: string | null
+          cookie_duration_days?: number | null
+          created_at?: string | null
+          defaqto_rating?: number | null
+          display_order?: number | null
+          excess_options?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          key_features?: string[] | null
+          logo_url?: string | null
+          offers_buildings?: boolean | null
+          offers_contents?: boolean | null
+          offers_emergency_assistance?: boolean | null
+          offers_legal_expenses?: boolean | null
+          offers_liability?: boolean | null
+          offers_rent_guarantee?: boolean | null
+          provider_name: string
+          trustpilot_rating?: number | null
+          updated_at?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          affiliate_link?: string | null
+          affiliate_network?: string | null
+          avg_buildings_premium?: number | null
+          avg_combined_premium?: number | null
+          avg_contents_premium?: number | null
+          commission_amount?: number | null
+          commission_type?: string | null
+          cookie_duration_days?: number | null
+          created_at?: string | null
+          defaqto_rating?: number | null
+          display_order?: number | null
+          excess_options?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          key_features?: string[] | null
+          logo_url?: string | null
+          offers_buildings?: boolean | null
+          offers_contents?: boolean | null
+          offers_emergency_assistance?: boolean | null
+          offers_legal_expenses?: boolean | null
+          offers_liability?: boolean | null
+          offers_rent_guarantee?: boolean | null
+          provider_name?: string
+          trustpilot_rating?: number | null
+          updated_at?: string | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
+      insurance_purchases: {
+        Row: {
+          affiliate_click_id: string | null
+          annual_premium: number | null
+          commission_amount: number | null
+          commission_date: string | null
+          commission_status: string | null
+          coverage_type: string | null
+          created_at: string | null
+          end_date: string | null
+          excess: number | null
+          id: string
+          policy_number: string | null
+          provider_id: string | null
+          provider_name: string | null
+          quote_id: string | null
+          start_date: string | null
+          user_id: string
+        }
+        Insert: {
+          affiliate_click_id?: string | null
+          annual_premium?: number | null
+          commission_amount?: number | null
+          commission_date?: string | null
+          commission_status?: string | null
+          coverage_type?: string | null
+          created_at?: string | null
+          end_date?: string | null
+          excess?: number | null
+          id?: string
+          policy_number?: string | null
+          provider_id?: string | null
+          provider_name?: string | null
+          quote_id?: string | null
+          start_date?: string | null
+          user_id: string
+        }
+        Update: {
+          affiliate_click_id?: string | null
+          annual_premium?: number | null
+          commission_amount?: number | null
+          commission_date?: string | null
+          commission_status?: string | null
+          coverage_type?: string | null
+          created_at?: string | null
+          end_date?: string | null
+          excess?: number | null
+          id?: string
+          policy_number?: string | null
+          provider_id?: string | null
+          provider_name?: string | null
+          quote_id?: string | null
+          start_date?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "insurance_purchases_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "insurance_providers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insurance_purchases_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "insurance_quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      insurance_quotes: {
+        Row: {
+          bedrooms: number | null
+          buildings_cover_amount: number | null
+          contents_cover_amount: number | null
+          coverage_type: string | null
+          created_at: string | null
+          expires_at: string | null
+          has_flat_roof: boolean | null
+          has_tenants: boolean | null
+          id: string
+          is_furnished: boolean | null
+          is_hmo: boolean | null
+          is_listed_building: boolean | null
+          needs_emergency_cover: boolean | null
+          needs_legal_expenses: boolean | null
+          needs_rent_guarantee: boolean | null
+          portfolio_property_id: string | null
+          postcode: string | null
+          property_address: string | null
+          property_type: string | null
+          property_value: number | null
+          quotes: Json | null
+          rebuild_cost: number | null
+          status: string | null
+          user_id: string
+          year_built: number | null
+        }
+        Insert: {
+          bedrooms?: number | null
+          buildings_cover_amount?: number | null
+          contents_cover_amount?: number | null
+          coverage_type?: string | null
+          created_at?: string | null
+          expires_at?: string | null
+          has_flat_roof?: boolean | null
+          has_tenants?: boolean | null
+          id?: string
+          is_furnished?: boolean | null
+          is_hmo?: boolean | null
+          is_listed_building?: boolean | null
+          needs_emergency_cover?: boolean | null
+          needs_legal_expenses?: boolean | null
+          needs_rent_guarantee?: boolean | null
+          portfolio_property_id?: string | null
+          postcode?: string | null
+          property_address?: string | null
+          property_type?: string | null
+          property_value?: number | null
+          quotes?: Json | null
+          rebuild_cost?: number | null
+          status?: string | null
+          user_id: string
+          year_built?: number | null
+        }
+        Update: {
+          bedrooms?: number | null
+          buildings_cover_amount?: number | null
+          contents_cover_amount?: number | null
+          coverage_type?: string | null
+          created_at?: string | null
+          expires_at?: string | null
+          has_flat_roof?: boolean | null
+          has_tenants?: boolean | null
+          id?: string
+          is_furnished?: boolean | null
+          is_hmo?: boolean | null
+          is_listed_building?: boolean | null
+          needs_emergency_cover?: boolean | null
+          needs_legal_expenses?: boolean | null
+          needs_rent_guarantee?: boolean | null
+          portfolio_property_id?: string | null
+          postcode?: string | null
+          property_address?: string | null
+          property_type?: string | null
+          property_value?: number | null
+          quotes?: Json | null
+          rebuild_cost?: number | null
+          status?: string | null
+          user_id?: string
+          year_built?: number | null
+        }
+        Relationships: []
+      }
+      insurance_renewals: {
+        Row: {
+          created_at: string | null
+          id: string
+          purchase_id: string | null
+          reminder_sent_30_days: boolean | null
+          reminder_sent_60_days: boolean | null
+          reminder_sent_7_days: boolean | null
+          renewal_date: string
+          renewed: boolean | null
+          renewed_with_provider_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          purchase_id?: string | null
+          reminder_sent_30_days?: boolean | null
+          reminder_sent_60_days?: boolean | null
+          reminder_sent_7_days?: boolean | null
+          renewal_date: string
+          renewed?: boolean | null
+          renewed_with_provider_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          purchase_id?: string | null
+          reminder_sent_30_days?: boolean | null
+          reminder_sent_60_days?: boolean | null
+          reminder_sent_7_days?: boolean | null
+          renewal_date?: string
+          renewed?: boolean | null
+          renewed_with_provider_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "insurance_renewals_purchase_id_fkey"
+            columns: ["purchase_id"]
+            isOneToOne: false
+            referencedRelation: "insurance_purchases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "insurance_renewals_renewed_with_provider_id_fkey"
+            columns: ["renewed_with_provider_id"]
+            isOneToOne: false
+            referencedRelation: "insurance_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       integration_catalog: {
         Row: {
           available_in_tiers: string[] | null
