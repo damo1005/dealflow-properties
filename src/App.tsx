@@ -33,6 +33,7 @@ import AccommodationRequests from "./pages/AccommodationRequests";
 import DealScout from "./pages/DealScout";
 import Alerts from "./pages/Alerts";
 import Portfolio from "./pages/Portfolio";
+import PortfolioDashboard from "./pages/PortfolioDashboard";
 import Auctions from "./pages/Auctions";
 import Network from "./pages/Network";
 import Copilot from "./pages/Copilot";
@@ -246,6 +247,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Portfolio />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/portfolio/dashboard"
+              element={
+                <ProtectedRoute>
+                  <PortfolioDashboard />
                 </ProtectedRoute>
               }
             />

@@ -2403,6 +2403,45 @@ export type Database = {
         }
         Relationships: []
       }
+      dashboard_widgets: {
+        Row: {
+          created_at: string | null
+          height: number | null
+          id: string
+          is_visible: boolean | null
+          position_x: number | null
+          position_y: number | null
+          user_id: string
+          widget_config: Json | null
+          widget_type: string
+          width: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          height?: number | null
+          id?: string
+          is_visible?: boolean | null
+          position_x?: number | null
+          position_y?: number | null
+          user_id: string
+          widget_config?: Json | null
+          widget_type: string
+          width?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          height?: number | null
+          id?: string
+          is_visible?: boolean | null
+          position_x?: number | null
+          position_y?: number | null
+          user_id?: string
+          widget_config?: Json | null
+          widget_type?: string
+          width?: number | null
+        }
+        Relationships: []
+      }
       deal_pack_comments: {
         Row: {
           comment_text: string
@@ -5681,6 +5720,159 @@ export type Database = {
           },
         ]
       }
+      portfolio_metrics: {
+        Row: {
+          annual_cash_flow: number | null
+          annualized_roi: number | null
+          arrears_percentage: number | null
+          average_gross_yield: number | null
+          average_net_yield: number | null
+          average_void_days: number | null
+          capital_growth: number | null
+          capital_growth_percentage: number | null
+          compliance_percentage: number | null
+          compliant_properties: number | null
+          created_at: string | null
+          current_value_total: number | null
+          gross_income: number | null
+          id: string
+          monthly_cash_flow: number | null
+          net_profit: number | null
+          net_profit_margin: number | null
+          non_compliant_properties: number | null
+          occupancy_rate: number | null
+          occupied_units: number | null
+          period_end: string
+          period_start: string
+          period_type: string | null
+          properties_by_region: Json | null
+          properties_commercial: number | null
+          properties_flats: number | null
+          properties_hmo: number | null
+          properties_houses: number | null
+          purchase_price_total: number | null
+          roi_percentage: number | null
+          total_arrears: number | null
+          total_debt: number | null
+          total_equity: number | null
+          total_expenses: number | null
+          total_insurance: number | null
+          total_invested: number | null
+          total_maintenance: number | null
+          total_management_fees: number | null
+          total_mortgage_payments: number | null
+          total_other_expenses: number | null
+          total_other_income: number | null
+          total_portfolio_value: number | null
+          total_rental_income: number | null
+          total_return: number | null
+          total_units: number | null
+          total_utilities: number | null
+          user_id: string
+          vacant_units: number | null
+        }
+        Insert: {
+          annual_cash_flow?: number | null
+          annualized_roi?: number | null
+          arrears_percentage?: number | null
+          average_gross_yield?: number | null
+          average_net_yield?: number | null
+          average_void_days?: number | null
+          capital_growth?: number | null
+          capital_growth_percentage?: number | null
+          compliance_percentage?: number | null
+          compliant_properties?: number | null
+          created_at?: string | null
+          current_value_total?: number | null
+          gross_income?: number | null
+          id?: string
+          monthly_cash_flow?: number | null
+          net_profit?: number | null
+          net_profit_margin?: number | null
+          non_compliant_properties?: number | null
+          occupancy_rate?: number | null
+          occupied_units?: number | null
+          period_end: string
+          period_start: string
+          period_type?: string | null
+          properties_by_region?: Json | null
+          properties_commercial?: number | null
+          properties_flats?: number | null
+          properties_hmo?: number | null
+          properties_houses?: number | null
+          purchase_price_total?: number | null
+          roi_percentage?: number | null
+          total_arrears?: number | null
+          total_debt?: number | null
+          total_equity?: number | null
+          total_expenses?: number | null
+          total_insurance?: number | null
+          total_invested?: number | null
+          total_maintenance?: number | null
+          total_management_fees?: number | null
+          total_mortgage_payments?: number | null
+          total_other_expenses?: number | null
+          total_other_income?: number | null
+          total_portfolio_value?: number | null
+          total_rental_income?: number | null
+          total_return?: number | null
+          total_units?: number | null
+          total_utilities?: number | null
+          user_id: string
+          vacant_units?: number | null
+        }
+        Update: {
+          annual_cash_flow?: number | null
+          annualized_roi?: number | null
+          arrears_percentage?: number | null
+          average_gross_yield?: number | null
+          average_net_yield?: number | null
+          average_void_days?: number | null
+          capital_growth?: number | null
+          capital_growth_percentage?: number | null
+          compliance_percentage?: number | null
+          compliant_properties?: number | null
+          created_at?: string | null
+          current_value_total?: number | null
+          gross_income?: number | null
+          id?: string
+          monthly_cash_flow?: number | null
+          net_profit?: number | null
+          net_profit_margin?: number | null
+          non_compliant_properties?: number | null
+          occupancy_rate?: number | null
+          occupied_units?: number | null
+          period_end?: string
+          period_start?: string
+          period_type?: string | null
+          properties_by_region?: Json | null
+          properties_commercial?: number | null
+          properties_flats?: number | null
+          properties_hmo?: number | null
+          properties_houses?: number | null
+          purchase_price_total?: number | null
+          roi_percentage?: number | null
+          total_arrears?: number | null
+          total_debt?: number | null
+          total_equity?: number | null
+          total_expenses?: number | null
+          total_insurance?: number | null
+          total_invested?: number | null
+          total_maintenance?: number | null
+          total_management_fees?: number | null
+          total_mortgage_payments?: number | null
+          total_other_expenses?: number | null
+          total_other_income?: number | null
+          total_portfolio_value?: number | null
+          total_rental_income?: number | null
+          total_return?: number | null
+          total_units?: number | null
+          total_utilities?: number | null
+          user_id?: string
+          vacant_units?: number | null
+        }
+        Relationships: []
+      }
       portfolio_properties: {
         Row: {
           address: string
@@ -6137,6 +6329,78 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      property_performance: {
+        Row: {
+          created_at: string | null
+          current_equity: number | null
+          id: string
+          insurance: number | null
+          invested_capital: number | null
+          maintenance: number | null
+          management_fees: number | null
+          mortgage_payment: number | null
+          net_profit: number | null
+          occupancy_days: number | null
+          occupancy_rate: number | null
+          other_expenses: number | null
+          other_income: number | null
+          period_end: string
+          period_start: string
+          property_id: string
+          rental_income: number | null
+          roi: number | null
+          user_id: string
+          utilities: number | null
+          void_days: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          current_equity?: number | null
+          id?: string
+          insurance?: number | null
+          invested_capital?: number | null
+          maintenance?: number | null
+          management_fees?: number | null
+          mortgage_payment?: number | null
+          net_profit?: number | null
+          occupancy_days?: number | null
+          occupancy_rate?: number | null
+          other_expenses?: number | null
+          other_income?: number | null
+          period_end: string
+          period_start: string
+          property_id: string
+          rental_income?: number | null
+          roi?: number | null
+          user_id: string
+          utilities?: number | null
+          void_days?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          current_equity?: number | null
+          id?: string
+          insurance?: number | null
+          invested_capital?: number | null
+          maintenance?: number | null
+          management_fees?: number | null
+          mortgage_payment?: number | null
+          net_profit?: number | null
+          occupancy_days?: number | null
+          occupancy_rate?: number | null
+          other_expenses?: number | null
+          other_income?: number | null
+          period_end?: string
+          period_start?: string
+          property_id?: string
+          rental_income?: number | null
+          roi?: number | null
+          user_id?: string
+          utilities?: number | null
+          void_days?: number | null
+        }
+        Relationships: []
       }
       referral_clicks: {
         Row: {
