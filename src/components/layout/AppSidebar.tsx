@@ -58,6 +58,7 @@ const navGroups: NavGroup[] = [
     items: [
       { title: "Search Properties", url: "/search", icon: Search },
       { title: "Market Intel", url: "/market-intel", icon: TrendingUp },
+      { title: "Airbnb Radar", url: "/airbnb-radar", icon: BedDouble },
       { title: "Contractor Demand", url: "/contractor-demand", icon: HardHat },
       { title: "Deal Scout", url: "/deal-scout", icon: Radar },
       { title: "Construction Radar", url: "/construction-radar", icon: HardHat },
