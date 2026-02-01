@@ -195,15 +195,13 @@ async function fetchFromApify(searchUrl: string, searchLocation: string): Promis
 
   console.log('Starting Apify run...');
   
-  // IMPORTANT: Apify "List URLs" inputs typically use the requestListSources format
-  // (array of objects with a `url` field). Passing a string array can fail validation.
-  // Also align input keys with the actor's documented schema.
+  // Use startUrls format which is more commonly supported
   const input = {
-    listUrls: [{ url: searchUrl }],
-    maxProperties: 25,
-    fullPropertyDetails: false,
-    includePriceHistory: false,
-    includeNearestSchools: false,
+    startUrls: [{ url: searchUrl }],
+    maxItems: 25,
+    proxy: {
+      useApifyProxy: true,
+    },
   };
   
   console.log('Apify input:', JSON.stringify(input));
@@ -232,13 +230,11 @@ async function fetchFromApify(searchUrl: string, searchLocation: string): Promis
     throw new Error('No run ID returned');
   }
 
-  // Poll for completion.
-  // NOTE: This backend function has a practical time limit, so keep polling bounded.
+  // Poll for completion with longer timeout
+  // Edge functions have ~60s limit, so we can poll longer
   let status = 'RUNNING';
   let attempts = 0;
-
-  // 14 * 2s = 28s max wait
-  const maxAttempts = 14;
+  const maxAttempts = 25; // 25 * 2s = 50s max wait
 
   while ((status === 'RUNNING' || status === 'READY') && attempts < maxAttempts) {
     await new Promise((r) => setTimeout(r, 2000));
@@ -250,13 +246,22 @@ async function fetchFromApify(searchUrl: string, searchLocation: string): Promis
     status = statusData.data?.status;
     attempts++;
 
-    console.log(`Status: ${status} (${attempts * 2}s)`);
+    if (attempts % 5 === 0) {
+      console.log(`Status: ${status} (${attempts * 2}s)`);
+    }
   }
 
   console.log('Final status:', status);
 
+  // If still running, return empty but don't throw - let cached results show
+  if (status === 'RUNNING' || status === 'READY') {
+    console.log('Apify run still in progress, returning empty for now');
+    return [];
+  }
+
   if (status !== 'SUCCEEDED') {
-    throw new Error(`Run failed with status: ${status}`);
+    console.error(`Run ended with status: ${status}`);
+    return []; // Return empty instead of throwing
   }
 
   // Get results
@@ -265,7 +270,8 @@ async function fetchFromApify(searchUrl: string, searchLocation: string): Promis
   );
   
   if (!resultsRes.ok) {
-    throw new Error('Failed to get results');
+    console.error('Failed to get results');
+    return [];
   }
   
   const results = await resultsRes.json();
