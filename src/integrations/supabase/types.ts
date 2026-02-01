@@ -3557,6 +3557,103 @@ export type Database = {
         }
         Relationships: []
       }
+      generated_reports: {
+        Row: {
+          created_at: string | null
+          download_count: number | null
+          file_size: number | null
+          file_url: string | null
+          generated_at: string | null
+          generation_time_ms: number | null
+          id: string
+          last_downloaded_at: string | null
+          net_profit: number | null
+          period_end: string | null
+          period_start: string | null
+          properties_count: number | null
+          report_name: string
+          report_type: string | null
+          scheduled_report_id: string | null
+          sent_at: string | null
+          sent_to: Json | null
+          template_id: string | null
+          total_expenses: number | null
+          total_income: number | null
+          user_id: string | null
+          was_sent: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          download_count?: number | null
+          file_size?: number | null
+          file_url?: string | null
+          generated_at?: string | null
+          generation_time_ms?: number | null
+          id?: string
+          last_downloaded_at?: string | null
+          net_profit?: number | null
+          period_end?: string | null
+          period_start?: string | null
+          properties_count?: number | null
+          report_name: string
+          report_type?: string | null
+          scheduled_report_id?: string | null
+          sent_at?: string | null
+          sent_to?: Json | null
+          template_id?: string | null
+          total_expenses?: number | null
+          total_income?: number | null
+          user_id?: string | null
+          was_sent?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          download_count?: number | null
+          file_size?: number | null
+          file_url?: string | null
+          generated_at?: string | null
+          generation_time_ms?: number | null
+          id?: string
+          last_downloaded_at?: string | null
+          net_profit?: number | null
+          period_end?: string | null
+          period_start?: string | null
+          properties_count?: number | null
+          report_name?: string
+          report_type?: string | null
+          scheduled_report_id?: string | null
+          sent_at?: string | null
+          sent_to?: Json | null
+          template_id?: string | null
+          total_expenses?: number | null
+          total_income?: number | null
+          user_id?: string | null
+          was_sent?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "generated_reports_scheduled_report_id_fkey"
+            columns: ["scheduled_report_id"]
+            isOneToOne: false
+            referencedRelation: "scheduled_reports"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "generated_reports_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "report_templates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "generated_reports_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       goal_seek_results: {
         Row: {
           adjust_variable: string
@@ -6841,6 +6938,110 @@ export type Database = {
         }
         Relationships: []
       }
+      report_sections: {
+        Row: {
+          available_in_templates: string[] | null
+          config_schema: Json | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          section_description: string | null
+          section_key: string
+          section_name: string
+          section_type: string
+        }
+        Insert: {
+          available_in_templates?: string[] | null
+          config_schema?: Json | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          section_description?: string | null
+          section_key: string
+          section_name: string
+          section_type: string
+        }
+        Update: {
+          available_in_templates?: string[] | null
+          config_schema?: Json | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          section_description?: string | null
+          section_key?: string
+          section_name?: string
+          section_type?: string
+        }
+        Relationships: []
+      }
+      report_templates: {
+        Row: {
+          company_name: string | null
+          created_at: string | null
+          default_date_range: string | null
+          default_properties: string[] | null
+          id: string
+          include_logo: boolean | null
+          is_active: boolean | null
+          is_system_template: boolean | null
+          logo_url: string | null
+          orientation: string | null
+          page_size: string | null
+          primary_color: string | null
+          sections: Json
+          template_name: string
+          template_type: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          company_name?: string | null
+          created_at?: string | null
+          default_date_range?: string | null
+          default_properties?: string[] | null
+          id?: string
+          include_logo?: boolean | null
+          is_active?: boolean | null
+          is_system_template?: boolean | null
+          logo_url?: string | null
+          orientation?: string | null
+          page_size?: string | null
+          primary_color?: string | null
+          sections?: Json
+          template_name: string
+          template_type: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          company_name?: string | null
+          created_at?: string | null
+          default_date_range?: string | null
+          default_properties?: string[] | null
+          id?: string
+          include_logo?: boolean | null
+          is_active?: boolean | null
+          is_system_template?: boolean | null
+          logo_url?: string | null
+          orientation?: string | null
+          page_size?: string | null
+          primary_color?: string | null
+          sections?: Json
+          template_name?: string
+          template_type?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_templates_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       request_alerts: {
         Row: {
           ai_match_threshold: number | null
@@ -7351,6 +7552,90 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      scheduled_reports: {
+        Row: {
+          created_at: string | null
+          custom_date_end: string | null
+          custom_date_start: string | null
+          date_range_type: string | null
+          delivery_method: string | null
+          email_message: string | null
+          email_subject: string | null
+          frequency: string
+          id: string
+          include_properties: string[] | null
+          is_active: boolean | null
+          last_sent_at: string | null
+          next_send_at: string | null
+          recipients: Json
+          report_name: string
+          schedule_day: number | null
+          schedule_time: string | null
+          template_id: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          custom_date_end?: string | null
+          custom_date_start?: string | null
+          date_range_type?: string | null
+          delivery_method?: string | null
+          email_message?: string | null
+          email_subject?: string | null
+          frequency: string
+          id?: string
+          include_properties?: string[] | null
+          is_active?: boolean | null
+          last_sent_at?: string | null
+          next_send_at?: string | null
+          recipients?: Json
+          report_name: string
+          schedule_day?: number | null
+          schedule_time?: string | null
+          template_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          custom_date_end?: string | null
+          custom_date_start?: string | null
+          date_range_type?: string | null
+          delivery_method?: string | null
+          email_message?: string | null
+          email_subject?: string | null
+          frequency?: string
+          id?: string
+          include_properties?: string[] | null
+          is_active?: boolean | null
+          last_sent_at?: string | null
+          next_send_at?: string | null
+          recipients?: Json
+          report_name?: string
+          schedule_day?: number | null
+          schedule_time?: string | null
+          template_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scheduled_reports_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "report_templates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scheduled_reports_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       scout_alerts: {
         Row: {

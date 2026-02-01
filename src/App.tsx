@@ -44,6 +44,7 @@ import MarketIntel from "./pages/MarketIntel";
 import STRManagement from "./pages/STRManagement";
 import Conveyancing from "./pages/Conveyancing";
 import Contractors from "./pages/Contractors";
+import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 
 // Admin pages
@@ -344,6 +345,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Contractors />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/reports"
+              element={
+                <ProtectedRoute>
+                  <Reports />
                 </ProtectedRoute>
               }
             />
