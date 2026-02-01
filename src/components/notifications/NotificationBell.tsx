@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
-import { Bell, Check, CheckCheck, Home, TrendingDown, RefreshCw, Settings, X } from "lucide-react";
+import { Bell, Check, CheckCheck, Home, TrendingDown, Settings, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -10,37 +10,39 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useSavedSearchesStore, Notification } from "@/stores/savedSearchesStore";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { useNotifications, useUnreadCount, useMarkAsRead, useMarkAllAsRead, Notification } from "@/hooks/useNotifications";
 
-const notificationIcons: Record<Notification["type"], React.ReactNode> = {
-  new_match: <Home className="h-4 w-4" />,
+const notificationIcons: Record<string, React.ReactNode> = {
+  new_listing: <Home className="h-4 w-4" />,
   price_drop: <TrendingDown className="h-4 w-4" />,
-  back_on_market: <RefreshCw className="h-4 w-4" />,
   digest: <Bell className="h-4 w-4" />,
 };
 
-const notificationColors: Record<Notification["type"], string> = {
-  new_match: "bg-primary/10 text-primary",
-  price_drop: "bg-success/10 text-success",
-  back_on_market: "bg-chart-4/10 text-chart-4",
-  digest: "bg-chart-3/10 text-chart-3",
+const notificationColors: Record<string, string> = {
+  new_listing: "bg-primary/10 text-primary",
+  price_drop: "bg-green-500/10 text-green-600",
+  digest: "bg-blue-500/10 text-blue-600",
 };
 
 export function NotificationBell() {
-  const { notifications, markAsRead, markAllAsRead } = useSavedSearchesStore();
+  const { data: notifications = [] } = useNotifications();
+  const { data: unreadCount = 0 } = useUnreadCount();
+  const markAsRead = useMarkAsRead();
+  const markAllAsRead = useMarkAllAsRead();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
-
   const handleNotificationClick = (notification: Notification) => {
-    markAsRead(notification.id);
-    if (notification.property_id) {
-      navigate(`/property/${notification.property_id}`);
-    } else if (notification.saved_search_id) {
-      navigate("/saved-searches");
+    if (!notification.is_read) {
+      markAsRead.mutate(notification.id);
+    }
+    
+    if (notification.listing_id && notification.data?.listing_url) {
+      window.open(notification.data.listing_url, "_blank");
+    } else {
+      navigate("/alerts");
     }
     setOpen(false);
   };
@@ -73,15 +75,13 @@ export function NotificationBell() {
           <h3 className="font-semibold">Notifications</h3>
           <div className="flex items-center gap-2">
             {unreadCount > 0 && (
-              <Button variant="ghost" size="sm" onClick={markAllAsRead} className="h-8 text-xs">
+              <Button variant="ghost" size="sm" onClick={() => markAllAsRead.mutate()} className="h-8 text-xs">
                 <CheckCheck className="mr-1 h-3 w-3" />
                 Mark all read
               </Button>
             )}
-            <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
-              <a href="/settings">
-                <Settings className="h-4 w-4" />
-              </a>
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => { setOpen(false); navigate("/alerts"); }}>
+              <Settings className="h-4 w-4" />
             </Button>
           </div>
         </div>
@@ -93,37 +93,37 @@ export function NotificationBell() {
               <Bell className="h-10 w-10 text-muted-foreground mb-3" />
               <p className="text-sm text-muted-foreground">No notifications yet</p>
               <p className="text-xs text-muted-foreground mt-1">
-                We'll notify you when new properties match
+                Create a saved search to get notified of new properties
               </p>
             </div>
           ) : (
             <div>
-              {notifications.map((notification, index) => (
+              {notifications.slice(0, 10).map((notification, index) => (
                 <div key={notification.id}>
                   <button
                     onClick={() => handleNotificationClick(notification)}
                     className={cn(
                       "w-full flex gap-3 p-4 text-left hover:bg-muted/50 transition-colors",
-                      !notification.read && "bg-primary/5"
+                      !notification.is_read && "bg-primary/5"
                     )}
                   >
                     {/* Icon */}
                     <div
                       className={cn(
                         "flex h-10 w-10 shrink-0 items-center justify-center rounded-full",
-                        notificationColors[notification.type]
+                        notificationColors[notification.type] || "bg-muted"
                       )}
                     >
-                      {notificationIcons[notification.type]}
+                      {notificationIcons[notification.type] || <Bell className="h-4 w-4" />}
                     </div>
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start justify-between gap-2">
-                        <p className={cn("text-sm font-medium", !notification.read && "text-foreground")}>
+                        <p className={cn("text-sm font-medium line-clamp-1", !notification.is_read && "text-foreground")}>
                           {notification.title}
                         </p>
-                        {!notification.read && (
+                        {!notification.is_read && (
                           <div className="h-2 w-2 rounded-full bg-primary shrink-0 mt-1.5" />
                         )}
                       </div>
@@ -132,9 +132,9 @@ export function NotificationBell() {
                           {notification.message}
                         </p>
                       )}
-                      {notification.property_price && (
+                      {notification.data?.price && (
                         <p className="text-sm font-semibold text-primary mt-1">
-                          {formatCurrency(notification.property_price)}
+                          {formatCurrency(notification.data.price)}
                         </p>
                       )}
                       <p className="text-xs text-muted-foreground mt-1">
@@ -143,17 +143,17 @@ export function NotificationBell() {
                     </div>
 
                     {/* Property Image */}
-                    {notification.property_image && (
+                    {notification.data?.thumbnail_url && (
                       <div className="shrink-0">
                         <img
-                          src={notification.property_image}
+                          src={notification.data.thumbnail_url}
                           alt=""
                           className="h-16 w-16 rounded-lg object-cover"
                         />
                       </div>
                     )}
                   </button>
-                  {index < notifications.length - 1 && <Separator />}
+                  {index < Math.min(notifications.length, 10) - 1 && <Separator />}
                 </div>
               ))}
             </div>
@@ -163,8 +163,8 @@ export function NotificationBell() {
         {/* Footer */}
         {notifications.length > 0 && (
           <div className="border-t border-border p-2">
-            <Button variant="ghost" className="w-full" asChild>
-              <a href="/saved-searches">View All Saved Searches</a>
+            <Button variant="ghost" className="w-full" onClick={() => { setOpen(false); navigate("/alerts"); }}>
+              View All Notifications
             </Button>
           </div>
         )}
