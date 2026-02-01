@@ -70,20 +70,27 @@ Deno.serve(async (req) => {
     }
 
     // First, resolve the location to get a proper Rightmove locationIdentifier
-    const locationId = await resolveLocationIdentifier(params.location);
-    console.log("Resolved location identifier:", locationId);
+    const locationData = await resolveLocationIdentifier(params.location);
+    console.log("Resolved location identifier:", locationData);
 
     // Build Rightmove search URL with proper location identifier
-    const searchUrl = buildRightmoveUrl(params, locationId);
+    const searchUrl = buildRightmoveUrl(params, locationData?.identifier || null);
     console.log("Rightmove URL:", searchUrl);
 
     let listings: any[] = [];
 
-    if (APIFY_TOKEN && locationId) {
+    if (APIFY_TOKEN) {
+      // Always try Apify first if we have a token
       console.log("Using Apify dhrumil/rightmove-scraper...");
       listings = await fetchFromApify(searchUrl, APIFY_TOKEN);
+      
+      // If Apify returned nothing, fall back to direct scrape
+      if (listings.length === 0) {
+        console.log("Apify returned no results, trying direct scrape...");
+        listings = await directScrape(params);
+      }
     } else {
-      console.log("No APIFY_API_TOKEN or location not resolved, trying direct scrape...");
+      console.log("No APIFY_API_TOKEN, trying direct scrape...");
       listings = await directScrape(params);
     }
 
@@ -144,33 +151,46 @@ function generateCacheKey(params: SearchParams): string {
   return btoa(JSON.stringify(normalized));
 }
 
-// Resolve location to a Rightmove location identifier using their typeAhead API
-async function resolveLocationIdentifier(location: string): Promise<string | null> {
+// Resolve location to a Rightmove location identifier using their location search API
+async function resolveLocationIdentifier(location: string): Promise<{ identifier: string; type: string } | null> {
   try {
-    const response = await fetch(
-      `https://www.rightmove.co.uk/typeAhead/uknocheck/${encodeURIComponent(location)}`,
-      { 
-        headers: { 
-          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" 
-        } 
-      }
-    );
+    // First, try to determine if this is a postcode or area name
+    const isPostcode = /^[A-Za-z]{1,2}\d{1,2}\s*\d?[A-Za-z]{0,2}$/i.test(location.trim());
+    const outcode = isPostcode ? location.trim().split(' ')[0].toUpperCase() : null;
     
-    if (!response.ok) {
-      console.log("Location lookup failed:", response.status);
-      return null;
+    // Try to get a proper search page by following redirects from a search
+    const searchUrl = `https://www.rightmove.co.uk/property-for-sale/search.html?searchLocation=${encodeURIComponent(location)}&useLocationIdentifier=true&locationIdentifierSearch=true`;
+    
+    const response = await fetch(searchUrl, { 
+      headers: { 
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+      },
+      redirect: 'follow'
+    });
+    
+    const finalUrl = response.url;
+    console.log("Final search URL:", finalUrl);
+    
+    // Check if we got redirected to a proper find.html page with locationIdentifier
+    const locationMatch = finalUrl.match(/locationIdentifier=([^&]+)/);
+    if (locationMatch) {
+      const identifier = decodeURIComponent(locationMatch[1]);
+      console.log(`Resolved "${location}" to identifier: ${identifier}`);
+      return { identifier, type: 'full' };
     }
     
-    const data = await response.json();
-    const locationId = data.typeAheadLocations?.[0]?.locationIdentifier;
-    
-    if (locationId) {
-      console.log(`Resolved "${location}" to locationIdentifier: ${locationId}`);
-      return locationId;
+    // If that didn't work but we have an outcode, return it as OUTCODE type
+    if (outcode) {
+      console.log(`Using outcode format for: ${outcode}`);
+      return { identifier: `OUTCODE^${outcode}`, type: 'outcode' };
     }
     
-    console.log("No location identifier found for:", location);
-    return null;
+    // Try region format for area names
+    const regionSlug = location.trim().toUpperCase().replace(/\s+/g, '').replace(/[^A-Z0-9]/g, '');
+    console.log(`Trying REGION format for: ${location}`);
+    return { identifier: `REGION^${regionSlug}`, type: 'region' };
+    
   } catch (e) {
     console.error("Error resolving location:", e);
     return null;
@@ -178,13 +198,33 @@ async function resolveLocationIdentifier(location: string): Promise<string | nul
 }
 
 function buildRightmoveUrl(params: SearchParams, locationId: string | null): string {
-  // If we have a proper location identifier, use it; otherwise fall back to postcode search
-  const locationParam = locationId 
-    ? `locationIdentifier=${encodeURIComponent(locationId)}`
-    : `searchLocation=${encodeURIComponent(params.location)}`;
-    
-  let url = `https://www.rightmove.co.uk/property-for-sale/find.html?searchType=SALE&${locationParam}&radius=${params.radius || 10}&sortType=6&includeSSTC=false`;
+  // Build a proper search results URL that Apify can scrape
+  let url: string;
   
+  if (locationId) {
+    // Use the resolved location identifier for proper search URL
+    // Note: Don't double-encode - the caret ^ should stay as-is for Rightmove
+    url = `https://www.rightmove.co.uk/property-for-sale/find.html?locationIdentifier=${locationId}&sortType=6&includeSSTC=false`;
+  } else {
+    // Try the SEO-friendly URL format which works better for common locations
+    const locationSlug = params.location
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/[^a-zA-Z0-9-]/g, '');
+    
+    const isPostcode = /^[A-Za-z]{1,2}\d/.test(params.location.trim());
+    
+    if (isPostcode) {
+      const outcode = params.location.trim().split(' ')[0].toUpperCase();
+      url = `https://www.rightmove.co.uk/property-for-sale/${outcode}.html?sortType=6&includeSSTC=false`;
+    } else {
+      const capitalizedLocation = locationSlug.charAt(0).toUpperCase() + locationSlug.slice(1).toLowerCase();
+      url = `https://www.rightmove.co.uk/property-for-sale/${capitalizedLocation}.html?sortType=6&includeSSTC=false`;
+    }
+  }
+  
+  // Add optional filters
+  if (params.radius) url += `&radius=${params.radius}`;
   if (params.minPrice) url += `&minPrice=${params.minPrice}`;
   if (params.maxPrice) url += `&maxPrice=${params.maxPrice}`;
   if (params.minBeds) url += `&minBedrooms=${params.minBeds}`;
