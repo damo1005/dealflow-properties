@@ -11,9 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Link, MapPin, Edit, ArrowRight, Loader2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Link, MapPin, Edit, ArrowRight, Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import { useDealAnalysisStore } from "@/stores/dealAnalysisStore";
 import { PropertyType } from "@/types/dealAnalysis";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const propertyTypes: { value: PropertyType; label: string }[] = [
   { value: "terraced", label: "Terraced" },
@@ -25,28 +28,105 @@ const propertyTypes: { value: PropertyType; label: string }[] = [
   { value: "commercial", label: "Commercial" },
 ];
 
+interface FetchedPropertyData {
+  address: string;
+  postcode: string;
+  price: number;
+  priceText: string;
+  bedrooms: number;
+  bathrooms: number;
+  propertyType: string;
+  tenure: string;
+  description: string;
+  features: string[];
+  images: string[];
+  floorArea: number | null;
+  epcRating: string | null;
+  agent: string;
+  listingUrl: string;
+  source: string;
+}
+
+function mapPropertyType(type: string): PropertyType {
+  const lower = type.toLowerCase();
+  if (lower.includes("terrace")) return "terraced";
+  if (lower.includes("semi")) return "semi-detached";
+  if (lower.includes("detached")) return "detached";
+  if (lower.includes("flat") || lower.includes("apartment")) return "flat";
+  if (lower.includes("bungalow")) return "bungalow";
+  if (lower.includes("hmo")) return "hmo";
+  if (lower.includes("commercial")) return "commercial";
+  return "terraced";
+}
+
 export function PropertyInputStep() {
-  const { property, setProperty, setStep } = useDealAnalysisStore();
+  const { property, setProperty, setStep, setFinancials } = useDealAnalysisStore();
   const [isLoading, setIsLoading] = useState(false);
   const [url, setUrl] = useState("");
+  const [fetchError, setFetchError] = useState<string | null>(null);
+  const [fetchedData, setFetchedData] = useState<FetchedPropertyData | null>(null);
 
   const handleFetchUrl = async () => {
-    if (!url) return;
+    if (!url) {
+      toast.error("Please enter a property URL");
+      return;
+    }
+
+    // Validate URL format
+    if (!url.includes("rightmove.co.uk") && !url.includes("zoopla.co.uk") && !url.includes("onthemarket.com")) {
+      toast.error("Please enter a valid Rightmove, Zoopla, or OnTheMarket URL");
+      return;
+    }
+
     setIsLoading(true);
-    // In production, this would call an API to scrape property data
-    setTimeout(() => {
+    setFetchError(null);
+    setFetchedData(null);
+
+    try {
+      const { data, error } = await supabase.functions.invoke("fetch-property-listing", {
+        body: { url },
+      });
+
+      if (error) {
+        throw new Error(error.message || "Failed to fetch property");
+      }
+
+      if (!data.success) {
+        throw new Error(data.error || "Failed to fetch property data");
+      }
+
+      const propertyData = data.data as FetchedPropertyData;
+      setFetchedData(propertyData);
+
+      // Auto-populate form fields
       setProperty({
         inputMethod: "url",
         sourceUrl: url,
-        sourcePlatform: url.includes("rightmove") ? "Rightmove" : url.includes("zoopla") ? "Zoopla" : "Other",
-        address: "123 Example Street",
-        postcode: "M14 5AB",
-        propertyType: "terraced",
-        bedrooms: 3,
-        bathrooms: 1,
+        sourcePlatform: propertyData.source.charAt(0).toUpperCase() + propertyData.source.slice(1),
+        address: propertyData.address,
+        postcode: propertyData.postcode,
+        propertyType: mapPropertyType(propertyData.propertyType),
+        bedrooms: propertyData.bedrooms || 1,
+        bathrooms: propertyData.bathrooms || 1,
+        squareFootage: propertyData.floorArea || undefined,
       });
+
+      // Also set asking price in financials
+      if (propertyData.price > 0) {
+        setFinancials({
+          askingPrice: propertyData.price,
+          offerPrice: Math.round(propertyData.price * 0.95), // Default 5% below asking
+        });
+      }
+
+      toast.success("Property data fetched successfully!");
+    } catch (error: any) {
+      console.error("Fetch error:", error);
+      setFetchError(error.message || "Failed to fetch property");
+      toast.error(`Failed to fetch: ${error.message}`);
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   const canContinue = property.postcode && property.propertyType && property.bedrooms;
@@ -106,14 +186,45 @@ export function PropertyInputStep() {
               </p>
             </div>
 
-            {property.sourceUrl && (
-              <div className="p-4 rounded-lg bg-muted/50 space-y-2">
-                <p className="font-medium">✓ Property data fetched</p>
-                <p className="text-sm text-muted-foreground">
-                  {property.address}, {property.postcode}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {property.bedrooms} bed {property.propertyType}
+            {fetchedData && (
+              <div className="p-4 rounded-lg bg-green-50 dark:bg-green-950/30 border border-green-200 dark:border-green-800 space-y-2">
+                <div className="flex items-center gap-2 text-green-700 dark:text-green-400 font-medium">
+                  <CheckCircle className="h-5 w-5" />
+                  Property data fetched from {fetchedData.source}
+                </div>
+                <div className="space-y-1 text-sm">
+                  <p className="font-medium text-foreground">{fetchedData.address}</p>
+                  <p className="text-muted-foreground">
+                    {fetchedData.bedrooms} bed {fetchedData.propertyType.toLowerCase()} • 
+                    {fetchedData.tenure} • 
+                    {fetchedData.priceText}
+                  </p>
+                  {fetchedData.floorArea && (
+                    <p className="text-muted-foreground">{fetchedData.floorArea} sq ft</p>
+                  )}
+                  {fetchedData.features.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {fetchedData.features.slice(0, 5).map((f, i) => (
+                        <Badge key={i} variant="secondary" className="text-xs">{f}</Badge>
+                      ))}
+                      {fetchedData.features.length > 5 && (
+                        <Badge variant="outline" className="text-xs">+{fetchedData.features.length - 5} more</Badge>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {fetchError && (
+              <div className="p-4 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
+                <div className="flex items-center gap-2 text-red-700 dark:text-red-400 font-medium mb-1">
+                  <AlertCircle className="h-5 w-5" />
+                  Failed to fetch property
+                </div>
+                <p className="text-red-600 dark:text-red-400 text-sm">{fetchError}</p>
+                <p className="text-xs text-muted-foreground mt-2">
+                  Try using "Enter Address" or "Manual Entry" instead. Some property pages may block automated access.
                 </p>
               </div>
             )}
