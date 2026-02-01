@@ -38,6 +38,7 @@ import Network from "./pages/Network";
 import Copilot from "./pages/Copilot";
 import Mortgages from "./pages/Mortgages";
 import Integrations from "./pages/Integrations";
+import MarketIntel from "./pages/MarketIntel";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -272,6 +273,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Integrations />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/market-intel"
+              element={
+                <ProtectedRoute>
+                  <MarketIntel />
                 </ProtectedRoute>
               }
             />
