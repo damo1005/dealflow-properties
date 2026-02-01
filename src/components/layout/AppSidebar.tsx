@@ -17,7 +17,8 @@ import {
   Bell,
   Radar,
   Plug,
-  TrendingUp
+  TrendingUp,
+  BedDouble
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -31,6 +32,7 @@ const navItems = [
   { title: "Market Intel", url: "/market-intel", icon: TrendingUp },
   { title: "My Pipeline", url: "/pipeline", icon: GitBranch },
   { title: "Portfolio", url: "/portfolio", icon: Briefcase },
+  { title: "STR Management", url: "/str", icon: BedDouble },
   { title: "Calculators", url: "/calculators", icon: Calculator },
   { title: "Mortgages", url: "/mortgages", icon: Percent },
   { title: "Deal Scout", url: "/deal-scout", icon: Radar },
