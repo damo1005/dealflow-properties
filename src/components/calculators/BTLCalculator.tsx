@@ -9,9 +9,7 @@ import { ResultCard, CostBreakdownChart, SensitivityTable } from "./ResultCompon
 import { useCalculatorStore, calculateBTLResults } from "@/stores/calculatorStore";
 
 export function BTLCalculator() {
-  const navigate = useNavigate();
   const { btlInputs, setBTLInputs } = useCalculatorStore();
-  const { setPropertyValue, setLoanAmount, setTermYears } = useMortgageStore();
 
   const results = useMemo(() => calculateBTLResults(btlInputs), [btlInputs]);
 

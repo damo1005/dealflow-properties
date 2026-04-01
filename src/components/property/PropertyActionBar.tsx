@@ -18,7 +18,6 @@ interface PropertyActionBarProps {
 export function PropertyActionBar({ propertyId, agentPhone, propertyPrice }: PropertyActionBarProps) {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { setPropertyValue, setLoanAmount } = useMortgageStore();
 
   const handleCalculator = () => {
     navigate("/tools/deal-analyser");

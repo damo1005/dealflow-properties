@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
-import { Bell, Check, CheckCheck, Home, TrendingDown, Settings, ExternalLink } from "lucide-react";
+import { Bell, CheckCheck, Home, TrendingDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
