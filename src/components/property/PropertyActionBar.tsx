@@ -1,4 +1,4 @@
-import { Calculator, Plus, Calendar, Phone, FileText, Percent } from "lucide-react";
+import { Calculator, Plus, Calendar, Phone, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
