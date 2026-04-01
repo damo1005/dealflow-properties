@@ -146,10 +146,6 @@ export default function MyComparisons() {
               Your saved property comparisons
             </p>
           </div>
-          <Button onClick={() => navigate("/compare")}>
-            <Plus className="h-4 w-4 mr-2" />
-            New Comparison
-          </Button>
         </div>
 
         {isLoading ? (
