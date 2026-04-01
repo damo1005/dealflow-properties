@@ -54,7 +54,7 @@ export function UpgradeButton({
       return;
     }
     
-    // If already on pro or premium, go to settings
+    // If already on operator or growth, go to settings
     if (currentTier !== "free") {
       navigate("/settings");
       return;
@@ -64,8 +64,8 @@ export function UpgradeButton({
     try {
       const { data, error } = await supabase.functions.invoke("create-checkout", {
         body: {
-          priceId: SUBSCRIPTION_TIERS.pro.priceId,
-          tier: "pro",
+          priceId: SUBSCRIPTION_TIERS.operator.priceId,
+          tier: "operator",
         },
       });
       
@@ -82,19 +82,19 @@ export function UpgradeButton({
     }
   };
 
-  // Don't show upgrade button if already premium
-  if (currentTier === "premium") {
+  // Don't show upgrade button if already growth
+  if (currentTier === "growth") {
     return showBadge ? (
       <Badge variant="default" className="bg-gradient-to-r from-amber-500 to-orange-500">
-        Premium
+        Growth
       </Badge>
     ) : null;
   }
 
-  // Show manage button if on pro
-  if (currentTier === "pro") {
+  // Show manage button if on operator
+  if (currentTier === "operator") {
     return showBadge ? (
-      <Badge variant="secondary">Pro</Badge>
+      <Badge variant="secondary">Operator</Badge>
     ) : (
       <Button variant={variant} size={size} className={className} onClick={() => navigate("/settings")}>
         Manage Plan
@@ -118,7 +118,7 @@ export function UpgradeButton({
       ) : (
         <>
           <Sparkles className="h-4 w-4 mr-2" />
-          Upgrade to Pro
+          Upgrade Plan
         </>
       )}
     </Button>
