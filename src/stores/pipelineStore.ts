@@ -33,6 +33,8 @@ export interface PipelineProperty {
   exchange_target_date?: string;
   purchase_date?: string;
   actual_price?: number;
+  landlord_name?: string;
+  monthly_offer?: number;
   created_at: string;
   updated_at: string;
   activities: PipelineActivity[];
