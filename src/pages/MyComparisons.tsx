@@ -66,7 +66,6 @@ export default function MyComparisons() {
 
   const handleView = (comparison: SavedComparison) => {
     loadComparison(comparison.property_data, comparison.calculator_inputs);
-    navigate("/compare");
   };
 
   const handleDuplicate = async (comparison: SavedComparison) => {
