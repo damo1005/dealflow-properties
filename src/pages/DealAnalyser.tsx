@@ -81,6 +81,14 @@ const DealAnalyser = () => {
         {currentStep === 2 && <FinancialsStep />}
         {currentStep === 3 && <StrategyStep />}
         {currentStep === 4 && <AnalysisResults />}
+        {currentStep === 4 && (
+          <div className="flex justify-center pt-4">
+            <Button size="lg" onClick={() => useDealAnalysisStore.getState().setStep(5)} className="gap-2">
+              <Sparkles className="h-4 w-4" />
+              Generate Landlord Pitch
+            </Button>
+          </div>
+        )}
         {currentStep === 5 && <LandlordPitchGenerator />}
       </div>
     </AppLayout>
