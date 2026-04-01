@@ -145,7 +145,7 @@ export const PipelineCard = memo(function PipelineCard({ property, index }: Pipe
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
                   <DropdownMenuItem
-                    onClick={() => navigate("/deal-analyser")}
+                    onClick={() => navigate("/tools/deal-analyser")}
                   >
                     <FileText className="mr-2 h-4 w-4" />
                     Generate Pitch
