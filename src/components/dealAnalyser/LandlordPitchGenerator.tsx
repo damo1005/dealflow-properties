@@ -18,6 +18,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDealAnalysisStore } from "@/stores/dealAnalysisStore";
+import { usePipelineStore } from "@/stores/pipelineStore";
 import { SAStrategyInputs } from "@/types/dealAnalysis";
 import { pdf, Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 
