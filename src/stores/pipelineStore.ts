@@ -117,22 +117,20 @@ interface PipelineState {
 }
 
 const defaultStages: PipelineStage[] = [
-  { id: 'sourced', name: 'Sourced', color: 'hsl(var(--chart-1))', order: 0 },
-  { id: 'researching', name: 'Researching', color: 'hsl(var(--chart-2))', order: 1 },
-  { id: 'viewing-booked', name: 'Viewing Booked', color: 'hsl(var(--chart-3))', order: 2 },
-  { id: 'offer-made', name: 'Offer Made', color: 'hsl(var(--chart-4))', order: 3 },
-  { id: 'under-offer', name: 'Under Offer', color: 'hsl(var(--chart-5))', order: 4 },
-  { id: 'solicitors', name: 'Solicitors Instructed', color: 'hsl(var(--primary))', order: 5 },
-  { id: 'completed', name: 'Completed', color: 'hsl(var(--success))', order: 6 },
-  { id: 'passed', name: 'Passed', color: 'hsl(var(--muted-foreground))', order: 7 },
+  { id: 'identified', name: 'Identified', color: 'hsl(var(--chart-1))', order: 0 },
+  { id: 'contacted', name: 'Contacted', color: 'hsl(var(--chart-2))', order: 1 },
+  { id: 'pitched', name: 'Pitched', color: 'hsl(var(--chart-3))', order: 2 },
+  { id: 'negotiating', name: 'Negotiating', color: 'hsl(var(--chart-4))', order: 3 },
+  { id: 'signed', name: 'Signed', color: 'hsl(var(--chart-5))', order: 4 },
+  { id: 'live', name: 'Live', color: 'hsl(var(--primary))', order: 5 },
 ];
 
 const defaultLabels = [
-  { id: 'hot', name: 'Hot Deal', color: 'hsl(0 84% 60%)' },
-  { id: 'bmv', name: 'BMV', color: 'hsl(142 76% 36%)' },
-  { id: 'auction', name: 'Auction', color: 'hsl(45 93% 47%)' },
-  { id: 'chain-free', name: 'Chain Free', color: 'hsl(221 83% 53%)' },
-  { id: 'motivated', name: 'Motivated Seller', color: 'hsl(280 67% 50%)' },
+  { id: 'hot', name: 'Hot Lead', color: 'hsl(0 84% 60%)' },
+  { id: 'responsive', name: 'Responsive', color: 'hsl(142 76% 36%)' },
+  { id: 'agent-intro', name: 'Agent Intro', color: 'hsl(45 93% 47%)' },
+  { id: 'direct', name: 'Direct to Landlord', color: 'hsl(221 83% 53%)' },
+  { id: 'returning', name: 'Returning Landlord', color: 'hsl(280 67% 50%)' },
 ];
 
 const defaultFilters: PipelineFilters = {
