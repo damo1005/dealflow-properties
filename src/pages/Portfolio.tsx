@@ -117,7 +117,7 @@ const Portfolio = () => {
                 <Plus className="h-4 w-4 mr-2" />
                 Add Property
               </Button>
-              <Button variant="outline" size="lg" onClick={() => navigate("/deal-analyser")}>
+              <Button variant="outline" size="lg" onClick={() => navigate("/tools/deal-analyser")}>
                 Analyse a Deal
               </Button>
             </div>
