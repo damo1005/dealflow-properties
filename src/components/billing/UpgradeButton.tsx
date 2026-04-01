@@ -54,7 +54,7 @@ export function UpgradeButton({
       return;
     }
     
-    // If already on pro or premium, go to settings
+    // If already on operator or growth, go to settings
     if (currentTier !== "free") {
       navigate("/settings");
       return;
@@ -64,8 +64,8 @@ export function UpgradeButton({
     try {
       const { data, error } = await supabase.functions.invoke("create-checkout", {
         body: {
-          priceId: SUBSCRIPTION_TIERS.pro.priceId,
-          tier: "pro",
+          priceId: SUBSCRIPTION_TIERS.operator.priceId,
+          tier: "operator",
         },
       });
       
