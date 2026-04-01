@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
-import { useMortgageStore } from "@/stores/mortgageStore";
 
 interface PropertyActionBarProps {
   propertyId: string;
