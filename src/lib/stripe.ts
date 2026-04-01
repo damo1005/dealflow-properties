@@ -95,7 +95,7 @@ export const canAccessFeature = (
   userTier: SubscriptionTier,
   requiredTier: SubscriptionTier
 ): boolean => {
-  const tierOrder: SubscriptionTier[] = ["free", "pro", "premium"];
+  const tierOrder: SubscriptionTier[] = ["free", "operator", "growth"];
   const userIndex = tierOrder.indexOf(userTier);
   const requiredIndex = tierOrder.indexOf(requiredTier);
   return userIndex >= requiredIndex;
