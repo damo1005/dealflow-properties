@@ -22,7 +22,7 @@ export function PropertyActionBar({ propertyId, agentPhone, propertyPrice }: Pro
   const { setPropertyValue, setLoanAmount } = useMortgageStore();
 
   const handleCalculator = () => {
-    navigate("/calculators");
+    navigate("/tools/deal-analyser");
   };
 
   const handleCompareMortgages = () => {
