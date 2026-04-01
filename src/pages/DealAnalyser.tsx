@@ -50,7 +50,7 @@ const DealAnalyser = () => {
         {currentStep <= 5 && (
           <div className="space-y-2">
             <div className="flex justify-between">
-              {steps.slice(0, 3).map((step) => (
+              {steps.map((step) => (
                 <div
                   key={step.number}
                   className={`flex items-center gap-2 ${
