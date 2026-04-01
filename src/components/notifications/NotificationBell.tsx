@@ -42,7 +42,7 @@ export function NotificationBell() {
     if (notification.listing_id && notification.data?.listing_url) {
       window.open(notification.data.listing_url, "_blank");
     } else {
-      navigate("/alerts");
+      navigate("/dashboard");
     }
     setOpen(false);
   };
