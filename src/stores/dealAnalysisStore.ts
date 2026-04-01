@@ -55,16 +55,20 @@ const defaultFinancials: FinancialsInput = {
   interestOnly: true,
 };
 
-const defaultBTLInputs: BTLStrategyInputs = {
-  monthlyRent: 0,
-  managementPercent: 0,
-  voidWeeksPerYear: 2,
-  maintenancePercent: 10,
+const defaultSAInputs: SAStrategyInputs = {
+  propertyStrategy: 'r2sa',
+  monthlyLeaseCost: 0,
+  nightlyRate: 0,
+  occupancyPercent: 70,
+  platformMix: ['airbnb'],
+  guestType: 'mixed',
+  cleaningPerStay: 0,
+  platformFeesPercent: 15,
 };
 
 const defaultStrategyInput: StrategyInput = {
-  strategy: 'btl',
-  inputs: defaultBTLInputs,
+  strategy: 'sa',
+  inputs: defaultSAInputs,
 };
 
 export const useDealAnalysisStore = create<DealAnalysisState>((set) => ({

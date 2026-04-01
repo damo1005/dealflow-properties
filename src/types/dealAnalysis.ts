@@ -51,9 +51,17 @@ export interface HMOStrategyInputs {
   estimatedBills: number;
 }
 
+export type SAPropertyStrategy = 'r2sa' | 'own';
+export type SAGuestType = 'contractors' | 'tourists' | 'corporate' | 'mixed';
+export type SAPlatform = 'airbnb' | 'booking' | 'direct' | 'corporate';
+
 export interface SAStrategyInputs {
+  propertyStrategy: SAPropertyStrategy;
+  monthlyLeaseCost: number;
   nightlyRate: number;
   occupancyPercent: number;
+  platformMix: SAPlatform[];
+  guestType: SAGuestType;
   cleaningPerStay: number;
   platformFeesPercent: number;
 }
