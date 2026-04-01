@@ -1,6 +1,5 @@
 import { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-import { Home, PoundSterling, Wallet, TrendingUp, Percent, PiggyBank, BarChart3, Search } from "lucide-react";
+import { Home, PoundSterling, Wallet, TrendingUp, Percent, PiggyBank, BarChart3 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
