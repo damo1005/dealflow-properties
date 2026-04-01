@@ -21,6 +21,7 @@ interface PipelineColumnProps {
 
 export const PipelineColumn = memo(function PipelineColumn({ stage, properties }: PipelineColumnProps) {
   const { deleteStage } = usePipelineStore();
+  const navigate = useNavigate();
 
   const formatValue = (value: number) => {
     return new Intl.NumberFormat("en-GB", {
