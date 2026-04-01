@@ -82,19 +82,19 @@ export function UpgradeButton({
     }
   };
 
-  // Don't show upgrade button if already premium
-  if (currentTier === "premium") {
+  // Don't show upgrade button if already growth
+  if (currentTier === "growth") {
     return showBadge ? (
       <Badge variant="default" className="bg-gradient-to-r from-amber-500 to-orange-500">
-        Premium
+        Growth
       </Badge>
     ) : null;
   }
 
-  // Show manage button if on pro
-  if (currentTier === "pro") {
+  // Show manage button if on operator
+  if (currentTier === "operator") {
     return showBadge ? (
-      <Badge variant="secondary">Pro</Badge>
+      <Badge variant="secondary">Operator</Badge>
     ) : (
       <Button variant={variant} size={size} className={className} onClick={() => navigate("/settings")}>
         Manage Plan
