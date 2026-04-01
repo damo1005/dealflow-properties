@@ -10,7 +10,7 @@ export default function Pipeline() {
   const { showActivitySidebar } = usePipelineStore();
 
   return (
-    <AppLayout title="My Pipeline">
+    <AppLayout title="Landlord Pipeline">
       <div className="flex h-[calc(100vh-8rem)]">
         {/* Main Content */}
         <div className={cn("flex-1 space-y-6 transition-all", showActivitySidebar && "pr-0")}>
