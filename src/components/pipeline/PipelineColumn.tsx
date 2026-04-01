@@ -91,10 +91,18 @@ export const PipelineColumn = memo(function PipelineColumn({ stage, properties }
             ))}
             {provided.placeholder}
             
-            {properties.length === 0 && !snapshot.isDraggingOver && (
-              <div className="flex flex-col items-center justify-center h-32 text-center">
-                <p className="text-sm text-muted-foreground">No properties</p>
-                <p className="text-xs text-muted-foreground">Drag cards here</p>
+            {properties.length === 0 && !snapshot.isDraggingOver && stage.id === 'identified' && (
+              <div className="flex flex-col items-center justify-center h-40 text-center px-3 gap-2">
+                <Search className="h-8 w-8 text-muted-foreground/50" />
+                <p className="text-sm text-muted-foreground">Add your first property to start tracking landlord conversations</p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="mt-1"
+                  onClick={() => navigate("/tools/deal-analyser")}
+                >
+                  Analyse a deal →
+                </Button>
               </div>
             )}
           </div>
