@@ -6,8 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { CurrencyInput } from "./CurrencyInput";
 import { ResultCard, CostBreakdownChart, SensitivityTable } from "./ResultComponents";
-import { useCalculatorStore, calculateBTLResults, calculateStampDuty, calculateMortgagePayment } from "@/stores/calculatorStore";
-import { useMortgageStore } from "@/stores/mortgageStore";
+import { useCalculatorStore, calculateBTLResults } from "@/stores/calculatorStore";
 
 export function BTLCalculator() {
   const navigate = useNavigate();
