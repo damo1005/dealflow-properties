@@ -25,13 +25,6 @@ export function PropertyActionBar({ propertyId, agentPhone, propertyPrice }: Pro
     navigate("/tools/deal-analyser");
   };
 
-  const handleCompareMortgages = () => {
-    if (propertyPrice) {
-      setPropertyValue(propertyPrice);
-      setLoanAmount(propertyPrice * 0.75); // Default 75% LTV
-    }
-    navigate("/mortgages");
-  };
 
   const handleAddToPipeline = (stage: string) => {
     toast({
