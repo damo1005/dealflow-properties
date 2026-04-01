@@ -9,7 +9,7 @@ export default function AccommodationRequests() {
   const [activeTab, setActiveTab] = useState("browse");
 
   const handleShareLink = () => {
-    navigator.clipboard.writeText("https://realtysync-co.lovable.app/accommodation-requests");
+    navigator.clipboard.writeText(`${window.location.origin}/accommodation`);
     toast("Link copied — share this with corporate clients to post accommodation requests");
   };
 
