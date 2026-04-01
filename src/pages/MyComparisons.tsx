@@ -162,10 +162,6 @@ export default function MyComparisons() {
               <p className="text-muted-foreground text-center mb-4">
                 Compare properties and save them here for future reference
               </p>
-              <Button onClick={() => navigate("/compare")}>
-                <Plus className="h-4 w-4 mr-2" />
-                Create Comparison
-              </Button>
             </CardContent>
           </Card>
         ) : (

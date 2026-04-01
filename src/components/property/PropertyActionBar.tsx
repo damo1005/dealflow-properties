@@ -65,11 +65,6 @@ export function PropertyActionBar({ propertyId, agentPhone, propertyPrice }: Pro
             <span className="hidden sm:inline">Calculator</span>
           </Button>
 
-          {/* Compare Mortgages */}
-          <Button variant="outline" size="sm" className="gap-2" onClick={handleCompareMortgages}>
-            <Percent className="h-4 w-4" />
-            <span className="hidden sm:inline">Mortgages</span>
-          </Button>
 
           {/* Add to Pipeline */}
           <DropdownMenu>

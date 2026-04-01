@@ -160,7 +160,7 @@ export function NotificationBell() {
         {/* Footer */}
         {notifications.length > 0 && (
           <div className="border-t border-border p-2">
-            <Button variant="ghost" className="w-full" onClick={() => { setOpen(false); navigate("/alerts"); }}>
+            <Button variant="ghost" className="w-full" onClick={() => { setOpen(false); navigate("/dashboard"); }}>
               View All Notifications
             </Button>
           </div>

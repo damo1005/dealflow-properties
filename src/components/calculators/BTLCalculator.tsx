@@ -325,15 +325,6 @@ export function BTLCalculator() {
                   size="large"
                 />
 
-                {/* Find Mortgages Button */}
-                <Button 
-                  onClick={handleFindMortgages} 
-                  variant="outline" 
-                  className="w-full gap-2"
-                >
-                  <Search className="h-4 w-4" />
-                  Find Mortgages at {btlInputs.mortgageRate}% or better
-                </Button>
               </CardContent>
             </Card>
 
