@@ -68,7 +68,7 @@ export default function Dashboard() {
               Run a deal analysis to see if a property stacks up, then generate a landlord pitch and track it in your pipeline.
             </p>
             <div className="flex gap-3">
-              <Button onClick={() => navigate("/deal-analyser")}>
+              <Button onClick={() => navigate("/tools/deal-analyser")}>
                 Analyse a Deal
               </Button>
               <Button variant="outline" onClick={() => navigate("/pipeline")}>
