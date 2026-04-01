@@ -80,9 +80,6 @@ export function NotificationBell() {
                 Mark all read
               </Button>
             )}
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => { setOpen(false); navigate("/alerts"); }}>
-              <Settings className="h-4 w-4" />
-            </Button>
           </div>
         </div>
 
