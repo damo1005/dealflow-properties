@@ -43,10 +43,10 @@ export const SUBSCRIPTION_TIERS: Record<string, {
       dealPacks: 1,
     },
   },
-  pro: {
-    name: "Pro",
+  operator: {
+    name: "Operator",
     price: 29,
-    priceId: "price_pro_monthly", // Replace with actual Stripe price ID
+    priceId: "price_1THWr23sLlxAaXpJ7jknROFz",
     features: [
       "Unlimited saved properties",
       "All calculators & scenarios",
@@ -63,12 +63,12 @@ export const SUBSCRIPTION_TIERS: Record<string, {
       dealPacks: 10,
     },
   },
-  premium: {
-    name: "Premium",
-    price: 99,
-    priceId: "price_premium_monthly", // Replace with actual Stripe price ID
+  growth: {
+    name: "Growth",
+    price: 49,
+    priceId: "price_1THWrP3sLlxAaXpJtBsT1Hl1",
     features: [
-      "Everything in Pro",
+      "Everything in Operator",
       "STR Management tools",
       "Portfolio analytics",
       "API access",
@@ -95,7 +95,7 @@ export const canAccessFeature = (
   userTier: SubscriptionTier,
   requiredTier: SubscriptionTier
 ): boolean => {
-  const tierOrder: SubscriptionTier[] = ["free", "pro", "premium"];
+  const tierOrder: SubscriptionTier[] = ["free", "operator", "growth"];
   const userIndex = tierOrder.indexOf(userTier);
   const requiredIndex = tierOrder.indexOf(requiredTier);
   return userIndex >= requiredIndex;
