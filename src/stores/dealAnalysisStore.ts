@@ -4,8 +4,7 @@ import {
   FinancialsInput,
   StrategyInput,
   DealAnalysis,
-  Strategy,
-  BTLStrategyInputs,
+  SAStrategyInputs,
 } from '@/types/dealAnalysis';
 
 interface DealAnalysisState {
