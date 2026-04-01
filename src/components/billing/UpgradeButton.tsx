@@ -118,7 +118,7 @@ export function UpgradeButton({
       ) : (
         <>
           <Sparkles className="h-4 w-4 mr-2" />
-          Upgrade to Pro
+          Upgrade Plan
         </>
       )}
     </Button>
