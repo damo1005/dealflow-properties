@@ -35,7 +35,7 @@ const DealAnalyser = () => {
               </Badge>
             </div>
             <p className="text-muted-foreground">
-              Get instant investment analysis on any UK property
+              Analyse any R2SA or SA property in minutes
             </p>
           </div>
           {currentStep > 1 && (
@@ -47,10 +47,10 @@ const DealAnalyser = () => {
         </div>
 
         {/* Progress Steps */}
-        {currentStep < 4 && (
+        {currentStep <= 5 && (
           <div className="space-y-2">
             <div className="flex justify-between">
-              {steps.slice(0, 3).map((step) => (
+              {steps.map((step) => (
                 <div
                   key={step.number}
                   className={`flex items-center gap-2 ${
@@ -72,7 +72,7 @@ const DealAnalyser = () => {
                 </div>
               ))}
             </div>
-            <Progress value={(currentStep / 3) * 100} className="h-2" />
+            <Progress value={(currentStep / 5) * 100} className="h-2" />
           </div>
         )}
 
