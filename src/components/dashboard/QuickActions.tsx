@@ -1,28 +1,28 @@
-import { Search, Plus, Calculator } from "lucide-react";
+import { Target, GitBranch, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 
 const actions = [
   {
-    title: "New Search",
-    description: "Find investment properties",
-    icon: Search,
-    href: "/search",
+    title: "Analyse a Deal",
+    description: "Check if a property stacks up as SA",
+    icon: Target,
+    href: "/tools/deal-analyser",
     variant: "default" as const,
   },
   {
-    title: "Add Property",
-    description: "Add to your pipeline",
-    icon: Plus,
+    title: "Add to Pipeline",
+    description: "Track a landlord conversation",
+    icon: GitBranch,
     href: "/pipeline",
     variant: "outline" as const,
   },
   {
-    title: "Run Calculator",
-    description: "Analyze a deal",
-    icon: Calculator,
-    href: "/calculators",
+    title: "View STR Calendar",
+    description: "Check bookings and availability",
+    icon: Calendar,
+    href: "/str",
     variant: "outline" as const,
   },
 ];
