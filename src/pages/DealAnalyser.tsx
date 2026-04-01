@@ -47,7 +47,7 @@ const DealAnalyser = () => {
         </div>
 
         {/* Progress Steps */}
-        {currentStep < 4 && (
+        {currentStep <= 5 && (
           <div className="space-y-2">
             <div className="flex justify-between">
               {steps.slice(0, 3).map((step) => (
