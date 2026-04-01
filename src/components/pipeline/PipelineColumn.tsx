@@ -1,6 +1,7 @@
 import { memo } from "react";
+import { useNavigate } from "react-router-dom";
 import { Droppable } from "@hello-pangea/dnd";
-import { MoreHorizontal, Plus, Settings2 } from "lucide-react";
+import { MoreHorizontal, Plus, Settings2, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -20,6 +21,7 @@ interface PipelineColumnProps {
 
 export const PipelineColumn = memo(function PipelineColumn({ stage, properties }: PipelineColumnProps) {
   const { deleteStage } = usePipelineStore();
+  const navigate = useNavigate();
 
   const formatValue = (value: number) => {
     return new Intl.NumberFormat("en-GB", {
@@ -89,10 +91,18 @@ export const PipelineColumn = memo(function PipelineColumn({ stage, properties }
             ))}
             {provided.placeholder}
             
-            {properties.length === 0 && !snapshot.isDraggingOver && (
-              <div className="flex flex-col items-center justify-center h-32 text-center">
-                <p className="text-sm text-muted-foreground">No properties</p>
-                <p className="text-xs text-muted-foreground">Drag cards here</p>
+            {properties.length === 0 && !snapshot.isDraggingOver && stage.id === 'identified' && (
+              <div className="flex flex-col items-center justify-center h-40 text-center px-3 gap-2">
+                <Search className="h-8 w-8 text-muted-foreground/50" />
+                <p className="text-sm text-muted-foreground">Add your first property to start tracking landlord conversations</p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="mt-1"
+                  onClick={() => navigate("/tools/deal-analyser")}
+                >
+                  Analyse a deal →
+                </Button>
               </div>
             )}
           </div>
