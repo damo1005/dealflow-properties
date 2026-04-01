@@ -35,7 +35,7 @@ const DealAnalyser = () => {
               </Badge>
             </div>
             <p className="text-muted-foreground">
-              Get instant investment analysis on any UK property
+              Analyse any R2SA or SA property in minutes
             </p>
           </div>
           {currentStep > 1 && (
