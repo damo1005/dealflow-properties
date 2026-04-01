@@ -8,12 +8,14 @@ import { PropertyInputStep } from "@/components/dealAnalyser/PropertyInputStep";
 import { FinancialsStep } from "@/components/dealAnalyser/FinancialsStep";
 import { StrategyStep } from "@/components/dealAnalyser/StrategyStep";
 import { AnalysisResults } from "@/components/dealAnalyser/AnalysisResults";
+import { LandlordPitchGenerator } from "@/components/dealAnalyser/LandlordPitchGenerator";
 
 const steps = [
   { number: 1, label: "Property" },
   { number: 2, label: "Financials" },
   { number: 3, label: "Strategy" },
   { number: 4, label: "Results" },
+  { number: 5, label: "Pitch" },
 ];
 
 const DealAnalyser = () => {
@@ -79,6 +81,15 @@ const DealAnalyser = () => {
         {currentStep === 2 && <FinancialsStep />}
         {currentStep === 3 && <StrategyStep />}
         {currentStep === 4 && <AnalysisResults />}
+        {currentStep === 4 && (
+          <div className="flex justify-center pt-4">
+            <Button size="lg" onClick={() => useDealAnalysisStore.getState().setStep(5)} className="gap-2">
+              <Sparkles className="h-4 w-4" />
+              Generate Landlord Pitch
+            </Button>
+          </div>
+        )}
+        {currentStep === 5 && <LandlordPitchGenerator />}
       </div>
     </AppLayout>
   );
