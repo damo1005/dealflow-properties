@@ -43,48 +43,8 @@ const iconStyles: Record<string, string> = {
   comparison_saved: "bg-accent text-accent-foreground",
 };
 
-// Fallback mock data when no real activity exists
-const mockActivities: Activity[] = [
-  {
-    id: "1",
-    type: "property_added",
-    title: "New property added",
-    description: "123 Oak Street added to pipeline",
-    time: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-    entityType: "property",
-    entityId: null,
-  },
-  {
-    id: "2",
-    type: "alert_triggered",
-    title: "Price alert triggered",
-    description: "Property below £500k in Downtown",
-    time: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
-    entityType: "alert",
-    entityId: null,
-  },
-  {
-    id: "3",
-    type: "calculation_saved",
-    title: "Analysis completed",
-    description: "ROI calculation for 456 Elm Ave",
-    time: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-    entityType: "calculation",
-    entityId: null,
-  },
-  {
-    id: "4",
-    type: "scout_discovery",
-    title: "New deals found",
-    description: "Deal Scout found 3 matching properties",
-    time: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-    entityType: "scout",
-    entityId: null,
-  },
-];
-
 export function ActivityFeed({ activities, isLoading }: ActivityFeedProps) {
-  const displayActivities = activities && activities.length > 0 ? activities : mockActivities;
+  const displayActivities = activities && activities.length > 0 ? activities : [];
 
   if (isLoading) {
     return (
