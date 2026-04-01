@@ -78,10 +78,10 @@ serve(async (req) => {
       );
     }
 
-    // Call Lovable AI Gateway
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
+    // Call Anthropic API
+    const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY");
+    if (!ANTHROPIC_API_KEY) {
+      throw new Error("ANTHROPIC_API_KEY is not configured");
     }
 
     const systemPrompt = `You are an experienced R2SA operator writing a guaranteed rent proposal to a landlord. Write a professional, 3-paragraph letter that:
@@ -103,18 +103,18 @@ Key benefits to highlight: ${benefits}
 
 Write the letter addressed to "Dear Landlord" and sign off with the operator name.`;
 
-    const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const aiResponse = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        "x-api-key": ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt },
-        ],
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1024,
+        system: systemPrompt,
+        messages: [{ role: "user", content: userPrompt }],
       }),
     });
 
@@ -132,12 +132,12 @@ Write the letter addressed to "Dear Landlord" and sign off with the operator nam
         );
       }
       const errorText = await aiResponse.text();
-      console.error("AI gateway error:", aiResponse.status, errorText);
+      console.error("Anthropic API error:", aiResponse.status, errorText);
       throw new Error("AI generation failed");
     }
 
     const aiData = await aiResponse.json();
-    const pitchText = aiData.choices?.[0]?.message?.content;
+    const pitchText = aiData.content?.[0]?.text;
 
     if (!pitchText) {
       throw new Error("No content returned from AI");
