@@ -30,7 +30,7 @@ const navItems: NavItem[] = [
   { title: "STR Management", url: "/str", icon: BedDouble },
   { title: "Airbnb Radar", url: "/airbnb-radar", icon: Radar },
   { title: "Portfolio", url: "/portfolio", icon: Briefcase },
-  { title: "Accommodation Requests", url: "/accommodation-requests", icon: MessageSquare },
+  { title: "Accommodation Requests", url: "/accommodation", icon: MessageSquare },
   { title: "Contractor Demand", url: "/contractor-demand", icon: HardHat },
 ];
 
