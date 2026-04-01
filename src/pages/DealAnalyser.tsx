@@ -72,7 +72,7 @@ const DealAnalyser = () => {
                 </div>
               ))}
             </div>
-            <Progress value={(currentStep / 3) * 100} className="h-2" />
+            <Progress value={(currentStep / 5) * 100} className="h-2" />
           </div>
         )}
 
