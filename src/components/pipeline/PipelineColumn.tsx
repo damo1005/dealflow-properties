@@ -1,6 +1,7 @@
 import { memo } from "react";
+import { useNavigate } from "react-router-dom";
 import { Droppable } from "@hello-pangea/dnd";
-import { MoreHorizontal, Plus, Settings2 } from "lucide-react";
+import { MoreHorizontal, Plus, Settings2, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
