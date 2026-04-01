@@ -22,7 +22,6 @@ export function calculateSDLT(price: number): number {
   
   let sdlt = 0;
   
-  // Additional property surcharge bands (3% extra on all bands)
   if (price <= 250000) {
     sdlt = price * 0.03;
   } else if (price <= 925000) {
@@ -58,6 +57,53 @@ export function calculateMortgagePayment(
   return payment;
 }
 
+// SA-specific: calculate monthly SA revenue
+export function calculateSAMonthlyRevenue(saInputs: SAStrategyInputs): number {
+  const daysInMonth = 30;
+  const occupiedNights = daysInMonth * (saInputs.occupancyPercent / 100);
+  return saInputs.nightlyRate * occupiedNights;
+}
+
+// SA-specific: calculate monthly SA costs
+export function calculateSAMonthlyCosts(saInputs: SAStrategyInputs): {
+  leaseCost: number;
+  platformFees: number;
+  utilities: number;
+  cleaning: number;
+  total: number;
+} {
+  const revenue = calculateSAMonthlyRevenue(saInputs);
+  const leaseCost = saInputs.propertyStrategy === 'r2sa' ? saInputs.monthlyLeaseCost : 0;
+  const platformFees = revenue * (saInputs.platformFeesPercent / 100);
+  const utilities = 150;
+  const cleaning = saInputs.cleaningPerStay > 0 ? saInputs.cleaningPerStay * 8 : 100; // ~8 turnovers/month or default £100
+  
+  return {
+    leaseCost,
+    platformFees: Math.round(platformFees),
+    utilities,
+    cleaning,
+    total: Math.round(leaseCost + platformFees + utilities + cleaning),
+  };
+}
+
+// SA-specific: calculate break-even occupancy %
+export function calculateSABreakEvenOccupancy(saInputs: SAStrategyInputs): number {
+  if (saInputs.nightlyRate <= 0) return 100;
+  
+  const leaseCost = saInputs.propertyStrategy === 'r2sa' ? saInputs.monthlyLeaseCost : 0;
+  const fixedCosts = 150 + (saInputs.cleaningPerStay > 0 ? saInputs.cleaningPerStay * 8 : 100); // utilities + cleaning
+  const totalFixedCosts = leaseCost + fixedCosts;
+  
+  // Revenue per night after platform fees
+  const netNightlyRate = saInputs.nightlyRate * (1 - saInputs.platformFeesPercent / 100);
+  
+  const breakEvenNights = totalFixedCosts / netNightlyRate;
+  const breakEvenPercent = (breakEvenNights / 30) * 100;
+  
+  return Math.round(Math.min(100, Math.max(0, breakEvenPercent)) * 10) / 10;
+}
+
 // Calculate annual income based on strategy
 export function calculateAnnualIncome(strategy: StrategyInput): number {
   const { strategy: type, inputs } = strategy;
@@ -73,15 +119,11 @@ export function calculateAnnualIncome(strategy: StrategyInput): number {
     case 'hmo': {
       const hmoInputs = inputs as HMOStrategyInputs;
       const monthlyIncome = hmoInputs.numberOfRooms * hmoInputs.rentPerRoom;
-      return monthlyIncome * 12 * 0.95; // 5% void allowance
+      return monthlyIncome * 12 * 0.95;
     }
     case 'sa': {
       const saInputs = inputs as SAStrategyInputs;
-      const nightsPerYear = 365 * (saInputs.occupancyPercent / 100);
-      const grossIncome = nightsPerYear * saInputs.nightlyRate;
-      const platformFees = grossIncome * (saInputs.platformFeesPercent / 100);
-      const cleaningCosts = (nightsPerYear / 3) * saInputs.cleaningPerStay; // Avg 3 nights per stay
-      return grossIncome - platformFees - cleaningCosts;
+      return calculateSAMonthlyRevenue(saInputs) * 12;
     }
     default:
       return 0;
@@ -110,20 +152,29 @@ export function calculateAnnualExpenses(
       const hmoInputs = inputs as HMOStrategyInputs;
       const annualIncome = calculateAnnualIncome(strategy);
       const bills = hmoInputs.billsIncluded ? hmoInputs.estimatedBills * 12 : 0;
-      const management = annualIncome * 0.12; // 12% for HMO
-      const maintenance = annualIncome * 0.15; // Higher maintenance for HMO
-      return annualMortgage + management + maintenance + bills + insuranceAnnual + 800; // HMO license
+      const management = annualIncome * 0.12;
+      const maintenance = annualIncome * 0.15;
+      return annualMortgage + management + maintenance + bills + insuranceAnnual + 800;
     }
     case 'sa': {
-      const annualIncome = calculateAnnualIncome(strategy);
-      const management = annualIncome * 0.2; // Higher management for SA
-      const maintenance = annualIncome * 0.08;
-      const utilities = 200 * 12; // Estimated utilities
-      return annualMortgage + management + maintenance + utilities + insuranceAnnual;
+      const saInputs = inputs as SAStrategyInputs;
+      const monthlyCosts = calculateSAMonthlyCosts(saInputs);
+      // For SA: annual costs = lease + platform fees + utilities + cleaning + mortgage (if own property)
+      // Mortgage only applies to own-property SA
+      const mortgageCost = saInputs.propertyStrategy === 'own' ? annualMortgage : 0;
+      return (monthlyCosts.total * 12) + mortgageCost + insuranceAnnual;
     }
     default:
       return annualMortgage + insuranceAnnual;
   }
+}
+
+// SA-specific deal score based on break-even occupancy
+function calculateSADealScore(breakEvenOccupancy: number): number {
+  if (breakEvenOccupancy < 50) return Math.round(80 + ((50 - breakEvenOccupancy) / 50) * 20); // 80-100
+  if (breakEvenOccupancy <= 65) return Math.round(65 + ((65 - breakEvenOccupancy) / 15) * 14); // 65-79
+  if (breakEvenOccupancy <= 75) return Math.round(50 + ((75 - breakEvenOccupancy) / 10) * 14); // 50-64
+  return Math.round(Math.max(10, 50 - ((breakEvenOccupancy - 75) / 25) * 40)); // below 50
 }
 
 // Main analysis calculation
@@ -134,16 +185,19 @@ export function calculateDealAnalysis(
 ): Omit<DealAnalysis, 'id' | 'userId' | 'createdAt' | 'updatedAt'> {
   const purchasePrice = financials.offerPrice || financials.askingPrice;
   const totalRefurb = financials.refurbLight + financials.refurbMedium + financials.refurbHeavy;
+  const isSA = strategy.strategy === 'sa';
+  const saInputs = isSA ? (strategy.inputs as SAStrategyInputs) : null;
+  const isR2SA = isSA && saInputs?.propertyStrategy === 'r2sa';
   
   // Calculate costs
   const deposit = financials.financeType === 'cash' ? purchasePrice : purchasePrice * (1 - financials.ltv / 100);
-  const sdlt = calculateSDLT(purchasePrice);
-  const legalFees = Math.max(1500, purchasePrice * 0.01);
-  const survey = 600;
-  const brokerFee = financials.financeType === 'cash' ? 0 : 500;
+  const sdlt = isR2SA ? 0 : calculateSDLT(purchasePrice); // No SDLT for R2SA (renting, not buying)
+  const legalFees = isR2SA ? 500 : Math.max(1500, purchasePrice * 0.01); // Lower legal for lease
+  const survey = isR2SA ? 0 : 600;
+  const brokerFee = financials.financeType === 'cash' || isR2SA ? 0 : 500;
   
   const costsBreakdown: CostsBreakdown = {
-    deposit,
+    deposit: isR2SA ? 0 : deposit,
     sdlt,
     legalFees,
     survey,
@@ -152,11 +206,13 @@ export function calculateDealAnalysis(
     otherCosts: 500,
   };
   
-  const totalCashRequired = deposit + sdlt + legalFees + survey + brokerFee + totalRefurb + 500;
+  const totalCashRequired = isR2SA
+    ? totalRefurb + legalFees + 500 // R2SA: just setup costs, no deposit/SDLT
+    : deposit + sdlt + legalFees + survey + brokerFee + totalRefurb + 500;
   
-  // Calculate mortgage
-  const loanAmount = purchasePrice * (financials.ltv / 100);
-  const monthlyMortgage = calculateMortgagePayment(
+  // Calculate mortgage (only for own-property SA or non-SA)
+  const loanAmount = isR2SA ? 0 : purchasePrice * (financials.ltv / 100);
+  const monthlyMortgage = isR2SA ? 0 : calculateMortgagePayment(
     loanAmount,
     financials.interestRate,
     financials.mortgageTerm,
@@ -169,33 +225,58 @@ export function calculateDealAnalysis(
   const annualCashFlow = annualIncome - annualExpenses;
   const monthlyCashFlow = annualCashFlow / 12;
   
-  // Calculate yields
-  const grossYield = (annualIncome / purchasePrice) * 100;
-  const netYield = (annualCashFlow / purchasePrice) * 100;
-  const cashOnCash = (annualCashFlow / totalCashRequired) * 100;
-  const roiYear1 = cashOnCash; // Simplified - could include equity growth
+  // Calculate yields / metrics
+  let grossYield: number;
+  let netYield: number;
+  let cashOnCash: number;
+  let roiYear1: number;
+  let dealScore: number;
+  let scoreBreakdown: ScoreBreakdown;
   
-  // Calculate score
-  const scoreBreakdown = calculateScore(grossYield, netYield, cashOnCash, monthlyCashFlow, strategy.strategy);
-  const dealScore = Math.round(
-    (scoreBreakdown.cashFlow + scoreBreakdown.roi + scoreBreakdown.risk + 
-     scoreBreakdown.growth + scoreBreakdown.exitOptions) / 5 * 10
-  );
+  if (isSA && saInputs) {
+    const breakEvenOccupancy = calculateSABreakEvenOccupancy(saInputs);
+    const annualLeaseCost = isR2SA ? saInputs.monthlyLeaseCost * 12 : 0;
+    
+    // SA-specific metrics
+    grossYield = annualLeaseCost > 0 ? (annualIncome / annualLeaseCost) * 100 : 0;
+    netYield = annualLeaseCost > 0 ? (annualCashFlow / annualLeaseCost) * 100 : 0;
+    roiYear1 = annualLeaseCost > 0 ? (annualCashFlow / annualLeaseCost) * 100 : 0; // ROI vs lease cost
+    cashOnCash = totalCashRequired > 0 ? (annualCashFlow / totalCashRequired) * 100 : 0;
+    
+    // SA deal score based on break-even occupancy
+    dealScore = calculateSADealScore(breakEvenOccupancy);
+    scoreBreakdown = calculateSAScoreBreakdown(breakEvenOccupancy, monthlyCashFlow, roiYear1);
+  } else {
+    grossYield = purchasePrice > 0 ? (annualIncome / purchasePrice) * 100 : 0;
+    netYield = purchasePrice > 0 ? (annualCashFlow / purchasePrice) * 100 : 0;
+    cashOnCash = totalCashRequired > 0 ? (annualCashFlow / totalCashRequired) * 100 : 0;
+    roiYear1 = cashOnCash;
+    scoreBreakdown = calculateScore(grossYield, netYield, cashOnCash, monthlyCashFlow, strategy.strategy);
+    dealScore = Math.round(
+      (scoreBreakdown.cashFlow + scoreBreakdown.roi + scoreBreakdown.risk +
+       scoreBreakdown.growth + scoreBreakdown.exitOptions) / 5 * 10
+    );
+  }
   
   // 5-year projection
-  const fiveYearProjection = calculateProjection(purchasePrice, annualCashFlow, loanAmount, financials.interestOnly);
+  const fiveYearProjection = isSA && isR2SA
+    ? calculateSAProjection(annualCashFlow)
+    : calculateProjection(purchasePrice, annualCashFlow, loanAmount, financials.interestOnly);
   
   // Risk assessment
-  const riskAssessment = assessRisks(grossYield, netYield, financials, strategy);
+  const riskAssessment = isSA && saInputs
+    ? assessSARisks(saInputs, monthlyCashFlow)
+    : assessRisks(grossYield, netYield, financials, strategy);
   
   // Stress test
-  const stressTest = runStressTest(loanAmount, financials.interestRate, annualIncome, annualExpenses - monthlyMortgage * 12);
+  const stressTest = isSA
+    ? [] // Stress test not applicable to lease-based SA in the same way
+    : runStressTest(loanAmount, financials.interestRate, annualIncome, annualExpenses - monthlyMortgage * 12);
   
-  // Mock comparables (in real app, fetch from API)
-  const soldComparables = generateMockComparables(purchasePrice, property.postcode);
+  // Comparables
+  const soldComparables = isR2SA ? [] : generateMockComparables(purchasePrice, property.postcode);
   const rentalComparables = generateMockRentalComparables(strategy, property.postcode);
   
-  // Area data (mock)
   const areaData: AreaData = {
     epcRating: 'C',
     floodRisk: 'Low',
@@ -204,7 +285,6 @@ export function calculateDealAnalysis(
     planningApplications: 3,
   };
   
-  // Tax implications (simplified)
   const taxImplications = calculateTaxImplications(annualIncome, monthlyMortgage * 12, sdlt);
   
   return {
@@ -230,15 +310,15 @@ export function calculateDealAnalysis(
     interestOnly: financials.interestOnly,
     strategy: strategy.strategy,
     strategyInputs: strategy.inputs,
-    dealScore,
+    dealScore: Math.min(100, Math.max(0, dealScore)),
     scoreBreakdown,
-    grossYield,
-    netYield,
-    cashOnCash,
-    roiYear1,
-    monthlyCashFlow,
-    annualCashFlow,
-    totalCashRequired,
+    grossYield: Math.round(grossYield * 10) / 10,
+    netYield: Math.round(netYield * 10) / 10,
+    cashOnCash: Math.round(cashOnCash * 10) / 10,
+    roiYear1: Math.round(roiYear1 * 10) / 10,
+    monthlyCashFlow: Math.round(monthlyCashFlow),
+    annualCashFlow: Math.round(annualCashFlow),
+    totalCashRequired: Math.round(totalCashRequired),
     costsBreakdown,
     fiveYearProjection,
     riskAssessment,
@@ -251,6 +331,45 @@ export function calculateDealAnalysis(
   };
 }
 
+// SA-specific score breakdown based on break-even occupancy
+function calculateSAScoreBreakdown(
+  breakEvenOccupancy: number,
+  monthlyCashFlow: number,
+  roiVsLease: number
+): ScoreBreakdown {
+  // Cash flow score
+  let cashFlowScore = 5;
+  if (monthlyCashFlow >= 1000) cashFlowScore = 10;
+  else if (monthlyCashFlow >= 600) cashFlowScore = 8;
+  else if (monthlyCashFlow >= 300) cashFlowScore = 6;
+  else if (monthlyCashFlow >= 0) cashFlowScore = 4;
+  else cashFlowScore = 2;
+  
+  // ROI score (vs lease cost)
+  let roiScore = 5;
+  if (roiVsLease >= 100) roiScore = 10;
+  else if (roiVsLease >= 60) roiScore = 8;
+  else if (roiVsLease >= 30) roiScore = 6;
+  else if (roiVsLease >= 10) roiScore = 4;
+  else roiScore = 2;
+  
+  // Risk based on break-even occupancy
+  let riskScore = 5;
+  if (breakEvenOccupancy < 45) riskScore = 10;
+  else if (breakEvenOccupancy < 55) riskScore = 8;
+  else if (breakEvenOccupancy < 65) riskScore = 6;
+  else if (breakEvenOccupancy < 75) riskScore = 4;
+  else riskScore = 2;
+  
+  return {
+    cashFlow: cashFlowScore,
+    roi: roiScore,
+    risk: riskScore,
+    growth: 6, // SA growth is moderate
+    exitOptions: 5, // R2SA exit = walk away from lease
+  };
+}
+
 function calculateScore(
   grossYield: number,
   netYield: number,
@@ -258,7 +377,6 @@ function calculateScore(
   monthlyCashFlow: number,
   strategy: string
 ): ScoreBreakdown {
-  // Cash flow score (0-10)
   let cashFlowScore = 5;
   if (monthlyCashFlow >= 500) cashFlowScore = 10;
   else if (monthlyCashFlow >= 300) cashFlowScore = 8;
@@ -266,7 +384,6 @@ function calculateScore(
   else if (monthlyCashFlow >= 0) cashFlowScore = 4;
   else cashFlowScore = 2;
   
-  // ROI score
   let roiScore = 5;
   if (cashOnCash >= 15) roiScore = 10;
   else if (cashOnCash >= 12) roiScore = 8;
@@ -274,17 +391,14 @@ function calculateScore(
   else if (cashOnCash >= 5) roiScore = 5;
   else roiScore = 3;
   
-  // Risk score (lower is more risky)
   let riskScore = 7;
   if (grossYield >= 8) riskScore = 9;
   else if (grossYield >= 6) riskScore = 7;
   else if (grossYield >= 4) riskScore = 5;
   else riskScore = 3;
   
-  // Growth score (simplified)
   const growthScore = 7;
   
-  // Exit options
   let exitScore = 7;
   if (strategy === 'btl') exitScore = 9;
   else if (strategy === 'flip') exitScore = 8;
@@ -307,8 +421,8 @@ function calculateProjection(
   interestOnly: boolean
 ): YearProjection[] {
   const projections: YearProjection[] = [];
-  const growthRate = 0.04; // 4% annual growth
-  const rentGrowthRate = 0.03; // 3% rent growth
+  const growthRate = 0.04;
+  const rentGrowthRate = 0.03;
   
   let cumulativeCashFlow = 0;
   let currentCashFlow = annualCashFlow;
@@ -321,7 +435,6 @@ function calculateProjection(
     cumulativeCashFlow += currentCashFlow;
     
     if (!interestOnly) {
-      // Simplified principal reduction
       currentLoan *= 0.97;
     }
     
@@ -340,6 +453,67 @@ function calculateProjection(
   return projections;
 }
 
+// SA-specific projection (no property appreciation for R2SA)
+function calculateSAProjection(annualCashFlow: number): YearProjection[] {
+  const projections: YearProjection[] = [];
+  const revenueGrowth = 0.05; // 5% ADR growth assumed
+  
+  let cumulativeCashFlow = 0;
+  let currentCashFlow = annualCashFlow;
+  
+  for (let year = 1; year <= 5; year++) {
+    currentCashFlow *= (1 + revenueGrowth);
+    cumulativeCashFlow += currentCashFlow;
+    
+    projections.push({
+      year,
+      cumulativeCashFlow: Math.round(cumulativeCashFlow),
+      propertyValue: 0, // R2SA: no property owned
+      equity: 0,
+      totalReturn: Math.round(cumulativeCashFlow),
+    });
+  }
+  
+  return projections;
+}
+
+// SA-specific risk assessment
+function assessSARisks(saInputs: SAStrategyInputs, monthlyCashFlow: number): RiskItem[] {
+  const risks: RiskItem[] = [];
+  const breakEven = calculateSABreakEvenOccupancy(saInputs);
+  
+  if (breakEven < 50) {
+    risks.push({ level: 'low', description: `Break-even at ${breakEven}% occupancy — strong margins` });
+  } else if (breakEven < 65) {
+    risks.push({ level: 'medium', description: `Break-even at ${breakEven}% occupancy — moderate buffer` });
+  } else {
+    risks.push({ level: 'high', description: `Break-even at ${breakEven}% occupancy — tight margins, seasonal dips could cause losses` });
+  }
+  
+  if (saInputs.propertyStrategy === 'r2sa') {
+    risks.push({ level: 'medium', description: 'R2SA: landlord could end lease — ensure contract terms protect you' });
+    if (saInputs.monthlyLeaseCost > 0 && monthlyCashFlow < saInputs.monthlyLeaseCost * 0.3) {
+      risks.push({ level: 'high', description: 'Monthly profit is less than 30% of lease cost — low margin for error' });
+    }
+  }
+  
+  if (saInputs.guestType === 'tourists') {
+    risks.push({ level: 'medium', description: 'Tourist demand is seasonal — occupancy may drop 20-30% in low season' });
+  }
+  
+  if (saInputs.platformMix?.length === 1) {
+    risks.push({ level: 'medium', description: 'Single platform dependency — diversify to reduce risk' });
+  }
+  
+  if (saInputs.occupancyPercent > 85) {
+    risks.push({ level: 'medium', description: 'Target occupancy above 85% is ambitious — allow buffer for reality' });
+  }
+  
+  risks.push({ level: 'low', description: 'SA offers flexible exit — walk away from lease with notice period' });
+  
+  return risks;
+}
+
 function assessRisks(
   grossYield: number,
   netYield: number,
@@ -348,7 +522,6 @@ function assessRisks(
 ): RiskItem[] {
   const risks: RiskItem[] = [];
   
-  // Low risk items
   if (grossYield >= 6) {
     risks.push({ level: 'low', description: 'Strong rental demand indicated by yield' });
   }
@@ -357,10 +530,9 @@ function assessRisks(
     risks.push({ level: 'low', description: 'Conservative LTV provides equity buffer' });
   }
   
-  // Medium risk items
   risks.push({
     level: 'medium',
-    description: `Interest rate sensitivity: +2% rates reduces cash flow significantly`,
+    description: 'Interest rate sensitivity: +2% rates reduces cash flow significantly',
   });
   
   risks.push({
@@ -368,7 +540,6 @@ function assessRisks(
     description: 'Void risk: Average 2-4 weeks/year between tenants',
   });
   
-  // High risk items
   if (strategy.strategy === 'hmo') {
     risks.push({
       level: 'high',
@@ -442,28 +613,23 @@ function generateMockComparables(price: number, postcode?: string): ComparablePr
 }
 
 function generateMockRentalComparables(strategy: StrategyInput, postcode?: string): ComparableProperty[] {
+  if (strategy.strategy === 'sa') {
+    const saInputs = strategy.inputs as SAStrategyInputs;
+    const baseRate = saInputs.nightlyRate || 100;
+    return [
+      { address: `SA listing near ${postcode || 'XX1'}`, price: Math.round(baseRate * 0.95), status: 'Active', beds: 2 },
+      { address: `SA listing near ${postcode || 'XX1'}`, price: Math.round(baseRate * 1.05), status: 'Active', beds: 3 },
+      { address: `SA listing near ${postcode || 'XX1'}`, price: Math.round(baseRate * 0.90), status: 'Active', beds: 2 },
+    ];
+  }
+  
   const btlInputs = strategy.inputs as BTLStrategyInputs;
   const baseRent = btlInputs.monthlyRent || 900;
   
   return [
-    {
-      address: `22 ${postcode || 'XX1'} Street`,
-      price: Math.round(baseRent * 0.99),
-      status: 'Available',
-      beds: 3,
-    },
-    {
-      address: `5 Nearby Road`,
-      price: Math.round(baseRent * 0.95),
-      status: 'Let Agreed',
-      beds: 3,
-    },
-    {
-      address: `31 Area Avenue`,
-      price: Math.round(baseRent * 1.03),
-      status: 'Available',
-      beds: 3,
-    },
+    { address: `22 ${postcode || 'XX1'} Street`, price: Math.round(baseRent * 0.99), status: 'Available', beds: 3 },
+    { address: `5 Nearby Road`, price: Math.round(baseRent * 0.95), status: 'Let Agreed', beds: 3 },
+    { address: `31 Area Avenue`, price: Math.round(baseRent * 1.03), status: 'Available', beds: 3 },
   ];
 }
 
@@ -472,12 +638,11 @@ function calculateTaxImplications(
   annualMortgageInterest: number,
   sdlt: number
 ): TaxImplications {
-  // Simplified higher rate taxpayer calculation
   const taxRate = 0.40;
   const incomeTaxOnRent = annualIncome * taxRate;
-  const section24Relief = annualMortgageInterest * 0.20; // 20% tax credit
+  const section24Relief = annualMortgageInterest * 0.20;
   const section24Restriction = annualMortgageInterest * (taxRate - 0.20);
-  const effectiveTaxRate = ((incomeTaxOnRent - section24Relief) / annualIncome) * 100;
+  const effectiveTaxRate = annualIncome > 0 ? ((incomeTaxOnRent - section24Relief) / annualIncome) * 100 : 0;
   const afterTaxCashFlow = annualIncome - incomeTaxOnRent + section24Relief;
   
   return {
