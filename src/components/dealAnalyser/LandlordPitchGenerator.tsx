@@ -18,6 +18,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDealAnalysisStore } from "@/stores/dealAnalysisStore";
+import { usePipelineStore } from "@/stores/pipelineStore";
 import { SAStrategyInputs } from "@/types/dealAnalysis";
 import { pdf, Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 
@@ -143,15 +144,47 @@ export function LandlordPitchGenerator() {
   };
 
   const handleAddToPipeline = () => {
-    navigate("/pipeline", {
-      state: {
-        prefill: {
-          address: propertyAddress,
-          monthlyOffer: parseInt(monthlyOffer),
-          strategy: saInputs.propertyStrategy,
+    const { addProperty } = usePipelineStore.getState();
+    const newId = `pitch-${Date.now()}`;
+    const now = new Date().toISOString();
+
+    addProperty({
+      id: newId,
+      user_id: user?.id || "user-1",
+      address: propertyAddress,
+      monthly_offer: monthlyOffer ? parseInt(monthlyOffer) : undefined,
+      landlord_name: undefined,
+      stage: "pitched",
+      position: 0,
+      labels: [],
+      priority: null,
+      notes: pitchText || undefined,
+      created_at: now,
+      updated_at: now,
+      activities: [
+        {
+          id: `act-${Date.now()}`,
+          type: "created",
+          description: "Added from Landlord Pitch Generator",
+          timestamp: now,
         },
-      },
+      ],
+      comments: pitchText
+        ? [
+            {
+              id: `cmt-${Date.now()}`,
+              content: pitchText,
+              user_name: operatorName || "You",
+              created_at: now,
+            },
+          ]
+        : [],
+      documents: [],
+      reminders: [],
     });
+
+    toast.success("Property added to your landlord pipeline");
+    navigate("/pipeline", { state: { highlightPropertyId: newId } });
   };
 
   return (
