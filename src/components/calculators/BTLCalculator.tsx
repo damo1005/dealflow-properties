@@ -18,14 +18,6 @@ export function BTLCalculator() {
 
   const results = useMemo(() => calculateBTLResults(btlInputs), [btlInputs]);
 
-  const handleFindMortgages = () => {
-    // Pre-fill mortgage comparison with calculator values
-    setPropertyValue(btlInputs.purchasePrice);
-    const loanAmount = btlInputs.purchasePrice * (1 - btlInputs.depositPercent / 100);
-    setLoanAmount(loanAmount);
-    setTermYears(btlInputs.mortgageTerm);
-    navigate("/mortgages");
-  };
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("en-GB", {
