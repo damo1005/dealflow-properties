@@ -1,10 +1,10 @@
 import { memo } from "react";
+import { useNavigate } from "react-router-dom";
 import { Draggable } from "@hello-pangea/dnd";
-import { MoreHorizontal, MessageSquare, Paperclip, Flag, Calendar, Bed, Percent, TrendingUp } from "lucide-react";
+import { MoreHorizontal, MessageSquare, Paperclip, Flag, Calendar, PoundSterling, User, FileText } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { PipelineProperty, usePipelineStore } from "@/stores/pipelineStore";
 import { cn } from "@/lib/utils";
-import { formatDistanceToNow } from "date-fns";
 
 interface PipelineCardProps {
   property: PipelineProperty;
@@ -26,6 +25,7 @@ interface PipelineCardProps {
 
 export const PipelineCard = memo(function PipelineCard({ property, index }: PipelineCardProps) {
   const { stages, availableLabels, setSelectedPropertyId, moveProperty, updateProperty, deleteProperty } = usePipelineStore();
+  const navigate = useNavigate();
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("en-GB", {
@@ -68,23 +68,7 @@ export const PipelineCard = memo(function PipelineCard({ property, index }: Pipe
           )}
           onClick={() => setSelectedPropertyId(property.id)}
         >
-          <CardContent className="p-3 space-y-3">
-            {/* Image */}
-            {property.image_url && (
-              <div className="relative aspect-video rounded-md overflow-hidden">
-                <img
-                  src={property.image_url}
-                  alt={property.address}
-                  className="w-full h-full object-cover"
-                />
-                {property.priority && (
-                  <div className={cn("absolute top-2 right-2", priorityColors[property.priority])}>
-                    <Flag className="h-4 w-4 fill-current" />
-                  </div>
-                )}
-              </div>
-            )}
-
+          <CardContent className="p-3 space-y-2">
             {/* Labels */}
             {propertyLabels.length > 0 && (
               <div className="flex flex-wrap gap-1">
@@ -102,43 +86,37 @@ export const PipelineCard = memo(function PipelineCard({ property, index }: Pipe
             )}
 
             {/* Address */}
-            <p className="font-medium text-sm line-clamp-2">{property.address}</p>
-
-            {/* Price */}
-            {property.price && (
-              <p className="text-lg font-bold text-primary">
-                {formatCurrency(property.price)}
-              </p>
-            )}
-
-            {/* Metrics */}
-            <div className="flex items-center gap-3 text-xs text-muted-foreground">
-              {property.bedrooms && (
-                <span className="flex items-center gap-1">
-                  <Bed className="h-3 w-3" />
-                  {property.bedrooms}
-                </span>
-              )}
-              {property.estimated_yield && (
-                <span className="flex items-center gap-1">
-                  <Percent className="h-3 w-3" />
-                  {property.estimated_yield.toFixed(1)}%
-                </span>
-              )}
-              {property.roi_potential && (
-                <span className="flex items-center gap-1 text-success">
-                  <TrendingUp className="h-3 w-3" />
-                  {property.roi_potential.toFixed(1)}%
-                </span>
+            <div className="flex items-start justify-between gap-2">
+              <p className="font-medium text-sm line-clamp-2">{property.address}</p>
+              {property.priority && (
+                <Flag className={cn("h-4 w-4 shrink-0 fill-current", priorityColors[property.priority])} />
               )}
             </div>
+
+            {/* Landlord name */}
+            {property.landlord_name && (
+              <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <User className="h-3 w-3" />
+                <span>{property.landlord_name}</span>
+              </div>
+            )}
+
+            {/* Monthly offer */}
+            {property.monthly_offer && property.monthly_offer > 0 && (
+              <div className="flex items-center gap-1.5">
+                <PoundSterling className="h-3.5 w-3.5 text-primary" />
+                <span className="text-sm font-bold text-primary">
+                  {formatCurrency(property.monthly_offer)}/mo
+                </span>
+              </div>
+            )}
 
             {/* Footer */}
             <div className="flex items-center justify-between pt-2 border-t border-border">
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <Calendar className="h-3 w-3" />
-                  {daysInStage}d
+                  {daysInStage}d in stage
                 </span>
                 {property.comments.length > 0 && (
                   <span className="flex items-center gap-1">
@@ -166,6 +144,13 @@ export const PipelineCard = memo(function PipelineCard({ property, index }: Pipe
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
+                  <DropdownMenuItem
+                    onClick={() => navigate("/deal-analyser")}
+                  >
+                    <FileText className="mr-2 h-4 w-4" />
+                    Generate Pitch
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
                   <DropdownMenuSub>
                     <DropdownMenuSubTrigger>Move to Stage</DropdownMenuSubTrigger>
                     <DropdownMenuSubContent>
