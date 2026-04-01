@@ -111,10 +111,10 @@ export function CostEstimatesCard({ estimates }: CostEstimatesCardProps) {
               <Button
                 variant="outline"
                 className="w-full"
-                onClick={() => navigate("/calculators/brr")}
+                onClick={() => navigate("/tools/deal-analyser")}
               >
                 <Calculator className="h-4 w-4 mr-2" />
-                Add to Refurb Calculator
+                Open Deal Analyser
               </Button>
             </CardContent>
           </AccordionContent>

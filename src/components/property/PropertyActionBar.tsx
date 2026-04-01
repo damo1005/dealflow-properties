@@ -1,4 +1,4 @@
-import { Calculator, Plus, Calendar, Phone, FileText, Percent } from "lucide-react";
+import { Calculator, Plus, Calendar, Phone, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
-import { useMortgageStore } from "@/stores/mortgageStore";
 
 interface PropertyActionBarProps {
   propertyId: string;
@@ -19,19 +18,11 @@ interface PropertyActionBarProps {
 export function PropertyActionBar({ propertyId, agentPhone, propertyPrice }: PropertyActionBarProps) {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { setPropertyValue, setLoanAmount } = useMortgageStore();
 
   const handleCalculator = () => {
-    navigate("/calculators");
+    navigate("/tools/deal-analyser");
   };
 
-  const handleCompareMortgages = () => {
-    if (propertyPrice) {
-      setPropertyValue(propertyPrice);
-      setLoanAmount(propertyPrice * 0.75); // Default 75% LTV
-    }
-    navigate("/mortgages");
-  };
 
   const handleAddToPipeline = (stage: string) => {
     toast({
@@ -72,11 +63,6 @@ export function PropertyActionBar({ propertyId, agentPhone, propertyPrice }: Pro
             <span className="hidden sm:inline">Calculator</span>
           </Button>
 
-          {/* Compare Mortgages */}
-          <Button variant="outline" size="sm" className="gap-2" onClick={handleCompareMortgages}>
-            <Percent className="h-4 w-4" />
-            <span className="hidden sm:inline">Mortgages</span>
-          </Button>
 
           {/* Add to Pipeline */}
           <DropdownMenu>

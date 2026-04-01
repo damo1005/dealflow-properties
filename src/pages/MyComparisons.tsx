@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus, Calendar, Home, Trash2, Copy, Eye, Loader2 } from "lucide-react";
+import { Calendar, Home, Trash2, Copy, Eye, Loader2 } from "lucide-react";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -66,7 +66,6 @@ export default function MyComparisons() {
 
   const handleView = (comparison: SavedComparison) => {
     loadComparison(comparison.property_data, comparison.calculator_inputs);
-    navigate("/compare");
   };
 
   const handleDuplicate = async (comparison: SavedComparison) => {
@@ -147,10 +146,6 @@ export default function MyComparisons() {
               Your saved property comparisons
             </p>
           </div>
-          <Button onClick={() => navigate("/compare")}>
-            <Plus className="h-4 w-4 mr-2" />
-            New Comparison
-          </Button>
         </div>
 
         {isLoading ? (
@@ -167,10 +162,6 @@ export default function MyComparisons() {
               <p className="text-muted-foreground text-center mb-4">
                 Compare properties and save them here for future reference
               </p>
-              <Button onClick={() => navigate("/compare")}>
-                <Plus className="h-4 w-4 mr-2" />
-                Create Comparison
-              </Button>
             </CardContent>
           </Card>
         ) : (

@@ -1,31 +1,18 @@
 import { useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-import { Home, PoundSterling, Wallet, TrendingUp, Percent, PiggyBank, BarChart3, Search } from "lucide-react";
+import { Home, PoundSterling, Wallet, TrendingUp, Percent, PiggyBank, BarChart3 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { CurrencyInput } from "./CurrencyInput";
 import { ResultCard, CostBreakdownChart, SensitivityTable } from "./ResultComponents";
-import { useCalculatorStore, calculateBTLResults, calculateStampDuty, calculateMortgagePayment } from "@/stores/calculatorStore";
-import { useMortgageStore } from "@/stores/mortgageStore";
+import { useCalculatorStore, calculateBTLResults } from "@/stores/calculatorStore";
 
 export function BTLCalculator() {
-  const navigate = useNavigate();
   const { btlInputs, setBTLInputs } = useCalculatorStore();
-  const { setPropertyValue, setLoanAmount, setTermYears } = useMortgageStore();
 
   const results = useMemo(() => calculateBTLResults(btlInputs), [btlInputs]);
 
-  const handleFindMortgages = () => {
-    // Pre-fill mortgage comparison with calculator values
-    setPropertyValue(btlInputs.purchasePrice);
-    const loanAmount = btlInputs.purchasePrice * (1 - btlInputs.depositPercent / 100);
-    setLoanAmount(loanAmount);
-    setTermYears(btlInputs.mortgageTerm);
-    navigate("/mortgages");
-  };
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("en-GB", {
@@ -333,15 +320,6 @@ export function BTLCalculator() {
                   size="large"
                 />
 
-                {/* Find Mortgages Button */}
-                <Button 
-                  onClick={handleFindMortgages} 
-                  variant="outline" 
-                  className="w-full gap-2"
-                >
-                  <Search className="h-4 w-4" />
-                  Find Mortgages at {btlInputs.mortgageRate}% or better
-                </Button>
               </CardContent>
             </Card>
 

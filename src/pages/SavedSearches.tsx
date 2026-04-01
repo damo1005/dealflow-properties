@@ -373,12 +373,6 @@ export default function SavedSearches() {
                       <RefreshCw className="mr-2 h-4 w-4" />
                       Run Now
                     </Button>
-                    <Button variant="default" size="sm" className="flex-1" asChild>
-                      <a href="/search">
-                        <Search className="mr-2 h-4 w-4" />
-                        View Results
-                      </a>
-                    </Button>
                   </div>
                 </CardContent>
               </Card>

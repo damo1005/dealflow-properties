@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
-import { Bell, Check, CheckCheck, Home, TrendingDown, Settings, ExternalLink } from "lucide-react";
+import { Bell, CheckCheck, Home, TrendingDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -42,7 +42,7 @@ export function NotificationBell() {
     if (notification.listing_id && notification.data?.listing_url) {
       window.open(notification.data.listing_url, "_blank");
     } else {
-      navigate("/alerts");
+      navigate("/dashboard");
     }
     setOpen(false);
   };
@@ -80,9 +80,6 @@ export function NotificationBell() {
                 Mark all read
               </Button>
             )}
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => { setOpen(false); navigate("/alerts"); }}>
-              <Settings className="h-4 w-4" />
-            </Button>
           </div>
         </div>
 
@@ -163,7 +160,7 @@ export function NotificationBell() {
         {/* Footer */}
         {notifications.length > 0 && (
           <div className="border-t border-border p-2">
-            <Button variant="ghost" className="w-full" onClick={() => { setOpen(false); navigate("/alerts"); }}>
+            <Button variant="ghost" className="w-full" onClick={() => { setOpen(false); navigate("/dashboard"); }}>
               View All Notifications
             </Button>
           </div>

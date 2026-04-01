@@ -45,12 +45,6 @@ export default function AgentClients() {
       title={config?.company_name || "Agency Dashboard"}
       actions={
         <div className="flex gap-2">
-          <Button variant="outline" asChild>
-            <a href="/agent/settings">
-              <Settings className="h-4 w-4 mr-2" />
-              Agency Settings
-            </a>
-          </Button>
           <Button onClick={() => setShowAddDialog(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Add Client

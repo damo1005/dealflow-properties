@@ -69,7 +69,7 @@ export function SaveComparisonDialog({ open, onClose }: SaveComparisonDialogProp
       });
 
       onClose();
-      navigate("/comparisons");
+      navigate("/pipeline");
     } catch (error) {
       console.error("Save error:", error);
       toast({

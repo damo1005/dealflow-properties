@@ -20,7 +20,6 @@ import {
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
@@ -82,15 +81,9 @@ export function PropertyHeader({ property, isSaved, onSave }: PropertyHeaderProp
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink onClick={() => navigate("/search")} className="cursor-pointer">
-              Search
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbLink onClick={() => navigate("/search")} className="cursor-pointer">
+            <BreadcrumbPage className="text-muted-foreground">
               {property.postcode.split(" ")[0]}
-            </BreadcrumbLink>
+            </BreadcrumbPage>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>

@@ -148,8 +148,7 @@ export default function ScenarioBuilder() {
       title: "Applied to calculator",
       description: "Values have been updated in the BTL calculator.",
     });
-    navigate("/calculators");
-  }, [currentInputs, toast, navigate]);
+  }, [currentInputs, toast]);
 
   // Toggle category
   const toggleCategory = (category: string) => {
