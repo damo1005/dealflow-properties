@@ -17212,17 +17212,20 @@ export type Database = {
           agent_company: string
           applicant_name: string
           application_type: string
+          data_source: string
           decision_date: string
           description: string
           development_type: string
           distance_miles: number
           id: string
+          last_synced: string
           latitude: number
           local_authority: string
           longitude: number
           postcode: string
           proposed_units: number
           reference: string
+          source_url: string
           status: string
           submitted_date: string
         }[]

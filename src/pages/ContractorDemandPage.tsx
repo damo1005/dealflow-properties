@@ -30,19 +30,57 @@ export default function ContractorDemandPage() {
   const [selectedTrades, setSelectedTrades] = useState<string[]>([]);
   const [contractorSearch, setContractorSearch] = useState('');
 
-  const geocodePostcode = async (postcode: string) => {
+  const [planningLoading, setPlanningLoading] = useState(false);
+  const [planningApps, setPlanningApps] = useState<any[]>([]);
+  const [planningSource, setPlanningSource] = useState<string>('');
+
+  const searchArea = async (postcode: string) => {
+    if (!postcode.trim()) {
+      toast.error('Please enter a postcode');
+      return;
+    }
+
+    // Geocode
     try {
       const response = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(postcode)}`);
       const data = await response.json();
       if (data.result) {
         setSearchLocation({ lat: data.result.latitude, lng: data.result.longitude });
-        toast.success(`Found location: ${data.result.admin_district || postcode}`);
-        return data.result;
+      } else {
+        toast.error('Could not find postcode');
+        return;
       }
-    } catch (error) {
+    } catch {
       toast.error('Could not find postcode');
+      return;
     }
-    return null;
+
+    // Fetch planning data via edge function
+    setPlanningLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('fetch-planning-applications', {
+        body: { postcode: postcode.trim(), radius: radius[0] },
+      });
+
+      if (error) throw error;
+
+      if (data?.success) {
+        setPlanningApps(data.data || []);
+        setPlanningSource(data.source || '');
+        if (data.count === 0) {
+          toast.info('No planning applications found in this area');
+        } else {
+          toast.success(`Found ${data.count} planning applications`);
+        }
+      } else {
+        throw new Error(data?.error || 'Search failed');
+      }
+    } catch (err: any) {
+      console.error('Planning search error:', err);
+      toast.error(err.message || 'Failed to search planning applications');
+    } finally {
+      setPlanningLoading(false);
+    }
   };
 
   const { data: demandScore } = useQuery({
@@ -54,16 +92,6 @@ export default function ContractorDemandPage() {
       return data;
     },
     enabled: !!searchPostcode,
-  });
-
-  const { data: planning } = useQuery({
-    queryKey: ['planning', planningStatus],
-    queryFn: async () => {
-      let query = supabase.from('planning_applications').select('*').order('received_date', { ascending: false });
-      if (planningStatus !== 'all') query = query.eq('status', planningStatus);
-      const { data } = await query.limit(50);
-      return data || [];
-    },
   });
 
   const { data: ccsSites } = useQuery({
@@ -201,7 +229,7 @@ export default function ContractorDemandPage() {
                 placeholder="Enter postcode (e.g. AL5 2PQ)" 
                 value={searchPostcode} 
                 onChange={(e) => setSearchPostcode(e.target.value.toUpperCase())} 
-                onKeyDown={(e) => e.key === 'Enter' && geocodePostcode(searchPostcode)} 
+                onKeyDown={(e) => e.key === 'Enter' && searchArea(searchPostcode)} 
                 className="pl-10" 
               />
             </div>
@@ -211,7 +239,7 @@ export default function ContractorDemandPage() {
               </label>
               <Slider value={radius} onValueChange={setRadius} min={1} max={25} step={1} />
             </div>
-            <Button onClick={() => geocodePostcode(searchPostcode)}>
+            <Button onClick={() => searchArea(searchPostcode)} disabled={planningLoading}>
               <Search className="h-4 w-4 mr-2" />
               Search
             </Button>
@@ -226,7 +254,7 @@ export default function ContractorDemandPage() {
             <div className="flex items-center gap-3">
               <Building2 className="h-8 w-8 text-primary" />
               <div>
-                <p className="text-2xl font-bold">{planning?.length || 0}</p>
+                <p className="text-2xl font-bold">{planningApps?.length || 0}</p>
                 <p className="text-sm text-muted-foreground">Planning Apps</p>
               </div>
             </div>
@@ -315,8 +343,15 @@ export default function ContractorDemandPage() {
           </div>
           
           <div className="grid gap-4">
-            {planning?.map((app) => (
-              <Card key={app.id}>
+            {planningLoading && (
+              <Card>
+                <CardContent className="pt-6 text-center text-muted-foreground">
+                  Searching for planning applications...
+                </CardContent>
+              </Card>
+            )}
+            {!planningLoading && planningApps?.map((app) => (
+              <Card key={app.id || app.reference}>
                 <CardContent className="pt-4">
                   <div className="flex justify-between items-start">
                     <div className="space-y-2 flex-1">
@@ -324,19 +359,29 @@ export default function ContractorDemandPage() {
                         <Badge className={getStatusColor(app.status)}>
                           {app.status || 'Unknown'}
                         </Badge>
-                        <span className="font-mono text-sm">{app.application_reference}</span>
+                        <span className="font-mono text-sm">{app.reference || app.application_reference}</span>
+                        {app.distance_miles && (
+                          <span className="text-xs text-muted-foreground">
+                            {Number(app.distance_miles).toFixed(1)} mi
+                          </span>
+                        )}
                       </div>
-                      <p className="font-medium">{app.property_address}</p>
+                      <p className="font-medium">{app.address || app.property_address}</p>
                       <p className="text-sm text-muted-foreground line-clamp-2">
-                        {app.proposal_description}
+                        {app.description || app.proposal_description}
                       </p>
                       <div className="flex gap-4 text-xs text-muted-foreground flex-wrap">
-                        {app.number_of_units_proposed && (
-                          <span className="font-medium">{app.number_of_units_proposed} units</span>
+                        {app.proposed_units && (
+                          <span className="font-medium">{app.proposed_units} units</span>
                         )}
-                        <span>Submitted: {app.received_date ? new Date(app.received_date).toLocaleDateString() : 'N/A'}</span>
+                        <span>Submitted: {app.submitted_date || app.received_date ? new Date(app.submitted_date || app.received_date).toLocaleDateString() : 'N/A'}</span>
                         {app.applicant_name && <span>By: {app.applicant_name}</span>}
                       </div>
+                      {app.source_url && (
+                        <a href={app.source_url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline">
+                          View on planning.data.gov.uk →
+                        </a>
+                      )}
                     </div>
                     <Button variant="outline" size="sm" onClick={() => trackPlanning.mutate(app.id)}>
                       <Bookmark className="h-4 w-4" />
@@ -345,10 +390,10 @@ export default function ContractorDemandPage() {
                 </CardContent>
               </Card>
             ))}
-            {planning?.length === 0 && (
+            {!planningLoading && planningApps?.length === 0 && (
               <Card>
                 <CardContent className="pt-6 text-center text-muted-foreground">
-                  No planning applications found
+                  {searchPostcode ? 'No planning applications found in this area' : 'Search a postcode to find planning applications'}
                 </CardContent>
               </Card>
             )}
