@@ -1441,6 +1441,48 @@ export type Database = {
         }
         Relationships: []
       }
+      area_demand_metrics: {
+        Row: {
+          active_sites_count: number | null
+          avg_contractor_rating: number | null
+          contractors_count: number | null
+          demand_level: string | null
+          demand_score: number | null
+          id: string
+          last_calculated: string | null
+          planning_apps_count: number | null
+          postcode_area: string
+          renovation_opportunities_count: number | null
+          supply_demand_ratio: number | null
+        }
+        Insert: {
+          active_sites_count?: number | null
+          avg_contractor_rating?: number | null
+          contractors_count?: number | null
+          demand_level?: string | null
+          demand_score?: number | null
+          id?: string
+          last_calculated?: string | null
+          planning_apps_count?: number | null
+          postcode_area: string
+          renovation_opportunities_count?: number | null
+          supply_demand_ratio?: number | null
+        }
+        Update: {
+          active_sites_count?: number | null
+          avg_contractor_rating?: number | null
+          contractors_count?: number | null
+          demand_level?: string | null
+          demand_score?: number | null
+          id?: string
+          last_calculated?: string | null
+          planning_apps_count?: number | null
+          postcode_area?: string
+          renovation_opportunities_count?: number | null
+          supply_demand_ratio?: number | null
+        }
+        Relationships: []
+      }
       area_statistics_cache: {
         Row: {
           area_type: string | null
@@ -3602,6 +3644,93 @@ export type Database = {
           start_date?: string | null
           status?: string | null
           submitted_date?: string | null
+          units_count?: number | null
+        }
+        Relationships: []
+      }
+      construction_sites: {
+        Row: {
+          address: string
+          ccs_score: number | null
+          client_name: string | null
+          contractor_email: string | null
+          contractor_name: string | null
+          contractor_phone: string | null
+          created_at: string | null
+          data_source: string | null
+          description: string | null
+          estimated_value: number | null
+          expected_completion: string | null
+          id: string
+          is_ccs_registered: boolean | null
+          last_synced: string | null
+          latitude: number | null
+          local_authority: string | null
+          longitude: number | null
+          postcode: string | null
+          project_type: string | null
+          site_manager: string | null
+          site_manager_phone: string | null
+          site_name: string | null
+          site_reference: string | null
+          start_date: string | null
+          status: string | null
+          units_count: number | null
+        }
+        Insert: {
+          address: string
+          ccs_score?: number | null
+          client_name?: string | null
+          contractor_email?: string | null
+          contractor_name?: string | null
+          contractor_phone?: string | null
+          created_at?: string | null
+          data_source?: string | null
+          description?: string | null
+          estimated_value?: number | null
+          expected_completion?: string | null
+          id?: string
+          is_ccs_registered?: boolean | null
+          last_synced?: string | null
+          latitude?: number | null
+          local_authority?: string | null
+          longitude?: number | null
+          postcode?: string | null
+          project_type?: string | null
+          site_manager?: string | null
+          site_manager_phone?: string | null
+          site_name?: string | null
+          site_reference?: string | null
+          start_date?: string | null
+          status?: string | null
+          units_count?: number | null
+        }
+        Update: {
+          address?: string
+          ccs_score?: number | null
+          client_name?: string | null
+          contractor_email?: string | null
+          contractor_name?: string | null
+          contractor_phone?: string | null
+          created_at?: string | null
+          data_source?: string | null
+          description?: string | null
+          estimated_value?: number | null
+          expected_completion?: string | null
+          id?: string
+          is_ccs_registered?: boolean | null
+          last_synced?: string | null
+          latitude?: number | null
+          local_authority?: string | null
+          longitude?: number | null
+          postcode?: string | null
+          project_type?: string | null
+          site_manager?: string | null
+          site_manager_phone?: string | null
+          site_name?: string | null
+          site_reference?: string | null
+          start_date?: string | null
+          status?: string | null
           units_count?: number | null
         }
         Relationships: []
@@ -8365,6 +8494,105 @@ export type Database = {
           },
         ]
       }
+      local_contractors: {
+        Row: {
+          address: string | null
+          checkatrade_rating: number | null
+          checkatrade_reviews: number | null
+          checkatrade_url: string | null
+          company_name: string
+          company_number: string | null
+          contact_name: string | null
+          created_at: string | null
+          data_source: string | null
+          email: string | null
+          employees_count: string | null
+          established_year: number | null
+          gas_safe_number: string | null
+          google_rating: number | null
+          google_reviews: number | null
+          id: string
+          is_federation_master_builders: boolean | null
+          is_gas_safe: boolean | null
+          is_niceic: boolean | null
+          is_trustmark: boolean | null
+          last_synced: string | null
+          latitude: number | null
+          longitude: number | null
+          phone: string | null
+          postcode: string | null
+          service_radius_miles: number | null
+          specialties: string[] | null
+          trade_categories: string[] | null
+          trading_name: string | null
+          website: string | null
+        }
+        Insert: {
+          address?: string | null
+          checkatrade_rating?: number | null
+          checkatrade_reviews?: number | null
+          checkatrade_url?: string | null
+          company_name: string
+          company_number?: string | null
+          contact_name?: string | null
+          created_at?: string | null
+          data_source?: string | null
+          email?: string | null
+          employees_count?: string | null
+          established_year?: number | null
+          gas_safe_number?: string | null
+          google_rating?: number | null
+          google_reviews?: number | null
+          id?: string
+          is_federation_master_builders?: boolean | null
+          is_gas_safe?: boolean | null
+          is_niceic?: boolean | null
+          is_trustmark?: boolean | null
+          last_synced?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          phone?: string | null
+          postcode?: string | null
+          service_radius_miles?: number | null
+          specialties?: string[] | null
+          trade_categories?: string[] | null
+          trading_name?: string | null
+          website?: string | null
+        }
+        Update: {
+          address?: string | null
+          checkatrade_rating?: number | null
+          checkatrade_reviews?: number | null
+          checkatrade_url?: string | null
+          company_name?: string
+          company_number?: string | null
+          contact_name?: string | null
+          created_at?: string | null
+          data_source?: string | null
+          email?: string | null
+          employees_count?: string | null
+          established_year?: number | null
+          gas_safe_number?: string | null
+          google_rating?: number | null
+          google_reviews?: number | null
+          id?: string
+          is_federation_master_builders?: boolean | null
+          is_gas_safe?: boolean | null
+          is_niceic?: boolean | null
+          is_trustmark?: boolean | null
+          last_synced?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          phone?: string | null
+          postcode?: string | null
+          service_radius_miles?: number | null
+          specialties?: string[] | null
+          trade_categories?: string[] | null
+          trading_name?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
       maintenance_jobs: {
         Row: {
           actual_cost: number | null
@@ -12172,6 +12400,69 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      renovation_opportunities: {
+        Row: {
+          address: string
+          bedrooms: number | null
+          build_year: number | null
+          created_at: string | null
+          data_source: string | null
+          epc_potential: string | null
+          epc_rating: string | null
+          estimated_condition: string | null
+          estimated_cost_high: number | null
+          estimated_cost_low: number | null
+          id: string
+          last_synced: string | null
+          latitude: number | null
+          longitude: number | null
+          postcode: string | null
+          property_type: string | null
+          renovation_potential: string | null
+          work_types: string[] | null
+        }
+        Insert: {
+          address: string
+          bedrooms?: number | null
+          build_year?: number | null
+          created_at?: string | null
+          data_source?: string | null
+          epc_potential?: string | null
+          epc_rating?: string | null
+          estimated_condition?: string | null
+          estimated_cost_high?: number | null
+          estimated_cost_low?: number | null
+          id?: string
+          last_synced?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          postcode?: string | null
+          property_type?: string | null
+          renovation_potential?: string | null
+          work_types?: string[] | null
+        }
+        Update: {
+          address?: string
+          bedrooms?: number | null
+          build_year?: number | null
+          created_at?: string | null
+          data_source?: string | null
+          epc_potential?: string | null
+          epc_rating?: string | null
+          estimated_condition?: string | null
+          estimated_cost_high?: number | null
+          estimated_cost_low?: number | null
+          id?: string
+          last_synced?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          postcode?: string | null
+          property_type?: string | null
+          renovation_potential?: string | null
+          work_types?: string[] | null
+        }
+        Relationships: []
       }
       rent_guarantee_claims: {
         Row: {
