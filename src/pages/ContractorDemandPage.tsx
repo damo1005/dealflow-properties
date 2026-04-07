@@ -343,8 +343,15 @@ export default function ContractorDemandPage() {
           </div>
           
           <div className="grid gap-4">
-            {planning?.map((app) => (
-              <Card key={app.id}>
+            {planningLoading && (
+              <Card>
+                <CardContent className="pt-6 text-center text-muted-foreground">
+                  Searching for planning applications...
+                </CardContent>
+              </Card>
+            )}
+            {!planningLoading && planningApps?.map((app) => (
+              <Card key={app.id || app.reference}>
                 <CardContent className="pt-4">
                   <div className="flex justify-between items-start">
                     <div className="space-y-2 flex-1">
@@ -352,19 +359,29 @@ export default function ContractorDemandPage() {
                         <Badge className={getStatusColor(app.status)}>
                           {app.status || 'Unknown'}
                         </Badge>
-                        <span className="font-mono text-sm">{app.application_reference}</span>
+                        <span className="font-mono text-sm">{app.reference || app.application_reference}</span>
+                        {app.distance_miles && (
+                          <span className="text-xs text-muted-foreground">
+                            {Number(app.distance_miles).toFixed(1)} mi
+                          </span>
+                        )}
                       </div>
-                      <p className="font-medium">{app.property_address}</p>
+                      <p className="font-medium">{app.address || app.property_address}</p>
                       <p className="text-sm text-muted-foreground line-clamp-2">
-                        {app.proposal_description}
+                        {app.description || app.proposal_description}
                       </p>
                       <div className="flex gap-4 text-xs text-muted-foreground flex-wrap">
-                        {app.number_of_units_proposed && (
-                          <span className="font-medium">{app.number_of_units_proposed} units</span>
+                        {app.proposed_units && (
+                          <span className="font-medium">{app.proposed_units} units</span>
                         )}
-                        <span>Submitted: {app.received_date ? new Date(app.received_date).toLocaleDateString() : 'N/A'}</span>
+                        <span>Submitted: {app.submitted_date || app.received_date ? new Date(app.submitted_date || app.received_date).toLocaleDateString() : 'N/A'}</span>
                         {app.applicant_name && <span>By: {app.applicant_name}</span>}
                       </div>
+                      {app.source_url && (
+                        <a href={app.source_url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline">
+                          View on planning.data.gov.uk →
+                        </a>
+                      )}
                     </div>
                     <Button variant="outline" size="sm" onClick={() => trackPlanning.mutate(app.id)}>
                       <Bookmark className="h-4 w-4" />
@@ -373,10 +390,10 @@ export default function ContractorDemandPage() {
                 </CardContent>
               </Card>
             ))}
-            {planning?.length === 0 && (
+            {!planningLoading && planningApps?.length === 0 && (
               <Card>
                 <CardContent className="pt-6 text-center text-muted-foreground">
-                  No planning applications found
+                  {searchPostcode ? 'No planning applications found in this area' : 'Search a postcode to find planning applications'}
                 </CardContent>
               </Card>
             )}
