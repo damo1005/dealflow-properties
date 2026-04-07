@@ -9,7 +9,7 @@ import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
   Search, MapPin, Building2, Hammer, Thermometer, Users, TrendingUp,
-  Phone, Mail, Star, Award, Shield, Bookmark, Globe, Loader2,
+  Phone, Mail, Star, Award, Shield, Globe, Loader2,
   Calendar, PoundSterling, Wrench, Home
 } from 'lucide-react';
 import { toast } from 'sonner';
