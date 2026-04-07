@@ -239,7 +239,7 @@ export default function ContractorDemandPage() {
               </label>
               <Slider value={radius} onValueChange={setRadius} min={1} max={25} step={1} />
             </div>
-            <Button onClick={() => geocodePostcode(searchPostcode)}>
+            <Button onClick={() => searchArea(searchPostcode)} disabled={planningLoading}>
               <Search className="h-4 w-4 mr-2" />
               Search
             </Button>
