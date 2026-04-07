@@ -30,19 +30,57 @@ export default function ContractorDemandPage() {
   const [selectedTrades, setSelectedTrades] = useState<string[]>([]);
   const [contractorSearch, setContractorSearch] = useState('');
 
-  const geocodePostcode = async (postcode: string) => {
+  const [planningLoading, setPlanningLoading] = useState(false);
+  const [planningApps, setPlanningApps] = useState<any[]>([]);
+  const [planningSource, setPlanningSource] = useState<string>('');
+
+  const searchArea = async (postcode: string) => {
+    if (!postcode.trim()) {
+      toast.error('Please enter a postcode');
+      return;
+    }
+
+    // Geocode
     try {
       const response = await fetch(`https://api.postcodes.io/postcodes/${encodeURIComponent(postcode)}`);
       const data = await response.json();
       if (data.result) {
         setSearchLocation({ lat: data.result.latitude, lng: data.result.longitude });
-        toast.success(`Found location: ${data.result.admin_district || postcode}`);
-        return data.result;
+      } else {
+        toast.error('Could not find postcode');
+        return;
       }
-    } catch (error) {
+    } catch {
       toast.error('Could not find postcode');
+      return;
     }
-    return null;
+
+    // Fetch planning data via edge function
+    setPlanningLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('fetch-planning-applications', {
+        body: { postcode: postcode.trim(), radius: radius[0] },
+      });
+
+      if (error) throw error;
+
+      if (data?.success) {
+        setPlanningApps(data.data || []);
+        setPlanningSource(data.source || '');
+        if (data.count === 0) {
+          toast.info('No planning applications found in this area');
+        } else {
+          toast.success(`Found ${data.count} planning applications`);
+        }
+      } else {
+        throw new Error(data?.error || 'Search failed');
+      }
+    } catch (err: any) {
+      console.error('Planning search error:', err);
+      toast.error(err.message || 'Failed to search planning applications');
+    } finally {
+      setPlanningLoading(false);
+    }
   };
 
   const { data: demandScore } = useQuery({
@@ -54,16 +92,6 @@ export default function ContractorDemandPage() {
       return data;
     },
     enabled: !!searchPostcode,
-  });
-
-  const { data: planning } = useQuery({
-    queryKey: ['planning', planningStatus],
-    queryFn: async () => {
-      let query = supabase.from('planning_applications').select('*').order('received_date', { ascending: false });
-      if (planningStatus !== 'all') query = query.eq('status', planningStatus);
-      const { data } = await query.limit(50);
-      return data || [];
-    },
   });
 
   const { data: ccsSites } = useQuery({
