@@ -229,7 +229,7 @@ export default function ContractorDemandPage() {
                 placeholder="Enter postcode (e.g. AL5 2PQ)" 
                 value={searchPostcode} 
                 onChange={(e) => setSearchPostcode(e.target.value.toUpperCase())} 
-                onKeyDown={(e) => e.key === 'Enter' && geocodePostcode(searchPostcode)} 
+                onKeyDown={(e) => e.key === 'Enter' && searchArea(searchPostcode)} 
                 className="pl-10" 
               />
             </div>
