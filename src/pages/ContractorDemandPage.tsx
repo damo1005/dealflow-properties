@@ -254,7 +254,7 @@ export default function ContractorDemandPage() {
             <div className="flex items-center gap-3">
               <Building2 className="h-8 w-8 text-primary" />
               <div>
-                <p className="text-2xl font-bold">{planning?.length || 0}</p>
+                <p className="text-2xl font-bold">{planningApps?.length || 0}</p>
                 <p className="text-sm text-muted-foreground">Planning Apps</p>
               </div>
             </div>
